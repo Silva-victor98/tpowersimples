@@ -518,7 +518,7 @@ function toast(msg, type="info"){
   clearTimeout(window.__toastTimer);
   window.__toastTimer = setTimeout(()=>box.classList.add("hidden"), 2600);
 }
-function setStatus(t){ document.getElementById("statusText").textContent = t; }
+function setStatus(t){ const el = document.getElementById("statusText"); if(el) el.textContent = t; }
 
 function ensureSupabase(){
   if(sb) return sb;
