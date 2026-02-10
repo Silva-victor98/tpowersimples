@@ -142,14 +142,8 @@
           </div>
         </div>
 
-        <div class="p-6 rounded-3xl border border-white/10 card-gradient hover-glow">
-          <div class="text-sm text-white/60">Destaque</div>
-          <div class="mt-2 text-2xl font-bold" id="featuredTitle">Carregando…</div>
-          <div class="mt-4 rounded-2xl overflow-hidden border border-white/10 bg-black/30">
-            <img id="featuredImg" alt="Imagem destaque" class="w-full h-64 object-cover" src="" />
-          </div>
-          <div class="mt-4 text-white/70 text-sm leading-relaxed" id="featuredDesc"></div>
-        </div>
+        
+
       </div>
     </div>
   </section>
@@ -656,6 +650,10 @@ function matchesSearch(m, q){
   return hay.includes(q);
 }
 function renderFeatured(){
+  const titleEl = document.getElementById("featuredTitle");
+  const descEl = document.getElementById("featuredDesc");
+  const imgEl = document.getElementById("featuredImg");
+  if(!titleEl || !descEl || !imgEl) return;
   const ids = getMotoIds();
   const first = ids[0];
   const d = motoDataStorage[first]?.moto_data || {};
