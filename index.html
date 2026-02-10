@@ -19,28 +19,7 @@
     .glass{backdrop-filter: blur(14px); background: rgba(0,0,0,.35);}
     .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
     .hidden{display:none;}
-
-    /* Layout sessão motos (estilo premium) */
-    .section-blue{
-      background: linear-gradient(180deg, rgba(2,6,23,1) 0%, rgba(3,23,48,1) 55%, rgba(2,6,23,1) 100%);
-    }
-    .moto-card{
-      background: radial-gradient(900px 260px at 50% 0%, rgba(56,189,248,.12), transparent 60%),
-                  linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      border: 1px solid rgba(255,255,255,.10);
-    }
-    .moto-imgwrap{
-      background: radial-gradient(500px 180px at 50% 35%, rgba(56,189,248,.20), transparent 65%);
-    }
-    .line-clamp-2{
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
   </style>
-
 </head>
 
 <body class="min-h-screen bg-black text-white">
@@ -48,8 +27,8 @@
   <header class="sticky top-0 z-40 border-b border-white/10 glass">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-4">
       <div class="flex items-center gap-3">
-        <div class="w-12 h-12 flex items-center justify-center">
-          <img src="Design sem nome (2).png" alt="T-Power Motos" class="h-full w-auto object-contain"/>
+        <div class="w-10 h-10 rounded-2xl bg-sky-500/20 border border-sky-400/25 flex items-center justify-center">
+          <span class="text-sky-300 font-black">T</span>
         </div>
         <div>
           <div class="font-bold tracking-wide">T‑POWER MOTOS</div>
@@ -175,40 +154,40 @@
     </div>
   </section>
 
+  
   <!-- Grid -->
-  <section id="gridSection" class="py-20 section-blue border-t border-white/10">
+  <section id="gridSection" class="py-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-14">
         <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight">
           MOTOS EM <span class="text-sky-400">DESTAQUE</span>
         </h2>
-        <p class="mt-4 text-white/60">
+        <p class="mt-4 text-white/60 text-lg">
           Confira nossa seleção especial de motos com as melhores condições
         </p>
-        <div class="mt-3 text-xs text-white/40 mono">
-          Total: <span id="countText" class="text-white">0</span>
-        </div>
       </div>
 
-      <div id="motosGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+      <span id="countText" class="hidden">0</span>
+
+      <div id="motosGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"></div>
 
       <!-- Paginação -->
       <div class="mt-12 flex items-center justify-center gap-4">
         <button id="prevPageBtn"
-                class="px-5 py-3 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 disabled:opacity-40 disabled:cursor-not-allowed">
+                class="px-6 py-3 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 disabled:opacity-40 disabled:cursor-not-allowed">
           ← Anterior
         </button>
 
-        <div id="pageInfo" class="text-sm text-white/70 mono">Página 1 de 1</div>
+        <div id="pageIndicator" class="text-white/70 text-sm mono"></div>
 
         <button id="nextPageBtn"
-                class="px-5 py-3 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 disabled:opacity-40 disabled:cursor-not-allowed">
+                class="px-6 py-3 rounded-full bg-sky-500 hover:bg-sky-400 text-black font-bold disabled:opacity-40 disabled:cursor-not-allowed">
           Próxima →
         </button>
       </div>
-
     </div>
   </section>
+
 
   <!-- Modal detalhes -->
   <div id="detailModal" class="fixed inset-0 z-50 hidden">
@@ -504,12 +483,11 @@ const DEFAULT_DB = {
 };
 
 // Armazenamento runtime (sempre alimentado do banco + fallback)
-let motoDataStorage = JSON.parse(JSON.stringify(DEFAULT_DB)); // cópia profunda simples
-
-// Paginação (somente visual — não mexe no backend)
-const PAGE_SIZE = 9;
+let motoDataStorage = JSON.parse(JSON.stringify(DEFAULT_DB)); 
+// Paginação (UI)
 let currentPage = 1;
-let totalPages = 1;
+const PAGE_SIZE = 9;
+// cópia profunda simples
 
 /* ====== Helpers ====== */
 function toast(msg, type="info"){
@@ -623,63 +601,66 @@ function renderGrid(){
   const grid = document.getElementById("motosGrid");
   grid.innerHTML = "";
 
+  // Lista filtrada
   const allIds = getMotoIds().filter(id=>matchesSearch(id,q));
   document.getElementById("countText").textContent = allIds.length;
 
-  totalPages = Math.max(1, Math.ceil(allIds.length / PAGE_SIZE));
+  // Paginação
+  const totalPages = Math.max(1, Math.ceil(allIds.length / PAGE_SIZE));
   if(currentPage > totalPages) currentPage = totalPages;
   if(currentPage < 1) currentPage = 1;
 
   const start = (currentPage - 1) * PAGE_SIZE;
-  const pageIds = allIds.slice(start, start + PAGE_SIZE);
+  const ids = allIds.slice(start, start + PAGE_SIZE);
 
-  // UI paginação
-  const pageInfo = document.getElementById("pageInfo");
+  // Atualiza controles
   const prevBtn = document.getElementById("prevPageBtn");
   const nextBtn = document.getElementById("nextPageBtn");
+  const indicator = document.getElementById("pageIndicator");
 
-  if(pageInfo) pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
-  if(prevBtn) prevBtn.disabled = (currentPage === 1);
-  if(nextBtn) nextBtn.disabled = (currentPage === totalPages);
+  if(prevBtn && nextBtn && indicator){
+    prevBtn.disabled = (currentPage <= 1);
+    nextBtn.disabled = (currentPage >= totalPages);
+    indicator.textContent = allIds.length
+      ? `Página ${currentPage} de ${totalPages} • Mostrando ${ids.length} de ${allIds.length}`
+      : "Nenhuma moto encontrada";
+  }
 
-  pageIds.forEach(id=>{
+  // Renderiza 9 cards por página (3x3 em telas grandes)
+  ids.forEach(id=>{
     const d = motoDataStorage[id]?.moto_data || {};
     const thumb = motoDataStorage[id]?.thumbnail || motoDataStorage[id]?.photos?.[0] || "";
-
     const badge = (d.year && String(d.year) === "2024") ? "NOVO" : "DESTAQUE";
-    const badgeClass = badge === "NOVO"
-      ? "bg-sky-500 text-black"
-      : "bg-red-500 text-white";
 
     const el = document.createElement("button");
-    el.className = "text-left p-0 rounded-3xl overflow-hidden moto-card hover-glow";
+    el.className = "text-left p-0 rounded-3xl overflow-hidden border border-white/10 card-gradient hover-glow w-full";
     el.innerHTML = `
       <div class="relative">
-        <div class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-xs font-extrabold ${badgeClass}">
+        <div class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-xs font-black tracking-wide
+                    ${badge==="NOVO" ? "bg-sky-500 text-black" : "bg-red-500 text-white"}">
           ${badge}
         </div>
-
-        <div class="moto-imgwrap h-56 flex items-center justify-center border-b border-white/10">
+        <div class="h-56 bg-black/30 border-b border-white/10 flex items-center justify-center">
           <img src="${thumb || "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80"}"
-               class="w-full h-full object-contain p-10" alt="${d.name||id}"/>
+               class="w-full h-full object-cover" alt="${d.name||id}"/>
         </div>
       </div>
 
-      <div class="p-7">
+      <div class="p-6">
         <div class="flex items-center justify-between text-sm">
-          <div class="text-sky-400 font-semibold">${(d.brand||"—")}</div>
-          <div class="text-white/40 font-semibold">${(d.year||"—")}</div>
+          <div class="text-sky-300 font-semibold">${(d.brand||"—")}</div>
+          <div class="text-white/50 font-semibold">${(d.year||"—")}</div>
         </div>
 
         <div class="mt-2 text-2xl font-extrabold tracking-tight">${d.name || id.toUpperCase()}</div>
 
-        <div class="mt-2 text-white/60 text-sm leading-relaxed line-clamp-2">
+        <div class="mt-2 text-white/65 text-sm leading-relaxed line-clamp-2">
           ${d.description || ""}
         </div>
 
-        <div class="mt-6 text-white/45 text-xs font-semibold">A partir de</div>
-        <div class="mt-1 text-sky-400 text-2xl font-extrabold">
-          ${d.price || "Consultar"}
+        <div class="mt-5">
+          <div class="text-xs text-white/40 font-semibold">A partir de</div>
+          <div class="mt-1 text-2xl font-extrabold text-sky-300">${d.price || "Consultar"}</div>
         </div>
       </div>
     `;
@@ -945,10 +926,6 @@ document.getElementById("addPhotoBtn").onclick = addPhotoUrl;
 document.getElementById("saveThumbBtn").onclick = saveThumbnail;
 document.getElementById("savePhotosBtn").onclick = savePhotos;
 
-// Paginação
-document.getElementById("prevPageBtn").onclick = ()=>{ if(currentPage>1){ currentPage--; renderGrid(); } };
-document.getElementById("nextPageBtn").onclick = ()=>{ if(currentPage<totalPages){ currentPage++; renderGrid(); } };
-
 document.getElementById("searchInput").addEventListener("input", ()=>{
   currentPage = 1;
   renderGrid();
@@ -958,6 +935,12 @@ document.getElementById("ctaOpenFirst").onclick = ()=>{
   document.getElementById("gridSection").scrollIntoView({behavior:"smooth"});
 };
 
+
+// Paginação (9 por página)
+const __prev = document.getElementById("prevPageBtn");
+const __next = document.getElementById("nextPageBtn");
+if(__prev) __prev.onclick = ()=>{ currentPage = Math.max(1, currentPage - 1); renderGrid(); window.scrollTo({top: document.getElementById("gridSection").offsetTop - 80, behavior: "smooth"}); };
+if(__next) __next.onclick = ()=>{ currentPage = currentPage + 1; renderGrid(); window.scrollTo({top: document.getElementById("gridSection").offsetTop - 80, behavior: "smooth"}); };
 init();
 </script>
 </body>
