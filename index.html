@@ -294,11 +294,24 @@
         <!-- Conteúdo admin -->
         <div id="adminContent" class="hidden p-4">
           <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-            <div class="flex items-center gap-2 text-sm text-white/70">
+            
+            <div class="flex items-center gap-2 text-sm text-white/70 flex-wrap">
               <span class="mono">Editando:</span>
               <select id="adminMotoSelect" class="px-4 py-2 rounded-2xl bg-white/5 border border-white/10 text-white">
               </select>
+
+              <!-- Criar nova moto (apenas UI, sem mudar backend) -->
+              <div class="flex items-center gap-2 ml-0 sm:ml-3">
+                <input id="newMotoIdInput"
+                       class="w-36 sm:w-44 px-3 py-2 rounded-2xl bg-black/30 border border-white/10 focus:outline-none focus:border-sky-400 text-white mono text-sm"
+                       placeholder="novo_id"/>
+                <button id="createMotoBtn"
+                        class="px-4 py-2 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold text-sm">
+                  + Nova moto
+                </button>
+              </div>
             </div>
+
 
             <div class="flex gap-2">
               <button id="adminRefreshBtn" class="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
@@ -434,640 +447,49 @@ let isAdmin = false;
 
 // Base “fallback” (se não tiver nada no banco, o site ainda funciona)
 const DEFAULT_DB = {
-  "cb500f": {
-    "moto_data": {
-      "name": "CB 500F",
-      "brand": "Honda",
-      "year": "2024",
-      "price": "R$ 35.990",
-      "description": "Naked equilibrada, ideal para o dia a dia e estrada.",
-      "specs": [
-        "Motor: 471cc",
-        "Potência: 47 cv",
-        "Torque: 4,4 kgf.m"
-      ],
-      "features": [
-        "ABS",
-        "Painel LCD",
-        "Econômica"
-      ]
+  cb500f: {
+    moto_data: {
+      name: "CB 500F",
+      brand: "Honda",
+      year: "2024",
+      price: "R$ 35.990",
+      description: "Naked equilibrada, ideal para o dia a dia e estrada.",
+      specs: ["Motor: 471cc", "Potência: 47 cv", "Torque: 4,4 kgf.m"],
+      features: ["ABS", "Painel LCD", "Econômica"]
     },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "hornet": {
-    "moto_data": {
-      "name": "Hornet",
-      "brand": "Honda",
-      "year": "2023",
-      "price": "R$ 49.990",
-      "description": "Clássica naked com performance e presença.",
-      "specs": [
-        "Motor: 600cc",
-        "Potência: 102 cv",
-        "Torque: 6,5 kgf.m"
-      ],
-      "features": [
-        "Resposta rápida",
-        "Confiável",
-        "Boa revenda"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
+    thumbnail: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
+    photos: [
+      "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1600&q=80",
       "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
     ]
   },
-  "xj6": {
-    "moto_data": {
-      "name": "XJ6",
-      "brand": "Yamaha",
-      "year": "2019",
-      "price": "R$ 38.990",
-      "description": "Confortável, suave e ótima para uso misto.",
-      "specs": [
-        "Motor: 600cc",
-        "Potência: 78 cv",
-        "Torque: 6,1 kgf.m"
-      ],
-      "features": [
-        "Conforto",
-        "Suavidade",
-        "Boa ciclística"
-      ]
+  hornet: {
+    moto_data: {
+      name: "Hornet",
+      brand: "Honda",
+      year: "2023",
+      price: "R$ 49.990",
+      description: "Clássica naked com performance e presença.",
+      specs: ["Motor: 600cc", "Potência: 102 cv", "Torque: 6,5 kgf.m"],
+      features: ["Resposta rápida", "Confiável", "Boa revenda"]
     },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
+    thumbnail: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
+    photos: [
+      "https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1600&q=80"
     ]
   },
-  "moto04": {
-    "moto_data": {
-      "name": "Moto 04",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
+  xj6: {
+    moto_data: {
+      name: "XJ6",
+      brand: "Yamaha",
+      year: "2019",
+      price: "R$ 38.990",
+      description: "Confortável, suave e ótima para uso misto.",
+      specs: ["Motor: 600cc", "Potência: 78 cv", "Torque: 6,1 kgf.m"],
+      features: ["Conforto", "Suavidade", "Boa ciclística"]
     },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto05": {
-    "moto_data": {
-      "name": "Moto 05",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto06": {
-    "moto_data": {
-      "name": "Moto 06",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto07": {
-    "moto_data": {
-      "name": "Moto 07",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto08": {
-    "moto_data": {
-      "name": "Moto 08",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto09": {
-    "moto_data": {
-      "name": "Moto 09",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto10": {
-    "moto_data": {
-      "name": "Moto 10",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto11": {
-    "moto_data": {
-      "name": "Moto 11",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto12": {
-    "moto_data": {
-      "name": "Moto 12",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto13": {
-    "moto_data": {
-      "name": "Moto 13",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto14": {
-    "moto_data": {
-      "name": "Moto 14",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto15": {
-    "moto_data": {
-      "name": "Moto 15",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto16": {
-    "moto_data": {
-      "name": "Moto 16",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto17": {
-    "moto_data": {
-      "name": "Moto 17",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto18": {
-    "moto_data": {
-      "name": "Moto 18",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto19": {
-    "moto_data": {
-      "name": "Moto 19",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto20": {
-    "moto_data": {
-      "name": "Moto 20",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto21": {
-    "moto_data": {
-      "name": "Moto 21",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto22": {
-    "moto_data": {
-      "name": "Moto 22",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto23": {
-    "moto_data": {
-      "name": "Moto 23",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto24": {
-    "moto_data": {
-      "name": "Moto 24",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto25": {
-    "moto_data": {
-      "name": "Moto 25",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto26": {
-    "moto_data": {
-      "name": "Moto 26",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto27": {
-    "moto_data": {
-      "name": "Moto 27",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto28": {
-    "moto_data": {
-      "name": "Moto 28",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto29": {
-    "moto_data": {
-      "name": "Moto 29",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  "moto30": {
-    "moto_data": {
-      "name": "Moto 30",
-      "brand": "—",
-      "year": "2024",
-      "price": "R$ 0,00",
-      "description": "Edite esta moto no painel administrativo.",
-      "specs": [
-        "Motor: —",
-        "Potência: —",
-        "Torque: —"
-      ],
-      "features": [
-        "Personalize no painel"
-      ]
-    },
-    "thumbnail": "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    "photos": [
+    thumbnail: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1200&q=80",
+    photos: [
       "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
     ]
   }
@@ -1407,6 +829,58 @@ function renderAdminPhotosList(motoId){
   });
 }
 
+
+async function createNewMoto(){
+  if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
+  const raw = (document.getElementById("newMotoIdInput").value || "").trim().toLowerCase();
+  const motoId = raw.replace(/[^a-z0-9_-]/g,""); // sane id
+  if(!motoId) return toast("Digite um moto_id (ex: mt03, ninja400)", "warn");
+
+  if(motoDataStorage[motoId]){
+    toast("Esse moto_id já existe", "warn");
+    // Seleciona o existente
+    const sel = document.getElementById("adminMotoSelect");
+    if(sel){
+      sel.value = motoId;
+      loadAdminForm(motoId);
+    }
+    return;
+  }
+
+  // Cria no storage local
+  motoDataStorage[motoId] = { moto_data:{ name:"", brand:"", year:"", price:"", description:"", specs:[], features:[] }, thumbnail:"", photos:[] };
+
+  // Persiste no Supabase criando as 3 linhas (moto_data, thumbnail, photos) vazias
+  try{
+    await upsertRow(motoId, "moto_data", motoDataStorage[motoId].moto_data);
+    await upsertRow(motoId, "thumbnail", "");
+    await upsertRow(motoId, "photos", []);
+
+    toast("Nova moto criada ✅", "ok");
+
+    // Atualiza select e renderizações
+    const sel = document.getElementById("adminMotoSelect");
+    if(sel){
+      const opt = document.createElement("option");
+      opt.value = motoId;
+      opt.textContent = motoId.toUpperCase();
+      sel.appendChild(opt);
+      sel.value = motoId;
+    }
+    document.getElementById("newMotoIdInput").value = "";
+    loadAdminForm(motoId);
+
+    // Atualiza grid (paginação respeita)
+    renderFeatured(); 
+    renderGrid();
+  }catch(e){
+    console.error(e);
+    toast("Falha ao criar no Supabase (veja console)", "err");
+    // rollback local para não ficar “fantasma”
+    delete motoDataStorage[motoId];
+  }
+}
+
 function addPhotoUrl(){
   if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
   const motoId = document.getElementById("adminMotoSelect").value;
@@ -1502,6 +976,8 @@ document.getElementById("adminBackdrop").onclick = closeAdmin;
 document.getElementById("adminLoginBtn").onclick = adminLogin;
 document.getElementById("adminLogoutBtn").onclick = adminLogout;
 
+
+document.getElementById("createMotoBtn").onclick = createNewMoto;
 document.getElementById("adminHelpBtn").onclick = ()=>toast("Senha padrão: tpower2024 (troque no código depois)", "info");
 
 document.getElementById("adminMotoSelect").onchange = (e)=>loadAdminForm(e.target.value);
