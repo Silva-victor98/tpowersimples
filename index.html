@@ -39,19 +39,29 @@
       <div class="flex-1"></div>
 
       <div class="relative w-full max-w-md">
+        <!-- Barra de busca (estilo “pill” como no seu print) -->
         <input id="searchInput"
-               class="w-full pl-12 pr-16 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400 text-sm"
-               placeholder="Buscar por modelo, marca, ano…"/>
-        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">🔎</div>
+               class="w-full h-12 pl-12 pr-16 rounded-full bg-white/5 border border-white/10 text-sm text-white placeholder-white/45
+                      focus:outline-none focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10 transition"
+               placeholder="Buscar moto..."/>
 
-        <!-- Botão admin discreto (como “cadeado quase invisível”) -->
+        <!-- Ícone de busca -->
+        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-white/55 pointer-events-none">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.6-5.15a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+
+        <!-- Botão admin discreto -->
         <button id="adminBtn"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/90 transition"
+                class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full
+                       bg-white/5 hover:bg-white/10 border border-white/10
+                       text-white/55 hover:text-white/90 transition"
                 title="Painel administrativo"
                 aria-label="Painel administrativo">
           🔒
         </button>
-      </div>
+      </div></div>
     </div>
   </header>
 
@@ -727,7 +737,8 @@ function renderGrid(){
     const thumb = motoDataStorage[id]?.thumbnail || motoDataStorage[id]?.photos?.[0] || "";
     const badge = (d.year && String(d.year) === "2024") ? "NOVO" : "DESTAQUE";
 
-    const el = document.createElement("button");
+    const el = document.createElement("a");
+    el.href = `moto.html?id=${encodeURIComponent(id)}`;
     el.className = "text-left p-0 rounded-3xl overflow-hidden border border-white/10 card-gradient hover-glow w-full";
     el.innerHTML = `
       <div class="relative">
@@ -759,57 +770,30 @@ function renderGrid(){
         </div>
       </div>
     `;
-    el.onclick = ()=>openDetail(id);
+    el.addEventListener("click", (e)=>{ e.preventDefault(); openMotoPage(id); });
     grid.appendChild(el);
   });
 }
 
 /* ====== Detalhe ====== */
-function openDetail(motoId){
-  const d = motoDataStorage[motoId]?.moto_data || {};
-  const photos = motoDataStorage[motoId]?.photos || [];
-  const thumb = motoDataStorage[motoId]?.thumbnail || photos[0] || "";
-  document.getElementById("detailMotoId").textContent = motoId;
-  document.getElementById("detailTitle").textContent = d.name || motoId.toUpperCase();
-  document.getElementById("detailBrand").textContent = d.brand || "—";
-  document.getElementById("detailYear").textContent = d.year || "—";
-  document.getElementById("detailPrice").textContent = d.price || "Consultar";
-  document.getElementById("detailDesc").textContent = d.description || "—";
+function openMotoPage(motoId){
+  // Abre a página de detalhes (moto.html) passando o moto_id na URL
+  const targetUrl = `moto.html?id=${encodeURIComponent(motoId)}`;
 
-  const main = document.getElementById("detailMainImg");
-  main.src = thumb || "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80";
-
-  const specsUl = document.getElementById("detailSpecs");
-  specsUl.innerHTML = "";
-  (d.specs || []).forEach(s=>{
-    const li = document.createElement("li");
-    li.textContent = "• " + s;
-    specsUl.appendChild(li);
-  });
-
-  const feat = document.getElementById("detailFeatures");
-  feat.innerHTML = "";
-  (d.features || []).forEach(f=>{
-    const chip = document.createElement("span");
-    chip.className = "px-3 py-1 rounded-full bg-white/10 border border-white/10 text-xs";
-    chip.textContent = f;
-    feat.appendChild(chip);
-  });
-
-  const thumbs = document.getElementById("detailThumbs");
-  thumbs.innerHTML = "";
-  const list = (photos.length ? photos : (thumb? [thumb] : []));
-  list.slice(0,8).forEach(url=>{
-    const b = document.createElement("button");
-    b.className = "rounded-xl overflow-hidden border border-white/10 bg-black/30";
-    b.innerHTML = `<img src="${url}" class="w-full h-16 object-cover" alt="thumb"/>`;
-    b.onclick = ()=>{ main.src = url; };
-    thumbs.appendChild(b);
-  });
-
-  document.getElementById("detailLoadedFrom").textContent = "Supabase + fallback";
-  document.getElementById("detailModal").classList.remove("hidden");
+  // Checagem rápida: se moto.html não estiver publicado no mesmo nível do index.html,
+  // a navegação vai parecer que "sumiu tudo" (vira 404/blank). Aqui avisamos com toast.
+  fetch("moto.html", { method: "HEAD", cache: "no-store" })
+    .then(res => {
+      if(!res.ok) throw new Error("moto.html não encontrado");
+      window.location.href = targetUrl;
+    })
+    .catch(() => {
+      toast("Não encontrei o arquivo moto.html publicado junto do index.html. Suba moto.html no mesmo nível do index.html no GitHub Pages.", "err");
+    });
 }
+
+// Compatibilidade (caso algum trecho antigo chame openDetail)
+function openDetail(motoId){ openMotoPage(motoId); }
 function closeDetail(){ document.getElementById("detailModal").classList.add("hidden"); }
 
 /* ====== Admin ====== */
