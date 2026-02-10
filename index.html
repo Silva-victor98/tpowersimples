@@ -102,57 +102,8 @@
   </div>
 </section>
 
-
   <!-- Hero -->
-  <section class="relative overflow-hidden">
-    <div class="absolute inset-0 opacity-50 pointer-events-none"
-         style="background: radial-gradient(900px 400px at 20% 20%, rgba(56,189,248,.18), transparent 60%),
-                          radial-gradient(700px 300px at 80% 10%, rgba(99,102,241,.10), transparent 55%);"></div>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
-      <div class="grid lg:grid-cols-2 gap-10 items-center">
-        <div>
-          <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight">
-            Encontre sua próxima <span class="text-sky-400">moto</span>
-          </h1>
-          <p class="mt-4 text-white/70 text-lg leading-relaxed">
-            Catálogo com fotos, ficha e edição via painel. Salva no <span class="text-sky-300">Supabase</span>
-            e usa URLs de imagem (ex.: Cloudinary).
-          </p>
-
-          <div class="mt-6 flex flex-wrap gap-3">
-            <span class="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm">✅ Carrega após F5</span>
-            <span class="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm">✅ 1 fonte de verdade</span>
-            <span class="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm">✅ Sem Backendless</span>
-          </div>
-
-          <div class="mt-8 flex flex-col sm:flex-row gap-3">
-            <button id="ctaOpenFirst"
-                    class="px-6 py-3 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold">
-              Ver motos
-            </button>
-            <button id="ctaAdmin"
-                    class="px-6 py-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
-              Abrir painel
-            </button>
-          </div>
-
-          <div class="mt-6 text-xs text-white/50 mono">
-            Status: <span id="statusText">inicializando…</span>
-          </div>
-        </div>
-
-        <div class="p-6 rounded-3xl border border-white/10 card-gradient hover-glow">
-          <div class="text-sm text-white/60">Destaque</div>
-          <div class="mt-2 text-2xl font-bold" id="featuredTitle">Carregando…</div>
-          <div class="mt-4 rounded-2xl overflow-hidden border border-white/10 bg-black/30">
-            <img id="featuredImg" alt="Imagem destaque" class="w-full h-64 object-cover" src="" />
-          </div>
-          <div class="mt-4 text-white/70 text-sm leading-relaxed" id="featuredDesc"></div>
-        </div>
-      </div>
-    </div>
-  </section>
+  
 
   
   <!-- Grid -->
@@ -241,8 +192,6 @@
       </div>
     </div>
   </section>
-
-
 
   <!-- Modal detalhes -->
   <div id="detailModal" class="fixed inset-0 z-50 hidden">
@@ -366,7 +315,6 @@
                 </button>
               </div>
             </div>
-
 
             <div class="flex gap-2">
               <button id="adminRefreshBtn" class="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
@@ -884,7 +832,6 @@ function renderAdminPhotosList(motoId){
   });
 }
 
-
 async function createNewMoto(){
   if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
   const raw = (document.getElementById("newMotoIdInput").value || "").trim().toLowerCase();
@@ -1031,7 +978,6 @@ document.getElementById("adminBackdrop").onclick = closeAdmin;
 document.getElementById("adminLoginBtn").onclick = adminLogin;
 document.getElementById("adminLogoutBtn").onclick = adminLogout;
 
-
 document.getElementById("createMotoBtn").onclick = createNewMoto;
 document.getElementById("adminHelpBtn").onclick = ()=>toast("Senha padrão: tpower2024 (troque no código depois)", "info");
 
@@ -1056,7 +1002,6 @@ document.getElementById("searchInput").addEventListener("input", ()=>{
 document.getElementById("ctaOpenFirst").onclick = ()=>{
   document.getElementById("gridSection").scrollIntoView({behavior:"smooth"});
 };
-
 
 // Paginação (9 por página)
 const __prev = document.getElementById("prevPageBtn");
@@ -1183,7 +1128,6 @@ init();
     </div>
   </section>
 
-
 <script>
 // Preenche o select "Moto de Interesse" com as motos carregadas do site
 function populateMotoInteresse(){
@@ -1207,7 +1151,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 </script>
 
-
   <!-- FOOTER -->
   <footer class="relative border-t border-white/10 bg-black/40 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col items-center gap-4">
@@ -1221,7 +1164,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
       </p>
     </div>
   </footer>
-
 
 <script>
 // Envio por e-mail (sem backend): abre o cliente de e-mail do visitante com a mensagem pronta
