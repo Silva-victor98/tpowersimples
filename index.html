@@ -39,29 +39,19 @@
       <div class="flex-1"></div>
 
       <div class="relative w-full max-w-md">
-        <!-- Barra de busca (estilo “pill” como no seu print) -->
         <input id="searchInput"
-               class="w-full h-12 pl-12 pr-16 rounded-full bg-white/5 border border-white/10 text-sm text-white placeholder-white/45
-                      focus:outline-none focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10 transition"
-               placeholder="Buscar moto..."/>
+               class="w-full pl-12 pr-16 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400 text-sm"
+               placeholder="Buscar por modelo, marca, ano…"/>
+        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">🔎</div>
 
-        <!-- Ícone de busca -->
-        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-white/55 pointer-events-none">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.6-5.15a7 7 0 11-14 0 7 7 0 0114 0z"/>
-          </svg>
-        </div>
-
-        <!-- Botão admin discreto -->
+        <!-- Botão admin discreto (como “cadeado quase invisível”) -->
         <button id="adminBtn"
-                class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full
-                       bg-white/5 hover:bg-white/10 border border-white/10
-                       text-white/55 hover:text-white/90 transition"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/90 transition"
                 title="Painel administrativo"
                 aria-label="Painel administrativo">
           🔒
         </button>
-      </div></div>
+      </div>
     </div>
   </header>
 
