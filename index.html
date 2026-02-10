@@ -1085,11 +1085,11 @@ init();
       <div class="grid lg:grid-cols-2 gap-10">
         <!-- FORM -->
         <div class="p-8 rounded-3xl bg-white/5 border border-white/10">
-          <form onsubmit="event.preventDefault(); window.open('https://wa.me/5541996977148','_blank');">
+          <form id="contactForm">
             <div class="grid sm:grid-cols-2 gap-4">
               <div>
                 <label class="text-sm text-white/60">Nome</label>
-                <input class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="Seu nome"/>
+                <input id="c_name" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="Seu nome" required/>
               </div>
               <div>
                 <label class="text-sm text-white/60">Telefone</label>
@@ -1099,19 +1099,19 @@ init();
 
             <div class="mt-4">
               <label class="text-sm text-white/60">E-mail</label>
-              <input class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="seu@email.com"/>
+              <input id="c_email" type="email" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="seu@email.com" required/>
             </div>
 
             <div class="mt-4">
               <label class="text-sm text-white/60">Moto de Interesse</label>
-              <select class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10">
+              <select id="c_moto" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10">
                 <option>Selecione uma moto</option>
               </select>
             </div>
 
             <div class="mt-4">
               <label class="text-sm text-white/60">Mensagem</label>
-              <textarea rows="4" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="Como podemos ajudar?"></textarea>
+              <textarea id="c_message" rows="4" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="Como podemos ajudar?" required></textarea>
             </div>
 
             <button type="submit"
@@ -1221,6 +1221,42 @@ document.addEventListener('DOMContentLoaded', ()=>{
       </p>
     </div>
   </footer>
+
+
+<script>
+// Envio por e-mail (sem backend): abre o cliente de e-mail do visitante com a mensagem pronta
+(function(){
+  const form = document.getElementById('contactForm');
+  if(!form) return;
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const nome = (document.getElementById('c_name')?.value || '').trim();
+    const whatsapp = (document.getElementById('c_whatsapp')?.value || '').trim();
+    const email = (document.getElementById('c_email')?.value || '').trim();
+    const motoId = (document.getElementById('c_moto')?.value || '').trim();
+
+    // tenta pegar o nome da moto do option selecionado
+    const motoLabel = (document.getElementById('c_moto')?.selectedOptions?.[0]?.textContent || '').trim();
+    const motoFinal = motoLabel || motoId || '—';
+
+    const mensagemCliente = (document.getElementById('c_message')?.value || '').trim();
+
+    const body =
+      `Olá, me chamo "${nome}", meu Whatsapp é "${whatsapp}", estou enviando essa mensagem através do meu email "${email}", ` +
+      `eu gostaria de ter mais informações sobre a moto "${motoFinal}".\n\n` +
+      `Texto enviado pelo cliente: ${mensagemCliente}`;
+
+    const subject = `Contato pelo site - ${motoFinal}`;
+
+    const to = 'tpowermotos@hotmail.com';
+    const mailto = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    window.location.href = mailto;
+  });
+})();
+</script>
 
 </body>
 </html>
