@@ -1253,7 +1253,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const to = 'tpowermotos@hotmail.com';
     const mailto = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-    window.location.href = mailto;
+    window.location.assign(mailto);
+
+    // Se nenhum app de e-mail estiver configurado no navegador, nada pode abrir.
+    // Mostra um aviso rápido como fallback.
+    setTimeout(()=>{
+      if(document.visibilityState === 'visible'){
+        alert('Seu navegador pode não ter um app de e-mail configurado para abrir automaticamente.
+
+Dica: no Chrome, configure o Gmail/Outlook como app padrão para links de e-mail (mailto:).');
+      }
+    }, 1200);
   });
 })();
 </script>
