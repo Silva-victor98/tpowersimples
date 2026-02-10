@@ -1079,33 +1079,45 @@ init();
       <div class="grid lg:grid-cols-2 gap-10">
         <!-- FORM -->
         <div class="p-8 rounded-3xl bg-white/5 border border-white/10">
-          <form id="contactForm">
+          <!--
+            Envio de e-mail real (sem depender do app de e-mail do visitante) via FormSubmit.
+            Depois de publicar, faça 1 envio de teste e confirme o e-mail de autorização do FormSubmit.
+          -->
+          <form id="contactForm" action="https://formsubmit.co/tpowermotos@hotmail.com" method="POST">
+
+            <!-- Config do FormSubmit -->
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_subject" value="Contato pelo site - T-Power Motos" />
+            <input type="hidden" name="_template" value="table" />
+
+            <!-- Campo que receberá a mensagem formatada (preenchido via JS no submit) -->
+            <input type="hidden" id="compiled_message" name="Mensagem formatada" value="" />
             <div class="grid sm:grid-cols-2 gap-4">
               <div>
                 <label class="text-sm text-white/60">Nome</label>
-                <input id="c_name" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="Seu nome" required/>
+                <input id="c_name" name="Nome" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="Seu nome" required/>
               </div>
               <div>
                 <label class="text-sm text-white/60">Telefone</label>
-                <input class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="(00) 00000-0000"/>
+                <input id="c_whatsapp" name="Whatsapp" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="(00) 00000-0000"/>
               </div>
             </div>
 
             <div class="mt-4">
               <label class="text-sm text-white/60">E-mail</label>
-              <input id="c_email" type="email" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="seu@email.com" required/>
+              <input id="c_email" name="Email" type="email" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="seu@email.com" required/>
             </div>
 
             <div class="mt-4">
               <label class="text-sm text-white/60">Moto de Interesse</label>
-              <select id="c_moto" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10">
+              <select id="c_moto" name="Moto de interesse" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10">
                 <option>Selecione uma moto</option>
               </select>
             </div>
 
             <div class="mt-4">
               <label class="text-sm text-white/60">Mensagem</label>
-              <textarea id="c_message" rows="4" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="Como podemos ajudar?" required></textarea>
+              <textarea id="c_message" name="Mensagem" rows="4" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="Como podemos ajudar?" required></textarea>
             </div>
 
             <button type="submit"
@@ -1218,14 +1230,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 
 <script>
-// Envio por e-mail (sem backend): abre o cliente de e-mail do visitante com a mensagem pronta
+// Envio de contato (GitHub Pages): FormSubmit envia direto para seu e-mail.
+// Aqui a gente apenas monta a mensagem no formato que você pediu e deixa o formulário enviar.
 (function(){
   const form = document.getElementById('contactForm');
   if(!form) return;
 
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-
+  form.addEventListener('submit', function(){
     const nome = (document.getElementById('c_name')?.value || '').trim();
     const whatsapp = (document.getElementById('c_whatsapp')?.value || '').trim();
     const email = (document.getElementById('c_email')?.value || '').trim();
@@ -1237,17 +1248,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     const mensagemCliente = (document.getElementById('c_message')?.value || '').trim();
 
-    const body =
+    const mensagemFormatada =
       `Olá, me chamo "${nome}", meu Whatsapp é "${whatsapp}", estou enviando essa mensagem através do meu email "${email}", ` +
       `eu gostaria de ter mais informações sobre a moto "${motoFinal}".\n\n` +
       `Texto enviado pelo cliente: ${mensagemCliente}`;
 
-    const subject = `Contato pelo site - ${motoFinal}`;
+    // Preenche o campo oculto que vai no e-mail
+    const compiled = document.getElementById('compiled_message');
+    if(compiled) compiled.value = mensagemFormatada;
 
-    const to = 'tpowermotos@hotmail.com';
-    const mailto = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-    window.location.href = mailto;
+    // Atualiza assunto com a moto selecionada
+    const subj = form.querySelector('input[name="_subject"]');
+    if(subj) subj.value = `Contato pelo site - ${motoFinal}`;
   });
 })();
 </script>
