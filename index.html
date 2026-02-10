@@ -39,29 +39,19 @@
       <div class="flex-1"></div>
 
       <div class="relative w-full max-w-md">
-        <!-- Barra de busca (estilo “pill” como no seu print) -->
         <input id="searchInput"
-               class="w-full h-12 pl-12 pr-16 rounded-full bg-white/5 border border-white/10 text-sm text-white placeholder-white/45
-                      focus:outline-none focus:border-sky-400/60 focus:ring-4 focus:ring-sky-500/10 transition"
-               placeholder="Buscar moto..."/>
+               class="w-full pl-12 pr-16 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400 text-sm"
+               placeholder="Buscar por modelo, marca, ano…"/>
+        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">🔎</div>
 
-        <!-- Ícone de busca -->
-        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-white/55 pointer-events-none">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.6-5.15a7 7 0 11-14 0 7 7 0 0114 0z"/>
-          </svg>
-        </div>
-
-        <!-- Botão admin discreto -->
+        <!-- Botão admin discreto (como “cadeado quase invisível”) -->
         <button id="adminBtn"
-                class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full
-                       bg-white/5 hover:bg-white/10 border border-white/10
-                       text-white/55 hover:text-white/90 transition"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/90 transition"
                 title="Painel administrativo"
                 aria-label="Painel administrativo">
           🔒
         </button>
-      </div></div>
+      </div>
     </div>
   </header>
 
@@ -244,99 +234,105 @@
 
 
 
-  
-  <!-- LOCALIZAÇÃO -->
-  <section id="localizacao" class="py-24 relative overflow-hidden">
-    <div class="absolute inset-0 opacity-60 pointer-events-none"
-         style="background:
-           radial-gradient(900px 420px at 50% 20%, rgba(56,189,248,.18), transparent 60%);"></div>
-
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <a href="https://maps.app.goo.gl/sowMDzp94ZPjfzeH7"
-         target="_blank"
-         class="block rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md p-12 sm:p-14 text-center transition-all duration-500 hover:border-sky-400 hover:bg-sky-500/10">
-        <div class="flex justify-center mb-6">
-          <div class="w-16 h-16 rounded-full bg-sky-500/20 flex items-center justify-center border border-sky-400/20">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-sky-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 22s8-4.5 8-10A8 8 0 104 12c0 5.5 8 10 8 10z" />
-            </svg>
-          </div>
-        </div>
-
-        <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
-          NOSSA LOCALIZAÇÃO
-        </h3>
-
-        <p class="mt-2 text-white/60">
-          Clique para abrir no Google Maps
-        </p>
-      </a>
-    </div>
-  </section>
-
-<!-- Modal detalhes -->
+    <!-- Modal detalhes (tela cheia estilo "página") -->
   <div id="detailModal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/70" id="detailBackdrop"></div>
+    <div class="absolute inset-0"
+         style="background:
+           radial-gradient(1200px 520px at 50% -10%, rgba(56,189,248,.35), transparent 60%),
+           radial-gradient(900px 420px at 85% 15%, rgba(99,102,241,.18), transparent 55%),
+           linear-gradient(180deg, #06112b 0%, #0b2a6f 55%, #0b2a6f 100%);">
+    </div>
 
-    <div class="absolute inset-0 flex items-center justify-center p-4">
-      <div class="w-full max-w-4xl rounded-3xl border border-white/10 glass overflow-hidden">
-        <div class="flex items-center justify-between p-4 border-b border-white/10">
-          <div>
-            <div class="text-xs text-white/50 mono" id="detailMotoId"></div>
-            <div class="text-xl font-bold" id="detailTitle"></div>
-          </div>
-          <button id="detailClose" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15">✖</button>
+    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <!-- Topbar -->
+      <div class="flex items-center justify-between">
+        <button id="detailBack"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-sm">
+          ← Voltar
+        </button>
+
+        <div class="text-xs text-white/60 mono" id="detailMotoId"></div>
+      </div>
+
+      <!-- Hero -->
+      <div class="mt-10 text-center">
+        <div class="inline-flex items-center justify-center">
+          <span id="detailBadge"
+                class="px-4 py-1.5 rounded-full text-xs font-black tracking-wide bg-sky-500 text-black">
+            NOVO
+          </span>
         </div>
 
-        <div class="grid lg:grid-cols-2 gap-0">
-          <div class="p-4">
-            <div class="rounded-2xl overflow-hidden border border-white/10 bg-black/30">
-              <img id="detailMainImg" class="w-full h-72 object-cover" src="" alt="Foto principal"/>
-            </div>
+        <div class="mt-3 text-sky-300 font-semibold" id="detailBrand">—</div>
 
-            <div id="detailThumbs" class="mt-3 grid grid-cols-4 gap-2"></div>
+        <h1 class="mt-2 text-5xl sm:text-6xl font-extrabold tracking-tight uppercase" id="detailTitle">—</h1>
+
+        <p class="mt-4 max-w-2xl mx-auto text-white/70" id="detailDesc">—</p>
+
+        <div class="mt-6 text-4xl font-extrabold text-sky-300" id="detailPrice">—</div>
+      </div>
+
+      <!-- Galeria -->
+      <div class="mt-12">
+        <div class="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md overflow-hidden">
+          <div class="relative">
+            <img id="detailMainImg" class="w-full h-[280px] sm:h-[420px] object-cover" src="" alt="Foto principal"/>
+
+            <button id="detailPrev"
+                    class="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/40 border border-white/10 hover:bg-black/55 flex items-center justify-center">
+              ←
+            </button>
+            <button id="detailNext"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/40 border border-white/10 hover:bg-black/55 flex items-center justify-center">
+              →
+            </button>
           </div>
 
-          <div class="p-4 border-t lg:border-t-0 lg:border-l border-white/10">
-            <div class="grid grid-cols-2 gap-3 text-sm">
-              <div class="p-3 rounded-2xl bg-white/5 border border-white/10">
-                <div class="text-white/50">Marca</div>
-                <div class="font-semibold" id="detailBrand"></div>
-              </div>
-              <div class="p-3 rounded-2xl bg-white/5 border border-white/10">
-                <div class="text-white/50">Ano</div>
-                <div class="font-semibold" id="detailYear"></div>
-              </div>
-              <div class="p-3 rounded-2xl bg-white/5 border border-white/10 col-span-2">
-                <div class="text-white/50">Preço</div>
-                <div class="font-semibold text-sky-300" id="detailPrice"></div>
-              </div>
-            </div>
+          <div id="detailThumbs" class="p-4 grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-2 bg-black/20 border-t border-white/10"></div>
+        </div>
+      </div>
 
-            <div class="mt-4">
-              <div class="text-white/50 text-sm">Descrição</div>
-              <p class="mt-1 text-white/75 leading-relaxed" id="detailDesc"></p>
-            </div>
-
-            <div class="mt-4">
-              <div class="text-white/50 text-sm">Especificações</div>
-              <ul class="mt-2 text-sm text-white/75 space-y-1" id="detailSpecs"></ul>
-            </div>
-
-            <div class="mt-4">
-              <div class="text-white/50 text-sm">Destaques</div>
-              <div class="mt-2 flex flex-wrap gap-2" id="detailFeatures"></div>
-            </div>
-
-            <div class="mt-5 text-xs text-white/40 mono">
-              Carregado do Supabase: <span id="detailLoadedFrom">—</span>
-            </div>
+      <!-- Cards specs/destaques -->
+      <div class="mt-10 grid md:grid-cols-2 gap-6">
+        <div class="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-2xl bg-sky-500/20 border border-sky-400/20 flex items-center justify-center">⚡</div>
+            <div class="font-extrabold text-sky-300">ESPECIFICAÇÕES</div>
           </div>
+          <ul class="space-y-3 text-white/85 text-sm" id="detailSpecs"></ul>
         </div>
 
+        <div class="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-2xl bg-sky-500/20 border border-sky-400/20 flex items-center justify-center">✓</div>
+            <div class="font-extrabold text-sky-300">DESTAQUES</div>
+          </div>
+          <div class="space-y-3 text-white/85 text-sm" id="detailFeatures"></div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="mt-10 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md p-8 text-center">
+        <div class="text-2xl font-extrabold tracking-tight">GOSTOU DESTA MOTO?</div>
+        <div class="mt-2 text-white/70 text-sm">Entre em contato com nossa equipe agora mesmo!</div>
+
+        <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="#contato"
+             id="detailCtaTalk"
+             class="px-8 py-3 rounded-full bg-sky-500 hover:bg-sky-400 text-black font-extrabold text-sm">
+            Falar com Consultor
+          </a>
+          <a id="detailCtaWhats"
+             href="https://wa.me/5541996977148"
+             target="_blank"
+             class="px-8 py-3 rounded-full bg-green-500 hover:bg-green-400 text-black font-extrabold text-sm">
+            WhatsApp Direto
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-6 text-center text-xs text-white/50 mono">
+        Carregado do Supabase: <span id="detailLoadedFrom">—</span>
       </div>
     </div>
   </div>
@@ -737,8 +733,7 @@ function renderGrid(){
     const thumb = motoDataStorage[id]?.thumbnail || motoDataStorage[id]?.photos?.[0] || "";
     const badge = (d.year && String(d.year) === "2024") ? "NOVO" : "DESTAQUE";
 
-    const el = document.createElement("a");
-    el.href = `moto.html?id=${encodeURIComponent(id)}`;
+    const el = document.createElement("button");
     el.className = "text-left p-0 rounded-3xl overflow-hidden border border-white/10 card-gradient hover-glow w-full";
     el.innerHTML = `
       <div class="relative">
@@ -770,31 +765,106 @@ function renderGrid(){
         </div>
       </div>
     `;
-    el.addEventListener("click", (e)=>{ e.preventDefault(); openMotoPage(id); });
+    el.onclick = ()=>openDetail(id);
     grid.appendChild(el);
   });
 }
 
 /* ====== Detalhe ====== */
-function openMotoPage(motoId){
-  // Abre a página de detalhes (moto.html) passando o moto_id na URL
-  const targetUrl = `moto.html?id=${encodeURIComponent(motoId)}`;
+let __detailScrollY = 0;
+let __detailPhotos = [];
+let __detailIndex = 0;
 
-  // Checagem rápida: se moto.html não estiver publicado no mesmo nível do index.html,
-  // a navegação vai parecer que "sumiu tudo" (vira 404/blank). Aqui avisamos com toast.
-  fetch("moto.html", { method: "HEAD", cache: "no-store" })
-    .then(res => {
-      if(!res.ok) throw new Error("moto.html não encontrado");
-      window.location.href = targetUrl;
-    })
-    .catch(() => {
-      toast("Não encontrei o arquivo moto.html publicado junto do index.html. Suba moto.html no mesmo nível do index.html no GitHub Pages.", "err");
-    });
+function __setDetailImage(idx){
+  if(!__detailPhotos.length) return;
+  __detailIndex = (idx + __detailPhotos.length) % __detailPhotos.length;
+  const main = document.getElementById("detailMainImg");
+  if(main) main.src = __detailPhotos[__detailIndex];
+  // marca thumb ativo
+  const thumbs = document.querySelectorAll("#detailThumbs button[data-idx]");
+  thumbs.forEach(b=>{
+    const i = Number(b.getAttribute("data-idx"));
+    b.classList.toggle("ring-2", i === __detailIndex);
+    b.classList.toggle("ring-sky-400", i === __detailIndex);
+  });
 }
 
-// Compatibilidade (caso algum trecho antigo chame openDetail)
-function openDetail(motoId){ openMotoPage(motoId); }
-function closeDetail(){ document.getElementById("detailModal").classList.add("hidden"); }
+function openDetail(motoId){
+  const d = motoDataStorage[motoId]?.moto_data || {};
+  const photos = motoDataStorage[motoId]?.photos || [];
+  const thumb = motoDataStorage[motoId]?.thumbnail || photos[0] || "";
+
+  __detailPhotos = (photos && photos.length) ? photos.slice() : (thumb ? [thumb] : []);
+  if(!__detailPhotos.length){
+    __detailPhotos = ["https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"];
+  }
+
+  // trava scroll e abre
+  __detailScrollY = window.scrollY || 0;
+  document.body.style.overflow = "hidden";
+
+  document.getElementById("detailMotoId").textContent = motoId;
+  document.getElementById("detailTitle").textContent = (d.name || motoId).toUpperCase();
+  document.getElementById("detailBrand").textContent = d.brand || "—";
+  document.getElementById("detailPrice").textContent = d.price || "Consultar";
+  document.getElementById("detailDesc").textContent = d.description || "—";
+
+  const badgeEl = document.getElementById("detailBadge");
+  const badge = (d.year && String(d.year) === "2024") ? "NOVO" : "DESTAQUE";
+  badgeEl.textContent = badge;
+  badgeEl.className = "px-4 py-1.5 rounded-full text-xs font-black tracking-wide " + (badge==="NOVO" ? "bg-sky-500 text-black" : "bg-red-500 text-white");
+
+  // thumbs
+  const thumbsWrap = document.getElementById("detailThumbs");
+  thumbsWrap.innerHTML = "";
+  __detailPhotos.slice(0, 16).forEach((url, idx)=>{
+    const b = document.createElement("button");
+    b.type = "button";
+    b.setAttribute("data-idx", String(idx));
+    b.className = "rounded-2xl overflow-hidden border border-white/10 bg-black/20 hover:bg-black/30";
+    b.innerHTML = `<img src="${url}" class="w-full h-14 object-cover" alt="thumb"/>`;
+    b.onclick = ()=>__setDetailImage(idx);
+    thumbsWrap.appendChild(b);
+  });
+
+  // specs (cards)
+  const specsUl = document.getElementById("detailSpecs");
+  specsUl.innerHTML = "";
+  (d.specs || []).forEach(s=>{
+    const li = document.createElement("li");
+    li.className = "p-3 rounded-2xl bg-black/20 border border-white/10";
+    const parts = String(s).split(":");
+    if(parts.length >= 2){
+      const k = parts.shift().trim();
+      const v = parts.join(":").trim();
+      li.innerHTML = `<div class="text-xs text-white/60 font-semibold">${k}</div><div class="mt-0.5 font-bold">${v}</div>`;
+    }else{
+      li.textContent = s;
+    }
+    specsUl.appendChild(li);
+  });
+
+  // destaques (linhas)
+  const feat = document.getElementById("detailFeatures");
+  feat.innerHTML = "";
+  (d.features || []).forEach(f=>{
+    const row = document.createElement("div");
+    row.className = "p-3 rounded-2xl bg-black/20 border border-white/10 flex items-center gap-3";
+    row.innerHTML = `<span class="w-2 h-2 rounded-full bg-sky-400 inline-block"></span><span class="font-semibold">${f}</span>`;
+    feat.appendChild(row);
+  });
+
+  document.getElementById("detailLoadedFrom").textContent = "Supabase + fallback";
+
+  document.getElementById("detailModal").classList.remove("hidden");
+  __setDetailImage(0);
+}
+
+function closeDetail(){
+  document.getElementById("detailModal").classList.add("hidden");
+  document.body.style.overflow = "";
+  window.scrollTo({ top: __detailScrollY, behavior: "instant" });
+}
 
 /* ====== Admin ====== */
 function openAdmin(){
@@ -1030,8 +1100,17 @@ async function init(){
 }
 
 /* ====== Events ====== */
-document.getElementById("detailClose").onclick = closeDetail;
-document.getElementById("detailBackdrop").onclick = closeDetail;
+document.getElementById("detailBack").onclick = closeDetail;
+document.getElementById("detailPrev").onclick = ()=>__setDetailImage(__detailIndex-1);
+document.getElementById("detailNext").onclick = ()=>__setDetailImage(__detailIndex+1);
+
+document.addEventListener("keydown", (e)=>{
+  const modal = document.getElementById("detailModal");
+  if(modal.classList.contains("hidden")) return;
+  if(e.key === "Escape") closeDetail();
+  if(e.key === "ArrowLeft") __setDetailImage(__detailIndex-1);
+  if(e.key === "ArrowRight") __setDetailImage(__detailIndex+1);
+});
 
 document.getElementById("adminBtn").onclick = openAdmin;
 document.getElementById("ctaAdmin").onclick = openAdmin;
