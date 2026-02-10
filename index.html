@@ -234,7 +234,40 @@
 
 
 
-  <!-- Modal detalhes -->
+  
+  <!-- LOCALIZAÇÃO -->
+  <section id="localizacao" class="py-24 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-60 pointer-events-none"
+         style="background:
+           radial-gradient(900px 420px at 50% 20%, rgba(56,189,248,.18), transparent 60%);"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href="https://maps.app.goo.gl/sowMDzp94ZPjfzeH7"
+         target="_blank"
+         class="block rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md p-12 sm:p-14 text-center transition-all duration-500 hover:border-sky-400 hover:bg-sky-500/10">
+        <div class="flex justify-center mb-6">
+          <div class="w-16 h-16 rounded-full bg-sky-500/20 flex items-center justify-center border border-sky-400/20">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-sky-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 22s8-4.5 8-10A8 8 0 104 12c0 5.5 8 10 8 10z" />
+            </svg>
+          </div>
+        </div>
+
+        <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+          NOSSA LOCALIZAÇÃO
+        </h3>
+
+        <p class="mt-2 text-white/60">
+          Clique para abrir no Google Maps
+        </p>
+      </a>
+    </div>
+  </section>
+
+<!-- Modal detalhes -->
   <div id="detailModal" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black/70" id="detailBackdrop"></div>
 
