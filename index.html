@@ -110,13 +110,14 @@
   <header class="sticky top-0 z-40 border-b border-white/10 glass">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-4">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-sky-500/20 border border-sky-400/25 flex items-center justify-center">
-          <span class="text-sky-300 font-black">T</span>
-        </div>
+        <a href="./" aria-label="Voltar para a página inicial" class="block">
+          <div class="w-14 h-14 rounded-2xl bg-sky-500/10 border border-sky-400/25 flex items-center justify-center overflow-hidden">
+            <img src="https://i.imgur.com/FyCqY2d.png" alt="T-Power Motos" class="w-12 h-12 object-contain" />
+          </div>
+        </a>
         <div>
           <div class="font-bold tracking-wide">T‑POWER MOTOS</div>
-          <div class="text-xs text-white/60">Catálogo • Fotos • Painel</div>
-        </div>
+</div>
       </div>
 
       <div class="flex-1"></div>
@@ -191,7 +192,6 @@
     </div>
   </div>
 </section>
-
 
   <!-- Hero -->
   <section class="relative overflow-hidden">
@@ -321,8 +321,6 @@
       </div>
     </div>
   </section>
-
-
 
   <!-- Modal detalhes -->
   <div id="detailModal" class="fixed inset-0 z-50 hidden">
@@ -476,7 +474,6 @@
                 </button>
               </div>
             </div>
-
 
             <div class="flex gap-2">
               <button id="adminRefreshBtn" class="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
@@ -682,7 +679,6 @@ function toast(msg, type="info"){
 }
 function setStatus(t){ document.getElementById("statusText").textContent = t; }
 
-
 function updateClearSearchBtn(){
   const input = document.getElementById("searchInput");
   const btn = document.getElementById("clearSearchBtn");
@@ -823,7 +819,6 @@ function renderGrid(){
       ? `Página ${currentPage} de ${totalPages} • Mostrando ${ids.length} de ${allIds.length}`
       : "Nenhuma moto encontrada";
   }
-
 
 // Estado vazio (quando a busca filtra tudo)
 if(!allIds.length){
@@ -1031,7 +1026,6 @@ function renderAdminPhotosList(motoId){
   });
 }
 
-
 async function createNewMoto(){
   if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
   const raw = (document.getElementById("newMotoIdInput").value || "").trim().toLowerCase();
@@ -1182,7 +1176,6 @@ document.getElementById("adminBackdrop").onclick = closeAdmin;
 document.getElementById("adminLoginBtn").onclick = adminLogin;
 document.getElementById("adminLogoutBtn").onclick = adminLogout;
 
-
 document.getElementById("createMotoBtn").onclick = createNewMoto;
 document.getElementById("adminCancelBtn").onclick = closeAdmin;
 
@@ -1210,7 +1203,6 @@ document.getElementById("searchInput").addEventListener("input", ()=>{
 document.getElementById("ctaOpenFirst").onclick = ()=>{
   document.getElementById("gridSection").scrollIntoView({behavior:"smooth"});
 };
-
 
 // Paginação (9 por página)
 const __prev = document.getElementById("prevPageBtn");
@@ -1365,7 +1357,6 @@ document.addEventListener("click", (e) => {
     </div>
   </section>
 
-
 <script>
 // Preenche o select "Moto de Interesse" com as motos carregadas do site
 function populateMotoInteresse(){
@@ -1389,7 +1380,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 </script>
 
-
   <!-- FOOTER -->
   <footer class="relative border-t border-white/10 bg-black/40 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col items-center gap-4">
@@ -1403,7 +1393,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
       </p>
     </div>
   </footer>
-
 
 <script>
 // Envio de contato (GitHub Pages): FormSubmit envia direto para seu e-mail.
