@@ -525,47 +525,22 @@
                         class="px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
                   Adicionar
                 </button>
-              
-              <!-- Adicionar várias fotos (URLs em massa) -->
-              <div class="mt-4">
+              </div>
+
+              <div class="mt-3">
                 <label class="text-sm text-white/60">Adicionar várias fotos (1 URL por linha)</label>
-                <textarea id="photoUrlsBulk" rows="4"
-                          class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10 focus:outline-none focus:border-sky-400 mono text-sm"
-                          placeholder="Cole aqui várias URLs, uma por linha&#10;https://.../foto1.jpg&#10;https://.../foto2.jpg&#10;https://.../foto3.jpg"></textarea>
+                <textarea id="photoUrlsBulk"
+                          rows="5"
+                          class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10 focus:outline-none focus:border-sky-400"
+                          placeholder="https://.../foto1.jpg&#10;https://.../foto2.jpg&#10;https://.../foto3.jpg"></textarea>
 
-                <div class="flex flex-col sm:flex-row gap-2 mt-2">
-                  <button id="addPhotosBulkBtn"
-                          class="px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 font-semibold">
-                    Adicionar em massa
-                  </button>
-                  <button id="clearBulkBtn"
-                          class="px-4 py-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-white/80">
-                    Limpar
-                  </button>
-                </div>
-
-                <div class="mt-2 text-xs text-white/45">
-                  Dica: pode colar URLs separadas por <span class="mono">ENTER</span>, vírgula ou espaço. Duplicadas serão ignoradas.
-                </div>
+                <button id="addPhotosBulkBtn"
+                        type="button"
+                        class="mt-2 w-full px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
+                  Adicionar em massa
+                </button>
               </div>
 
-              <!-- Upload do computador (opcional - requer Supabase Storage configurado) -->
-              <div class="mt-5">
-                <label class="text-sm text-white/60">Enviar fotos do computador (seleção múltipla)</label>
-                <div class="mt-1 flex flex-col sm:flex-row gap-2">
-                  <input id="photoFilesInput" type="file" multiple accept="image/*"
-                         class="flex-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10 text-white/80" />
-                  <button id="uploadPhotosBtn"
-                          class="px-4 py-3 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-extrabold">
-                    Enviar
-                  </button>
-                </div>
-                <div class="mt-2 text-xs text-white/45">
-                  Para isso funcionar, você precisa ter um <b>bucket público</b> no Supabase Storage (ex: <span class="mono">motos</span>).
-                  Se não estiver configurado, o botão vai avisar e nada será alterado.
-                </div>
-              </div>
-</div>
 
               <div class="mt-3">
                 <label class="text-sm text-white/60">Thumbnail (URL)</label>
@@ -621,10 +596,6 @@ const SUPABASE_ANON_KEY = "sb_publishable_8lO0wrc_bFhXMPMn7LB_kA_PbEIQ8nE";
 
 /* ====== ADMIN (client-side) ====== */
 const ADMIN_PASSWORD = "tpower2024"; // troque depois se quiser
-
-
-/* ====== UPLOAD (opcional): Supabase Storage ====== */
-const STORAGE_BUCKET = "motos"; // crie um bucket público com esse nome (ou troque aqui)
 
 /* ====== Estado ====== */
 let sb = null;
@@ -700,7 +671,10 @@ function toast(msg, type="info"){
   clearTimeout(window.__toastTimer);
   window.__toastTimer = setTimeout(()=>box.classList.add("hidden"), 2600);
 }
-function setStatus(t){ const el = document.getElementById("statusText"); if(el) el.textContent = t; }
+function setStatus(t){
+  const el = document.getElementById("statusText");
+  if(el) el.textContent = t;
+}
 
 function updateClearSearchBtn(){
   const input = document.getElementById("searchInput");
@@ -1107,150 +1081,40 @@ function addPhotoUrl(){
   const url = (document.getElementById("photoUrlInput").value || "").trim();
   if(!url) return toast("Cole a URL da foto", "warn");
   if(!motoDataStorage[motoId]) motoDataStorage[motoId] = { moto_data:{}, thumbnail:"", photos:[] };
-  if(!motoDataStorage[motoId].photos) motoDataStorage[motoId].p
-function isValidHttpUrl(str){
-  try{
-    const u = new URL(str);
-    return u.protocol === "http:" || u.protocol === "https:";
-  }catch{
-    return false;
-  }
-}
-function uniquePush(arr, items){
-  const set = new Set(arr);
-  items.forEach(it=>{
-    if(!set.has(it)){
-      arr.push(it);
-      set.add(it);
-    }
-  });
+  if(!motoDataStorage[motoId].photos) motoDataStorage[motoId].photos = [];
+  motoDataStorage[motoId].photos.push(url);
+  document.getElementById("photoUrlInput").value = "";
+  renderAdminPhotosList(motoId);
 }
 
 function addPhotosBulk(){
   if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
   const motoId = document.getElementById("adminMotoSelect").value;
-  const ta = document.getElementById("photoUrlsBulk");
-  if(!ta) return;
 
-  const raw = (ta.value || "").trim();
-  if(!raw) return toast("Cole as URLs no campo de massa", "warn");
+  const raw = (document.getElementById("photoUrlsBulk").value || "").trim();
+  if(!raw) return toast("Cole pelo menos 1 URL (uma por linha)", "warn");
 
-  // aceita: uma por linha, vírgula ou espaço
-  const parts = raw
-    .split(/\s+|,|;/g)
-    .map(s=>s.trim())
+  const urls = raw
+    .split(/\n|,|\s+/) // aceita linha, vírgula ou espaço
+    .map(s => s.trim())
     .filter(Boolean);
 
-  const urls = parts.filter(isValidHttpUrl);
   if(!urls.length) return toast("Nenhuma URL válida encontrada", "warn");
 
   if(!motoDataStorage[motoId]) motoDataStorage[motoId] = { moto_data:{}, thumbnail:"", photos:[] };
-  if(!Array.isArray(motoDataStorage[motoId].photos)) motoDataStorage[motoId].photos = [];
+  if(!motoDataStorage[motoId].photos) motoDataStorage[motoId].photos = [];
 
-  const before = motoDataStorage[motoId].photos.length;
-  uniquePush(motoDataStorage[motoId].photos, urls);
-  const added = motoDataStorage[motoId].photos.length - before;
+  // adiciona sem duplicar
+  const set = new Set(motoDataStorage[motoId].photos);
+  urls.forEach(u => set.add(u));
+  motoDataStorage[motoId].photos = Array.from(set);
 
+  document.getElementById("photoUrlsBulk").value = "";
   renderAdminPhotosList(motoId);
-  toast(`Adicionadas ${added} foto(s) ✅`, "ok");
+  toast(`Adicionadas ${urls.length} URLs ✅`, "ok");
 }
 
-function clearBulk(){
-  const ta = document.getElementById("photoUrlsBulk");
-  if(ta) ta.value = "";
-  toast("Campo limpo", "info");
-}
 
-function sanitizeFileName(name){
-  return (name || "foto.jpg")
-    .toLowerCase()
-    .replace(/[^a-z0-9._-]/g, "_")
-    .replace(/_+/g, "_");
-}
-
-async function uploadPhotosFromComputer(){
-  if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
-  const motoId = document.getElementById("adminMotoSelect").value;
-
-  const input = document.getElementById("photoFilesInput");
-  if(!input || !input.files || !input.files.length){
-    return toast("Selecione 1 ou mais imagens", "warn");
-  }
-
-  let client;
-  try{
-    client = ensureSupabase();
-  }catch(e){
-    console.error(e);
-    return toast("Supabase não iniciou. Veja console.", "err");
-  }
-
-  // checagem simples: storage existe?
-  if(!client.storage){
-    return toast("Storage não disponível. Atualize o Supabase SDK.", "err");
-  }
-
-  toast("Enviando fotos…", "info");
-
-  const files = Array.from(input.files);
-  const uploadedUrls = [];
-
-  for(const file of files){
-    try{
-      const ts = Date.now();
-      const rand = Math.random().toString(16).slice(2,8);
-      const path = `${motoId}/${ts}_${rand}_${sanitizeFileName(file.name)}`;
-
-      const { error: upErr } = await client
-        .storage
-        .from(STORAGE_BUCKET)
-        .upload(path, file, { upsert: true, cacheControl: "3600" });
-
-      if(upErr){
-        console.error("Upload error:", upErr);
-        throw upErr;
-      }
-
-      const { data } = client.storage.from(STORAGE_BUCKET).getPublicUrl(path);
-      const publicUrl = data?.publicUrl;
-
-      if(!publicUrl){
-        throw new Error("Não consegui gerar URL pública. Confira se o bucket é público.");
-      }
-
-      uploadedUrls.push(publicUrl);
-    }catch(e){
-      console.error(e);
-      toast("Falha no upload. Verifique se o bucket é público e existe no Supabase.", "err");
-      return;
-    }
-  }
-
-  if(!motoDataStorage[motoId]) motoDataStorage[motoId] = { moto_data:{}, thumbnail:"", photos:[] };
-  if(!Array.isArray(motoDataStorage[motoId].photos)) motoDataStorage[motoId].photos = [];
-
-  uniquePush(motoDataStorage[motoId].photos, uploadedUrls);
-
-  // Limpa input
-  input.value = "";
-  renderAdminPhotosList(motoId);
-
-  // Salva automaticamente no banco (persistente)
-  try{
-    await savePhotos();
-  }catch(e){
-    // savePhotos já dá toast de erro, mas garantimos aqui
-    console.error(e);
-  }
-
-  toast(`Upload concluído: ${uploadedUrls.length} foto(s) ✅`, "ok");
-}
-
-hotos = [];
-  motoDataStorage[motoId].photos.push(url);
-  document.getElementById("photoUrlInput").value = "";
-  renderAdminPhotosList(motoId);
-}
 
 async function saveMotoData(){
   if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
@@ -1355,13 +1219,8 @@ document.getElementById("adminRefreshBtn").onclick = async ()=>{
 
 document.getElementById("saveMotoBtn").onclick = saveMotoData;
 document.getElementById("addPhotoBtn").onclick = addPhotoUrl;
-
 const __bulkBtn = document.getElementById("addPhotosBulkBtn");
 if(__bulkBtn) __bulkBtn.onclick = addPhotosBulk;
-const __clearBulkBtn = document.getElementById("clearBulkBtn");
-if(__clearBulkBtn) __clearBulkBtn.onclick = clearBulk;
-const __uploadBtn = document.getElementById("uploadPhotosBtn");
-if(__uploadBtn) __uploadBtn.onclick = uploadPhotosFromComputer;
 document.getElementById("saveThumbBtn").onclick = saveThumbnail;
 document.getElementById("savePhotosBtn").onclick = savePhotos;
 
