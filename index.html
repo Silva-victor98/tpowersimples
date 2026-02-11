@@ -301,130 +301,66 @@
     </div>
   </section>
 
-  <!-- Modal detalhes (Premium) -->
+  <!-- Modal detalhes -->
   <div id="detailModal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/75" id="detailBackdrop"></div>
+    <div class="absolute inset-0 bg-black/70" id="detailBackdrop"></div>
 
-    <div class="absolute inset-0 overflow-y-auto">
-      <div class="min-h-full flex items-start justify-center p-4 sm:p-6 lg:p-10">
-        <div class="w-full max-w-6xl rounded-[2rem] border border-white/10 glass overflow-hidden">
-          <!-- Top bar -->
-          <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-white/10">
-            <button id="detailBackBtn"
-                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-sm font-semibold">
-              ← Voltar
-            </button>
-
-            <div class="flex items-center gap-2 text-xs text-white/50 mono">
-              <span id="detailMotoId"></span>
-              <span class="text-white/30">•</span>
-              <span id="detailLoadedFrom">—</span>
-            </div>
-
-            <button id="detailClose"
-                    class="px-4 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-sm font-semibold">
-              ✕
-            </button>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="w-full max-w-4xl rounded-3xl border border-white/10 glass overflow-hidden">
+        <div class="flex items-center justify-between p-4 border-b border-white/10">
+          <div>
+            <div class="text-xs text-white/50 mono" id="detailMotoId"></div>
+            <div class="text-xl font-bold" id="detailTitle"></div>
           </div>
-
-          <!-- Hero info -->
-          <div class="px-4 sm:px-6 pt-8 pb-6 text-center">
-            <div class="inline-flex items-center gap-2 justify-center">
-              <span id="detailBadge"
-                    class="hidden px-4 py-1.5 rounded-full text-xs font-black tracking-wider bg-sky-500 text-black">
-                NOVO
-              </span>
-              <div class="text-sky-300 font-semibold text-sm" id="detailBrand"></div>
-            </div>
-
-            <h2 id="detailTitle" class="mt-3 text-5xl sm:text-6xl font-extrabold tracking-tight"></h2>
-
-            <p id="detailDesc" class="mt-4 max-w-3xl mx-auto text-white/70 leading-relaxed"></p>
-
-            <div id="detailPrice"
-                 class="mt-6 text-4xl sm:text-5xl font-extrabold text-sky-300">
-            </div>
-          </div>
-
-          <!-- Content -->
-          <div class="px-4 sm:px-6 pb-10">
-            <div class="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
-              <!-- Gallery -->
-              <div class="rounded-3xl border border-white/10 bg-black/25 overflow-hidden">
-                <div class="relative">
-                  <img id="detailMainImg" class="w-full h-[280px] sm:h-[380px] lg:h-[430px] object-cover" src="" alt="Foto principal"/>
-
-                  <!-- Arrows -->
-                  <button id="detailPrev"
-                          class="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/45 hover:bg-black/60 border border-white/15 backdrop-blur flex items-center justify-center">
-                    ‹
-                  </button>
-                  <button id="detailNext"
-                          class="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/45 hover:bg-black/60 border border-white/15 backdrop-blur flex items-center justify-center">
-                    ›
-                  </button>
-
-                  <!-- Counter -->
-                  <div id="detailCounter"
-                       class="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-black/45 border border-white/15 text-xs text-white/80 mono">
-                    1/1
-                  </div>
-                </div>
-
-                <div id="detailThumbs" class="p-3 sm:p-4 grid grid-cols-4 sm:grid-cols-6 gap-2 bg-black/10 border-t border-white/10"></div>
-              </div>
-
-              <!-- Specs -->
-              <div class="space-y-6">
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="p-5 rounded-3xl bg-white/5 border border-white/10">
-                    <div class="text-white/50 text-xs font-semibold tracking-wide">ANO</div>
-                    <div class="mt-1 text-lg font-bold" id="detailYear"></div>
-                  </div>
-                  <div class="p-5 rounded-3xl bg-white/5 border border-white/10">
-                    <div class="text-white/50 text-xs font-semibold tracking-wide">MARCA</div>
-                    <div class="mt-1 text-lg font-bold" id="detailBrandBox"></div>
-                  </div>
-                </div>
-
-                <div class="p-5 rounded-3xl bg-white/5 border border-white/10">
-                  <div class="flex items-center gap-2 mb-3">
-                    <div class="w-10 h-10 rounded-2xl bg-sky-500/15 border border-sky-400/20 flex items-center justify-center text-sky-300">⚡</div>
-                    <div class="font-bold tracking-wide">ESPECIFICAÇÕES</div>
-                  </div>
-                  <ul class="text-sm text-white/80 space-y-2" id="detailSpecs"></ul>
-                </div>
-
-                <div class="p-5 rounded-3xl bg-white/5 border border-white/10">
-                  <div class="flex items-center gap-2 mb-3">
-                    <div class="w-10 h-10 rounded-2xl bg-sky-500/15 border border-sky-400/20 flex items-center justify-center text-sky-300">✓</div>
-                    <div class="font-bold tracking-wide">DESTAQUES</div>
-                  </div>
-                  <div class="flex flex-col gap-2" id="detailFeatures"></div>
-                </div>
-
-                <div class="p-5 rounded-3xl bg-white/5 border border-white/10 text-center">
-                  <div class="text-2xl font-extrabold tracking-tight">GOSTOU DESTA MOTO?</div>
-                  <div class="mt-2 text-white/60">Entre em contato com nossa equipe agora mesmo!</div>
-                  <div class="mt-5 flex flex-col sm:flex-row gap-3 justify-center">
-                    <button id="detailContactBtn"
-                            class="px-6 py-3 rounded-full bg-sky-500 hover:bg-sky-400 text-black font-extrabold">
-                      Falar com Consultor
-                    </button>
-                    <a id="detailWhatsappBtn"
-                       href="https://wa.me/5541996977148"
-                       target="_blank"
-                       class="px-6 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold">
-                      WhatsApp Direto
-                    </a>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
+          <button id="detailClose" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15">✖</button>
         </div>
+
+        <div class="grid lg:grid-cols-2 gap-0">
+          <div class="p-4">
+            <div class="rounded-2xl overflow-hidden border border-white/10 bg-black/30">
+              <img id="detailMainImg" class="w-full h-72 object-cover" src="" alt="Foto principal"/>
+            </div>
+
+            <div id="detailThumbs" class="mt-3 grid grid-cols-4 gap-2"></div>
+          </div>
+
+          <div class="p-4 border-t lg:border-t-0 lg:border-l border-white/10">
+            <div class="grid grid-cols-2 gap-3 text-sm">
+              <div class="p-3 rounded-2xl bg-white/5 border border-white/10">
+                <div class="text-white/50">Marca</div>
+                <div class="font-semibold" id="detailBrand"></div>
+              </div>
+              <div class="p-3 rounded-2xl bg-white/5 border border-white/10">
+                <div class="text-white/50">Ano</div>
+                <div class="font-semibold" id="detailYear"></div>
+              </div>
+              <div class="p-3 rounded-2xl bg-white/5 border border-white/10 col-span-2">
+                <div class="text-white/50">Preço</div>
+                <div class="font-semibold text-sky-300" id="detailPrice"></div>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <div class="text-white/50 text-sm">Descrição</div>
+              <p class="mt-1 text-white/75 leading-relaxed" id="detailDesc"></p>
+            </div>
+
+            <div class="mt-4">
+              <div class="text-white/50 text-sm">Especificações</div>
+              <ul class="mt-2 text-sm text-white/75 space-y-1" id="detailSpecs"></ul>
+            </div>
+
+            <div class="mt-4">
+              <div class="text-white/50 text-sm">Destaques</div>
+              <div class="mt-2 flex flex-wrap gap-2" id="detailFeatures"></div>
+            </div>
+
+            <div class="mt-5 text-xs text-white/40 mono">
+              Carregado do Supabase: <span id="detailLoadedFrom">—</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -885,10 +821,9 @@ if(!allIds.length){
     const thumb = motoDataStorage[id]?.thumbnail || motoDataStorage[id]?.photos?.[0] || "";
     const badge = (d.year && String(d.year) === "2024") ? "NOVO" : "DESTAQUE";
 
-    const el = document.createElement("button");
-    el.type = "button";
-    el.className = "\1";
-    el.onclick = () => openDetail(id);
+    const el = document.createElement("a");
+    el.href = `moto.html?id=${encodeURIComponent(id)}`;
+    el.className = "block text-left p-0 rounded-3xl overflow-hidden border border-white/10 card-gradient hover-glow w-full";
     el.innerHTML = `
       <div class="relative">
         <div class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-xs font-black tracking-wide
@@ -923,96 +858,53 @@ if(!allIds.length){
   });
 }
 
-/* ====== Detalhe (Premium + Carrossel) ====== */
-let __detailPhotos = [];
-let __detailIndex = 0;
-
-function __setDetailImage(idx){
-  if(!__detailPhotos.length) return;
-  __detailIndex = (idx + __detailPhotos.length) % __detailPhotos.length;
-
-  const main = document.getElementById("detailMainImg");
-  const counter = document.getElementById("detailCounter");
-  if(main) main.src = __detailPhotos[__detailIndex] || "";
-  if(counter) counter.textContent = `${__detailIndex + 1}/${__detailPhotos.length}`;
-
-  const thumbs = document.querySelectorAll("#detailThumbs button");
-  thumbs.forEach((b,i)=>{
-    b.classList.toggle("ring-2", i === __detailIndex);
-    b.classList.toggle("ring-sky-400", i === __detailIndex);
-    b.classList.toggle("opacity-90", i === __detailIndex);
-  });
-}
-
+/* ====== Detalhe ====== */
 function openDetail(motoId){
   const d = motoDataStorage[motoId]?.moto_data || {};
   const photos = motoDataStorage[motoId]?.photos || [];
   const thumb = motoDataStorage[motoId]?.thumbnail || photos[0] || "";
-
-  const badgeEl = document.getElementById("detailBadge");
-  const isNovo = String(d.year || "") === "2024";
-  if(badgeEl){
-    badgeEl.classList.toggle("hidden", !isNovo);
-    badgeEl.textContent = "NOVO";
-  }
-
   document.getElementById("detailMotoId").textContent = motoId;
   document.getElementById("detailTitle").textContent = d.name || motoId.toUpperCase();
-  document.getElementById("detailBrand").textContent = d.brand || "";
-  document.getElementById("detailBrandBox").textContent = d.brand || "—";
+  document.getElementById("detailBrand").textContent = d.brand || "—";
   document.getElementById("detailYear").textContent = d.year || "—";
   document.getElementById("detailPrice").textContent = d.price || "Consultar";
   document.getElementById("detailDesc").textContent = d.description || "—";
-  document.getElementById("detailLoadedFrom").textContent = "Supabase + fallback";
 
-  __detailPhotos = (photos && photos.length ? photos : (thumb ? [thumb] : [])).filter(Boolean);
-  if(!__detailPhotos.length){
-    __detailPhotos = ["https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"];
-  }
+  const main = document.getElementById("detailMainImg");
+  main.src = thumb || "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80";
 
   const specsUl = document.getElementById("detailSpecs");
   specsUl.innerHTML = "";
   (d.specs || []).forEach(s=>{
     const li = document.createElement("li");
-    li.className = "px-4 py-3 rounded-2xl bg-black/25 border border-white/10";
-    li.textContent = s;
+    li.textContent = "• " + s;
     specsUl.appendChild(li);
   });
 
   const feat = document.getElementById("detailFeatures");
   feat.innerHTML = "";
   (d.features || []).forEach(f=>{
-    const row = document.createElement("div");
-    row.className = "flex items-center gap-3 px-4 py-3 rounded-2xl bg-black/25 border border-white/10";
-    row.innerHTML = `<span class="w-7 h-7 rounded-xl bg-sky-500/15 border border-sky-400/20 flex items-center justify-center text-sky-300">✓</span>
-                     <span class="text-sm text-white/85">${f}</span>`;
-    feat.appendChild(row);
+    const chip = document.createElement("span");
+    chip.className = "px-3 py-1 rounded-full bg-white/10 border border-white/10 text-xs";
+    chip.textContent = f;
+    feat.appendChild(chip);
   });
 
   const thumbs = document.getElementById("detailThumbs");
   thumbs.innerHTML = "";
-  __detailPhotos.slice(0, 12).forEach((url, i)=>{
+  const list = (photos.length ? photos : (thumb? [thumb] : []));
+  list.slice(0,8).forEach(url=>{
     const b = document.createElement("button");
-    b.type = "button";
-    b.className = "rounded-2xl overflow-hidden border border-white/10 bg-black/30 hover:bg-black/40 transition";
+    b.className = "rounded-xl overflow-hidden border border-white/10 bg-black/30";
     b.innerHTML = `<img src="${url}" class="w-full h-16 object-cover" alt="thumb"/>`;
-    b.onclick = ()=>__setDetailImage(i);
+    b.onclick = ()=>{ main.src = url; };
     thumbs.appendChild(b);
   });
 
-  __setDetailImage(0);
-
+  document.getElementById("detailLoadedFrom").textContent = "Supabase + fallback";
   document.getElementById("detailModal").classList.remove("hidden");
-  const closeBtn = document.getElementById("detailClose");
-  if(closeBtn) closeBtn.focus({preventScroll:true});
 }
-
-function closeDetail(){
-  document.getElementById("detailModal").classList.add("hidden");
-}
-
-function __detailNext(){ __setDetailImage(__detailIndex + 1); }
-function __detailPrev(){ __setDetailImage(__detailIndex - 1); }
+function closeDetail(){ document.getElementById("detailModal").classList.add("hidden"); }
 
 /* ====== Admin ====== */
 function openAdmin(){
@@ -1253,17 +1145,6 @@ if(__clearSearchBtn) __clearSearchBtn.onclick = clearSearch;
 
 document.getElementById("detailClose").onclick = closeDetail;
 document.getElementById("detailBackdrop").onclick = closeDetail;
-document.getElementById("detailBackBtn").onclick = closeDetail;
-document.getElementById("detailPrev").onclick = __detailPrev;
-document.getElementById("detailNext").onclick = __detailNext;
-document.getElementById("detailContactBtn").onclick = ()=>{ document.getElementById("detailModal").classList.add("hidden"); document.getElementById("contato").scrollIntoView({behavior:"smooth"}); };
-
-document.addEventListener("keydown", (e)=>{
-  if(document.getElementById("detailModal").classList.contains("hidden")) return;
-  if(e.key === "Escape") closeDetail();
-  if(e.key === "ArrowLeft") __detailPrev();
-  if(e.key === "ArrowRight") __detailNext();
-});
 
 document.getElementById("adminBtn").onclick = openAdmin;
 document.getElementById("ctaAdmin").onclick = openAdmin;
@@ -1309,6 +1190,20 @@ if(__prev) __prev.onclick = ()=>{ currentPage = Math.max(1, currentPage - 1); re
 if(__next) __next.onclick = ()=>{ currentPage = currentPage + 1; renderGrid(); window.scrollTo({top: document.getElementById("gridSection").offsetTop - 80, behavior: "smooth"}); };
 init();
 
+// FIX DEFENSIVO: impede que "moto.html" vire clique em página inteira.
+// Só permite navegar para moto.html quando o clique aconteceu dentro do grid (#motosGrid).
+document.addEventListener("click", (e) => {
+  const a = e.target.closest('a[href*="moto.html"]');
+  if (!a) return;
+
+  const insideGrid = !!a.closest("#motosGrid");
+  if (!insideGrid) {
+    e.preventDefault();
+    e.stopPropagation();
+    // Se por acaso um link estiver "cobrindo" a tela, isso bloqueia a navegação indevida.
+    try { toast("Clique fora do card (bloqueado).", "warn"); } catch {}
+  }
+}, true);
 
 </script>
 
