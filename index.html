@@ -111,24 +111,7 @@
       text-transform: uppercase;
     }
     .hero-title .highlight{ color: #38BDF8; }
-
-    /* --- Admin select mais visível (premium) --- */
-    #adminMotoSelect {
-      background: rgba(0,0,0,.45) !important;
-      border: 1px solid rgba(255,255,255,.18) !important;
-      box-shadow: 0 8px 24px rgba(0,0,0,.35);
-    }
-    #adminMotoSelect:focus {
-      outline: none !important;
-      border-color: rgba(56,189,248,.65) !important;
-      box-shadow: 0 0 0 4px rgba(56,189,248,.18);
-    }
-    #adminMotoSelect option {
-      background: #0b1220;
-      color: #ffffff;
-    }
-
-  </style>
+</style>
 </head>
 
 <body class="min-h-screen text-white tp-bg font-body">
@@ -150,7 +133,7 @@
       <div class="relative w-full max-w-md">
         <input id="searchInput"
                class="w-full pl-12 pr-16 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400 text-sm"
-                autocomplete="off" placeholder="Buscar por modelo, marca, ano…" />
+               placeholder="Buscar por modelo, marca, ano…"/>
         <div class="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">🔎</div>
 
         
@@ -160,16 +143,7 @@
                 class="absolute right-12 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/90 transition hidden"
                 title="Limpar busca"
                 aria-label="Limpar busca">✕</button>
-<!-- Botão limpar busca -->
-        <button id="clearSearchBtn"
-                type="button"
-                class="absolute right-11 top-1/2 -translate-y-1/2 text-white/35 hover:text-white/80 transition hidden"
-                title="Limpar busca"
-                aria-label="Limpar busca">
-          ✕
-        </button>
-
-        <!-- Botão admin discreto (como “cadeado quase invisível”) -->
+<!-- Botão admin discreto (como “cadeado quase invisível”) -->
         <button id="adminBtn"
                 class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/90 transition"
                 title="Painel administrativo"
@@ -245,16 +219,6 @@
       <span id="countText" class="hidden">0</span>
 
       <div id="motosGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"></div>
-
-      <!-- Nenhum resultado -->
-      <div id="noResultsBox" class="hidden mt-10 p-8 rounded-3xl bg-white/5 border border-white/10 text-center">
-        <div class="text-2xl font-extrabold text-white">Nenhuma moto encontrada</div>
-        <div class="mt-2 text-white/60">Limpe a busca para ver o catálogo completo.</div>
-        <button id="clearSearchBtn2" type="button"
-                class="mt-6 px-6 py-3 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-extrabold">
-          Limpar busca
-        </button>
-      </div>
 
       <!-- Paginação -->
       <div class="mt-12 flex items-center justify-center gap-4">
@@ -887,17 +851,6 @@ if(!allIds.length){
     `;
     grid.appendChild(el);
   });
-
-  // --- UI: nenhum resultado ---
-  const noBox = document.getElementById("noResultsBox");
-  if(noBox){
-    if(Number(document.getElementById("countText")?.textContent || 0) === 0) && q){
-      noBox.classList.remove("hidden");
-    } else {
-      noBox.classList.add("hidden");
-    }
-  }
-
 }
 
 /* ====== Detalhe ====== */
@@ -970,11 +923,8 @@ function syncAdminVisibility(){
       opt.textContent = id.toUpperCase();
       sel.appendChild(opt);
     });
-    const saved = (()=>{ try{ return localStorage.getItem("tp_lastMotoId"); }catch{ return null; }})();
-    const first = getMotoIds()[0] || "";
-    sel.value = (saved && motoDataStorage[saved]) ? saved : first;
+    sel.value = getMotoIds()[0] || "";
     loadAdminForm(sel.value);
-    try{ if(sel.value) localStorage.setItem("tp_lastMotoId", sel.value); }catch{}
   }
 }
 function adminLogin(){
@@ -1207,7 +1157,7 @@ document.getElementById("adminCancelBtn").onclick = closeAdmin;
 
 document.getElementById("adminHelpBtn").onclick = ()=>toast("Senha padrão: tpower2024 (troque no código depois)", "info");
 
-document.getElementById("adminMotoSelect").onchange = (e)=>{ const id=e.target.value; try{ localStorage.setItem("tp_lastMotoId", id); }catch{} loadAdminForm(id); };
+document.getElementById("adminMotoSelect").onchange = (e)=>loadAdminForm(e.target.value);
 document.getElementById("adminRefreshBtn").onclick = async ()=>{
   toast("Recarregando…", "info");
   await loadAllFromSupabase();
@@ -1225,32 +1175,6 @@ document.getElementById("searchInput").addEventListener("input", ()=>{
   renderGrid();
   updateClearSearchBtn();
 });
-
-
-// Limpar busca (botões + auto)
-const clearBtn = document.getElementById("clearSearchBtn");
-const clearBtn2 = document.getElementById("clearSearchBtn2");
-function updateClearBtn(){
-  const has = (document.getElementById("searchInput").value || "").trim().length > 0;
-  if(clearBtn) clearBtn.classList.toggle("hidden", !has);
-}
-function clearSearch(){
-  const inp = document.getElementById("searchInput");
-  if(!inp) return;
-  inp.value = "";
-  currentPage = 1;
-  renderGrid();
-  updateClearBtn();
-}
-if(clearBtn) clearBtn.onclick = clearSearch;
-if(clearBtn2) clearBtn2.onclick = clearSearch;
-updateClearBtn();
-
-// Quando voltar pelo botão do navegador, limpa busca para não “sumir” o catálogo
-window.addEventListener("pageshow", ()=>{
-  clearSearch();
-});
-
 
 document.getElementById("ctaOpenFirst").onclick = ()=>{
   document.getElementById("gridSection").scrollIntoView({behavior:"smooth"});
