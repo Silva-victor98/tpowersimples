@@ -58,7 +58,7 @@ text-transform:uppercase;
 
 /* Background (mais azul, menos preto) */
 .tp-bg{
-background-image:url("https://i.imgur.com/TryCmgo.jpg");background-size:cover;background-position:center;background-repeat:no-repeat;background:
+background-image: linear-gradient(rgba(2,6,23,.75), rgba(2,6,23,.85)), url("https://i.imgur.com/TryCmgo.jpg");background-size:cover;background-position:center;background-repeat:no-repeat;background:
 radial-gradient(1200px 520px at 50% -10%, rgba(56,189,248,.28), transparent 60%),
 radial-gradient(900px 520px at 10% 20%, rgba(96,165,250,.16), transparent 55%),
 radial-gradient(800px 520px at 90% 30%, rgba(59,130,246,.12), transparent 55%),
@@ -165,7 +165,7 @@ aria-label="Painel administrativo">
 
 <!-- HERO (visual novo, backend intacto) -->
 <section class="relative overflow-hidden">
-<div class="absolute inset-0 bg-cover bg-center"
+<div id="hero-bg" class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000"
   style="
     background-image:
       linear-gradient(
@@ -1336,8 +1336,20 @@ try { toast("Clique fora do card (bloqueado).", "warn"); } catch {}
 }
 }, true);
 
-</script>
+// LOGIN COM ENTER (campo senha)
+(function(){
+  const pass = document.getElementById("adminPassword");
+  if(!pass) return;
+  pass.addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+      e.preventDefault();
+      const btn = document.getElementById("adminLoginBtn");
+      if(btn) btn.click();
+    }
+  });
+})();
 
+</script>
 <!-- CONTATO -->
 <section id="contato" class="py-24 relative overflow-hidden">
 <div class="absolute inset-0 opacity-60 pointer-events-none"
@@ -1536,6 +1548,27 @@ if(compiled) compiled.value = mensagemFormatada;
 const subj = form.querySelector('input[name="_subject"]');
 if(subj) subj.value = `Contato pelo site - ${motoFinal}`;
 });
+})();
+</script>
+
+
+<script>
+// HERO SLIDESHOW (automático)
+(function(){
+  const images = ['https://i.imgur.com/TryCmgo.jpg', 'https://i.imgur.com/B37xqkA.jpg', 'https://i.imgur.com/KslMGtA.jpg'];
+  let i = 0;
+  const hero = document.getElementById("hero-bg");
+  if(!hero || images.length < 2) return;
+
+  setInterval(() => {
+    i = (i + 1) % images.length;
+    hero.style.opacity = 0;
+    setTimeout(() => {
+      hero.style.backgroundImage =
+        `linear-gradient(rgba(2,6,23,.75), rgba(2,6,23,.85)), url('${images[i]}')`;
+      hero.style.opacity = 1;
+    }, 600);
+  }, 6000);
 })();
 </script>
 
