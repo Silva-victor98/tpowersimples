@@ -11,101 +11,18 @@
   <!-- Supabase JS v2 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<style>
-    :root{
-      --tp-ink:#EAF2FF;
-      --tp-muted:rgba(234,242,255,.68);
-      --tp-muted2:rgba(234,242,255,.50);
-      --tp-line:rgba(255,255,255,.10);
-      --tp-glass:rgba(6,18,42,.55);
-      --tp-glass2:rgba(6,18,42,.35);
-      --tp-accent:#38BDF8; /* sky-400 */
-      --tp-accent2:#60A5FA; /* blue-400 */
-      --tp-bgA:#020617; /* slate-950 */
-      --tp-bgB:#06122a; /* deep navy */
-      --tp-bgC:#0b2a5a; /* richer blue */
-    }
-
-    /* Fonts */
-    .font-display{
-      font-family:'Bebas Neue', sans-serif;
-      font-weight:400;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-    }
-    .font-body{
-      font-family:'Inter', sans-serif;
-      font-weight:400;
-      letter-spacing:.005em;
-    }
-    body, p, span, label, input, textarea, select, button{
-      font-family:'Inter', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-    h1,h2,h3,.display{
-      font-family:'Bebas Neue', sans-serif;
-      font-weight:400;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-    }
-
-    /* Background (mais azul, menos preto) */
-    .tp-bg{
-      background:
-        radial-gradient(1200px 520px at 50% -10%, rgba(56,189,248,.28), transparent 60%),
-        radial-gradient(900px 520px at 10% 20%, rgba(96,165,250,.16), transparent 55%),
-        radial-gradient(800px 520px at 90% 30%, rgba(59,130,246,.12), transparent 55%),
-        linear-gradient(180deg, var(--tp-bgA) 0%, var(--tp-bgB) 55%, #020617 100%);
-      color:var(--tp-ink);
-    }
-
-    /* Mantém o visual “premium” */
-    .card-gradient{
-      background: linear-gradient(135deg, rgba(56,189,248,.14), rgba(255,255,255,.06));
-    }
-    .hover-glow{
-      box-shadow: 0 0 0 rgba(56,189,248,0);
-      transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease;
-    }
-    .hover-glow:hover{
-      box-shadow: 0 0 40px rgba(56,189,248,.22);
-      transform: translateY(-2px);
-      border-color: rgba(56,189,248,.30);
-    }
-    .glass{
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      background: linear-gradient(180deg, var(--tp-glass), var(--tp-glass2));
-    }
+  <style>
+    /* Mantém o visual “dark + sky” sem depender do seu HTML antigo */
+    .card-gradient{background:linear-gradient(135deg, rgba(56,189,248,.12), rgba(255,255,255,.06));}
+    .hover-glow{box-shadow:0 0 0 rgba(56,189,248,0); transition:box-shadow .25s ease, transform .25s ease;}
+    .hover-glow:hover{box-shadow:0 0 32px rgba(56,189,248,.22); transform:translateY(-2px);}
+    .glass{backdrop-filter: blur(14px); background: rgba(0,0,0,.35);}
     .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
     .hidden{display:none;}
-
-    /* Inputs mais premium */
-    input, textarea, select{
-      color: var(--tp-ink);
-      caret-color: var(--tp-accent);
-    }
-    input::placeholder, textarea::placeholder{ color: rgba(234,242,255,.42); }
-    input:focus, textarea:focus, select:focus{
-      outline: none;
-      box-shadow: 0 0 0 4px rgba(56,189,248,.14);
-      border-color: rgba(56,189,248,.45) !important;
-    }
-
-    /* Pequenos ajustes de tipografia */
-    .tp-muted{color:var(--tp-muted);}
-    .tp-muted2{color:var(--tp-muted2);}
   </style>
 </head>
 
-<body class="min-h-screen text-white tp-bg font-body">
+<body class="min-h-screen bg-black text-white">
   <!-- Header -->
   <header class="sticky top-0 z-40 border-b border-white/10 glass">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-4">
@@ -127,14 +44,7 @@
                placeholder="Buscar por modelo, marca, ano…"/>
         <div class="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">🔎</div>
 
-        
-        <!-- Limpar busca -->
-        <button id="clearSearchBtn"
-                type="button"
-                class="absolute right-12 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/90 transition hidden"
-                title="Limpar busca"
-                aria-label="Limpar busca">✕</button>
-<!-- Botão admin discreto (como “cadeado quase invisível”) -->
+        <!-- Botão admin discreto (como “cadeado quase invisível”) -->
         <button id="adminBtn"
                 class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/90 transition"
                 title="Painel administrativo"
@@ -324,7 +234,40 @@
 
 
 
-  <!-- Modal detalhes -->
+  
+  <!-- LOCALIZAÇÃO -->
+  <section id="localizacao" class="py-24 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-60 pointer-events-none"
+         style="background:
+           radial-gradient(900px 420px at 50% 20%, rgba(56,189,248,.18), transparent 60%);"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href="https://maps.app.goo.gl/sowMDzp94ZPjfzeH7"
+         target="_blank"
+         class="block rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md p-12 sm:p-14 text-center transition-all duration-500 hover:border-sky-400 hover:bg-sky-500/10">
+        <div class="flex justify-center mb-6">
+          <div class="w-16 h-16 rounded-full bg-sky-500/20 flex items-center justify-center border border-sky-400/20">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-sky-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 22s8-4.5 8-10A8 8 0 104 12c0 5.5 8 10 8 10z" />
+            </svg>
+          </div>
+        </div>
+
+        <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+          NOSSA LOCALIZAÇÃO
+        </h3>
+
+        <p class="mt-2 text-white/60">
+          Clique para abrir no Google Maps
+        </p>
+      </a>
+    </div>
+  </section>
+
+<!-- Modal detalhes -->
   <div id="detailModal" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black/70" id="detailBackdrop"></div>
 
@@ -403,56 +346,26 @@
         </div>
 
         <!-- Login -->
-        <div id="adminLogin" class="p-6 sm:p-10">
-          <div class="mx-auto max-w-md text-center">
-            <div class="w-20 h-20 mx-auto rounded-3xl bg-sky-500/15 border border-sky-400/20 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-sky-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V8a4 4 0 10-8 0v3" />
-                <rect x="5" y="11" width="14" height="10" rx="2" ry="2" />
-              </svg>
-            </div>
-
-            <div class="mt-6 text-2xl font-extrabold tracking-wide text-sky-300">ACESSO RESTRITO</div>
-            <div class="mt-1 text-white/60">Área Administrativa</div>
-          </div>
-
-          <div class="mt-8 mx-auto max-w-md space-y-4">
-            <div>
-              <label class="text-sm text-white/60">Usuário</label>
-              <input id="adminUser" type="text" autocomplete="username"
-                     class="w-full mt-1 px-4 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400"
-                     placeholder="Digite seu usuário"/>
-            </div>
-
-            <div>
+        <div id="adminLogin" class="p-4">
+          <div class="grid sm:grid-cols-3 gap-3 items-end">
+            <div class="sm:col-span-1">
               <label class="text-sm text-white/60">Senha do painel</label>
               <input id="adminPassword" type="password" autocomplete="current-password"
                      class="w-full mt-1 px-4 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400"
                      placeholder="Digite sua senha"/>
             </div>
-
-            <div class="grid grid-cols-2 gap-3 pt-2">
-              <button id="adminCancelBtn"
-                      type="button"
-                      class="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 font-semibold">
-                Cancelar
-              </button>
-              <button id="adminLoginBtn"
-                      type="button"
-                      class="px-5 py-3 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-500 hover:from-sky-400 hover:to-blue-400 text-black font-extrabold">
+            <div class="sm:col-span-2 flex gap-2">
+              <button id="adminLoginBtn" class="flex-1 px-5 py-3 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold">
                 Entrar
               </button>
+              <button id="adminHelpBtn" class="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
+                Ajuda
+              </button>
             </div>
+          </div>
 
-            <button id="adminHelpBtn"
-                    type="button"
-                    class="w-full text-center text-sm text-white/55 hover:text-white/80 transition underline underline-offset-4">
-              Precisa de ajuda?
-            </button>
-
-            <div class="pt-2 text-xs text-white/45">
-              ⚠️ Este painel é “client-side”. Para segurança real, use Edge Function/servidor. Aqui é foco em funcionar no GitHub Pages.
-            </div>
+          <div class="mt-3 text-xs text-white/45">
+            ⚠️ Este painel é “client-side”. Para segurança real, use Edge Function/servidor. Aqui é foco em funcionar no GitHub Pages.
           </div>
         </div>
 
@@ -682,22 +595,6 @@ function toast(msg, type="info"){
 }
 function setStatus(t){ document.getElementById("statusText").textContent = t; }
 
-
-function updateClearSearchBtn(){
-  const input = document.getElementById("searchInput");
-  const btn = document.getElementById("clearSearchBtn");
-  if(!input || !btn) return;
-  const has = (input.value || "").trim().length > 0;
-  btn.classList.toggle("hidden", !has);
-}
-function clearSearch(){
-  const input = document.getElementById("searchInput");
-  if(input) input.value = "";
-  currentPage = 1;
-  renderGrid();
-  updateClearSearchBtn();
-}
-
 function ensureSupabase(){
   if(sb) return sb;
   if(!window.supabase){ throw new Error("Supabase SDK não carregou"); }
@@ -824,32 +721,14 @@ function renderGrid(){
       : "Nenhuma moto encontrada";
   }
 
-
-// Estado vazio (quando a busca filtra tudo)
-if(!allIds.length){
-  grid.innerHTML = `
-    <div class="col-span-full p-10 rounded-3xl bg-white/5 border border-white/10 text-center">
-      <div class="text-2xl font-extrabold tracking-tight">Nenhuma moto encontrada</div>
-      <div class="mt-2 text-white/60">Tente limpar a busca ou pesquisar por marca/modelo.</div>
-      <button type="button"
-              onclick="clearSearch()"
-              class="mt-6 px-6 py-3 rounded-full bg-sky-500 hover:bg-sky-400 text-black font-extrabold">
-        Limpar busca
-      </button>
-    </div>
-  `;
-  return;
-}
-
   // Renderiza 9 cards por página (3x3 em telas grandes)
   ids.forEach(id=>{
     const d = motoDataStorage[id]?.moto_data || {};
     const thumb = motoDataStorage[id]?.thumbnail || motoDataStorage[id]?.photos?.[0] || "";
     const badge = (d.year && String(d.year) === "2024") ? "NOVO" : "DESTAQUE";
 
-    const el = document.createElement("a");
-    el.href = `moto.html?id=${encodeURIComponent(id)}`;
-    el.className = "block text-left p-0 rounded-3xl overflow-hidden border border-white/10 card-gradient hover-glow w-full";
+    const el = document.createElement("button");
+    el.className = "text-left p-0 rounded-3xl overflow-hidden border border-white/10 card-gradient hover-glow w-full";
     el.innerHTML = `
       <div class="relative">
         <div class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-xs font-black tracking-wide
@@ -880,6 +759,7 @@ if(!allIds.length){
         </div>
       </div>
     `;
+    el.onclick = ()=>openDetail(id);
     grid.appendChild(el);
   });
 }
@@ -1075,7 +955,6 @@ async function createNewMoto(){
     // Atualiza grid (paginação respeita)
     renderFeatured(); 
     renderGrid();
-    updateClearSearchBtn();
   }catch(e){
     console.error(e);
     toast("Falha ao criar no Supabase (veja console)", "err");
@@ -1167,9 +1046,6 @@ async function init(){
 }
 
 /* ====== Events ====== */
-const __clearSearchBtn = document.getElementById("clearSearchBtn");
-if(__clearSearchBtn) __clearSearchBtn.onclick = clearSearch;
-
 document.getElementById("detailClose").onclick = closeDetail;
 document.getElementById("detailBackdrop").onclick = closeDetail;
 
@@ -1184,8 +1060,6 @@ document.getElementById("adminLogoutBtn").onclick = adminLogout;
 
 
 document.getElementById("createMotoBtn").onclick = createNewMoto;
-document.getElementById("adminCancelBtn").onclick = closeAdmin;
-
 document.getElementById("adminHelpBtn").onclick = ()=>toast("Senha padrão: tpower2024 (troque no código depois)", "info");
 
 document.getElementById("adminMotoSelect").onchange = (e)=>loadAdminForm(e.target.value);
@@ -1204,7 +1078,6 @@ document.getElementById("savePhotosBtn").onclick = savePhotos;
 document.getElementById("searchInput").addEventListener("input", ()=>{
   currentPage = 1;
   renderGrid();
-  updateClearSearchBtn();
 });
 
 document.getElementById("ctaOpenFirst").onclick = ()=>{
@@ -1218,22 +1091,6 @@ const __next = document.getElementById("nextPageBtn");
 if(__prev) __prev.onclick = ()=>{ currentPage = Math.max(1, currentPage - 1); renderGrid(); window.scrollTo({top: document.getElementById("gridSection").offsetTop - 80, behavior: "smooth"}); };
 if(__next) __next.onclick = ()=>{ currentPage = currentPage + 1; renderGrid(); window.scrollTo({top: document.getElementById("gridSection").offsetTop - 80, behavior: "smooth"}); };
 init();
-
-// FIX DEFENSIVO: impede que "moto.html" vire clique em página inteira.
-// Só permite navegar para moto.html quando o clique aconteceu dentro do grid (#motosGrid).
-document.addEventListener("click", (e) => {
-  const a = e.target.closest('a[href*="moto.html"]');
-  if (!a) return;
-
-  const insideGrid = !!a.closest("#motosGrid");
-  if (!insideGrid) {
-    e.preventDefault();
-    e.stopPropagation();
-    // Se por acaso um link estiver "cobrindo" a tela, isso bloqueia a navegação indevida.
-    try { toast("Clique fora do card (bloqueado).", "warn"); } catch {}
-  }
-}, true);
-
 </script>
 
   <!-- CONTATO -->
