@@ -73,7 +73,7 @@
     </p>
 
     <div class="mt-10">
-      <button id="ctaOpenFirst"
+      <button data-scroll="grid"
               class="px-10 py-4 rounded-full bg-sky-500 hover:bg-sky-400 text-black font-extrabold text-sm tracking-wide">
         EXPLORAR MOTOS
       </button>
@@ -123,7 +123,7 @@
           
 
           <div class="mt-8 flex flex-col sm:flex-row gap-3">
-            <button id="ctaOpenFirst"
+            <button data-scroll="grid"
                     class="px-6 py-3 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold">
               Ver motos
             </button>
@@ -234,40 +234,7 @@
 
 
 
-  
-  <!-- LOCALIZAÇÃO -->
-  <section id="localizacao" class="py-24 relative overflow-hidden">
-    <div class="absolute inset-0 opacity-60 pointer-events-none"
-         style="background:
-           radial-gradient(900px 420px at 50% 20%, rgba(56,189,248,.18), transparent 60%);"></div>
-
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <a href="https://maps.app.goo.gl/sowMDzp94ZPjfzeH7"
-         target="_blank"
-         class="block rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md p-12 sm:p-14 text-center transition-all duration-500 hover:border-sky-400 hover:bg-sky-500/10">
-        <div class="flex justify-center mb-6">
-          <div class="w-16 h-16 rounded-full bg-sky-500/20 flex items-center justify-center border border-sky-400/20">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-sky-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 22s8-4.5 8-10A8 8 0 104 12c0 5.5 8 10 8 10z" />
-            </svg>
-          </div>
-        </div>
-
-        <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
-          NOSSA LOCALIZAÇÃO
-        </h3>
-
-        <p class="mt-2 text-white/60">
-          Clique para abrir no Google Maps
-        </p>
-      </a>
-    </div>
-  </section>
-
-<!-- Modal detalhes -->
+  <!-- Modal detalhes -->
   <div id="detailModal" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black/70" id="detailBackdrop"></div>
 
@@ -284,13 +251,17 @@
         <div class="grid lg:grid-cols-2 gap-0">
           <div class="p-4">
             <div class="relative rounded-2xl overflow-hidden border border-white/10 bg-black/30">
-              <img id="detailMainImg" class="w-full h-[22rem] sm:h-[26rem] object-cover" src="" alt="Foto principal"/>
-              <button id="detailPrev" type="button"
-                class="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 hover:bg-black/70 border border-white/10 flex items-center justify-center text-white/90 text-2xl leading-none">
+              <img id="detailMainImg" class="w-full h-72 object-cover" src="" alt="Foto principal"/>
+
+              <!-- Setas do carrossel -->
+              <button id="detailPrev"
+                      type="button"
+                      class="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 border border-white/15 hover:bg-black/70 flex items-center justify-center">
                 ‹
               </button>
-              <button id="detailNext" type="button"
-                class="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 hover:bg-black/70 border border-white/10 flex items-center justify-center text-white/90 text-2xl leading-none">
+              <button id="detailNext"
+                      type="button"
+                      class="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 border border-white/15 hover:bg-black/70 flex items-center justify-center">
                 ›
               </button>
             </div>
@@ -584,6 +555,18 @@ const DEFAULT_DB = {
 // Armazenamento runtime (sempre alimentado do banco + fallback)
 let motoDataStorage = JSON.parse(JSON.stringify(DEFAULT_DB)); 
 // Paginação (UI)
+// ====== Detalhe (carrossel) ======
+let detailPhotos = [];
+let detailIndex = 0;
+
+function showDetailPhoto(i){
+  if(!detailPhotos.length) return;
+  if(i < 0) i = detailPhotos.length - 1;
+  if(i >= detailPhotos.length) i = 0;
+  detailIndex = i;
+  const main = document.getElementById("detailMainImg");
+  if(main) main.src = detailPhotos[detailIndex];
+}
 let currentPage = 1;
 const PAGE_SIZE = 9;
 // cópia profunda simples
@@ -736,7 +719,8 @@ function renderGrid(){
     const badge = (d.year && String(d.year) === "2024") ? "NOVO" : "DESTAQUE";
 
     const el = document.createElement("button");
-    el.className = "text-left p-0 rounded-3xl overflow-hidden border border-white/10 card-gradient hover-glow w-full";
+    el.type = "button";
+    el.className = "block text-left p-0 rounded-3xl overflow-hidden border border-white/10 card-gradient hover-glow w-full";
     el.innerHTML = `
       <div class="relative">
         <div class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-xs font-black tracking-wide
@@ -767,31 +751,16 @@ function renderGrid(){
         </div>
       </div>
     `;
-    el.onclick = ()=>openDetail(id);
+    el.addEventListener("click", (e)=>{
+      e.preventDefault();
+      e.stopPropagation();
+      openDetail(id);
+    });
     grid.appendChild(el);
   });
 }
 
 /* ====== Detalhe ====== */
-let detailPhotos = [];
-let detailIndex = 0;
-
-function setDetailIndex(i){
-  if(!detailPhotos.length) return;
-  detailIndex = (i + detailPhotos.length) % detailPhotos.length;
-  const main = document.getElementById("detailMainImg");
-  if(main) main.src = detailPhotos[detailIndex];
-
-  // destaca thumb ativo
-  document.querySelectorAll("#detailThumbs button[data-idx]").forEach(btn=>{
-    const idx = Number(btn.getAttribute("data-idx"));
-    btn.classList.toggle("ring-2", idx === detailIndex);
-    btn.classList.toggle("ring-sky-400", idx === detailIndex);
-  });
-}
-
-function stepDetail(delta){ setDetailIndex(detailIndex + delta); }
-
 function openDetail(motoId){
   const d = motoDataStorage[motoId]?.moto_data || {};
   const photos = motoDataStorage[motoId]?.photos || [];
@@ -804,11 +773,7 @@ function openDetail(motoId){
   document.getElementById("detailDesc").textContent = d.description || "—";
 
   const main = document.getElementById("detailMainImg");
-  detailPhotos = (photos && photos.length) ? photos.slice() : (thumb ? [thumb] : []);
-  if(!detailPhotos.length){
-    detailPhotos = ["https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"];
-  }
-  setDetailIndex(0);
+  main.src = thumb || "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80";
 
   const specsUl = document.getElementById("detailSpecs");
   specsUl.innerHTML = "";
@@ -829,44 +794,23 @@ function openDetail(motoId){
 
   const thumbs = document.getElementById("detailThumbs");
   thumbs.innerHTML = "";
-  detailPhotos.slice(0, 12).forEach((url, idx)=>{
+  const list = (photos.length ? photos : (thumb? [thumb] : []));
+  detailPhotos = list.filter(Boolean);
+  detailIndex = 0;
+  if(detailPhotos.length){ showDetailPhoto(0); }
+
+  list.slice(0,8).forEach((url, idx)=>{
     const b = document.createElement("button");
-    b.type = "button";
-    b.setAttribute("data-idx", String(idx));
-    b.className = "rounded-xl overflow-hidden border border-white/10 bg-black/30 hover:bg-black/40";
+    b.className = "rounded-xl overflow-hidden border border-white/10 bg-black/30";
     b.innerHTML = `<img src="${url}" class="w-full h-16 object-cover" alt="thumb"/>`;
-    b.onclick = ()=>setDetailIndex(idx);
+    b.onclick = ()=>{ showDetailPhoto(idx); };
     thumbs.appendChild(b);
   });
 
   document.getElementById("detailLoadedFrom").textContent = "Supabase + fallback";
   document.getElementById("detailModal").classList.remove("hidden");
-
-  const prevBtn = document.getElementById("detailPrev");
-  const nextBtn = document.getElementById("detailNext");
-  if(prevBtn) prevBtn.onclick = ()=>stepDetail(-1);
-  if(nextBtn) nextBtn.onclick = ()=>stepDetail(1);
-
-  // teclado (← → Esc)
-  if(window.__detailKeyHandler){
-    document.removeEventListener("keydown", window.__detailKeyHandler);
-  }
-  window.__detailKeyHandler = (ev)=>{
-    if(document.getElementById("detailModal").classList.contains("hidden")) return;
-    if(ev.key === "ArrowLeft") stepDetail(-1);
-    else if(ev.key === "ArrowRight") stepDetail(1);
-    else if(ev.key === "Escape") closeDetail();
-  };
-  document.addEventListener("keydown", window.__detailKeyHandler);
-
 }
-function closeDetail(){
-  document.getElementById("detailModal").classList.add("hidden");
-  if(window.__detailKeyHandler){
-    document.removeEventListener("keydown", window.__detailKeyHandler);
-    window.__detailKeyHandler = null;
-  }
-}
+function closeDetail(){ document.getElementById("detailModal").classList.add("hidden"); }
 
 /* ====== Admin ====== */
 function openAdmin(){
@@ -1105,6 +1049,21 @@ async function init(){
 document.getElementById("detailClose").onclick = closeDetail;
 document.getElementById("detailBackdrop").onclick = closeDetail;
 
+// Carrossel: setas
+const __prevPhotoBtn = document.getElementById("detailPrev");
+const __nextPhotoBtn = document.getElementById("detailNext");
+if(__prevPhotoBtn) __prevPhotoBtn.onclick = (e)=>{ e.preventDefault(); e.stopPropagation(); showDetailPhoto(detailIndex - 1); };
+if(__nextPhotoBtn) __nextPhotoBtn.onclick = (e)=>{ e.preventDefault(); e.stopPropagation(); showDetailPhoto(detailIndex + 1); };
+
+// Teclado (← → / ESC) quando o modal estiver aberto
+document.addEventListener("keydown", (e)=>{
+  const modal = document.getElementById("detailModal");
+  if(!modal || modal.classList.contains("hidden")) return;
+  if(e.key === "Escape") return closeDetail();
+  if(e.key === "ArrowLeft") return showDetailPhoto(detailIndex - 1);
+  if(e.key === "ArrowRight") return showDetailPhoto(detailIndex + 1);
+});
+
 document.getElementById("adminBtn").onclick = openAdmin;
 document.getElementById("ctaAdmin").onclick = openAdmin;
 
@@ -1136,9 +1095,11 @@ document.getElementById("searchInput").addEventListener("input", ()=>{
   renderGrid();
 });
 
-document.getElementById("ctaOpenFirst").onclick = ()=>{
-  document.getElementById("gridSection").scrollIntoView({behavior:"smooth"});
-};
+document.querySelectorAll('[data-scroll="grid"]').forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.getElementById("gridSection").scrollIntoView({behavior:"smooth"});
+  });
+});
 
 
 // Paginação (9 por página)
