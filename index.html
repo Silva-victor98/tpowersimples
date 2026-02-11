@@ -656,7 +656,7 @@ function toast(msg, type="info"){
   clearTimeout(window.__toastTimer);
   window.__toastTimer = setTimeout(()=>box.classList.add("hidden"), 2600);
 }
-function setStatus(t){ document.getElementById("statusText").textContent = t; }
+function setStatus(t){ const el = document.getElementById("statusText"); if(el) el.textContent = t; }
 
 function updateClearSearchBtn(){
   const input = document.getElementById("searchInput");
@@ -1146,8 +1146,10 @@ if(__clearSearchBtn) __clearSearchBtn.onclick = clearSearch;
 document.getElementById("detailClose").onclick = closeDetail;
 document.getElementById("detailBackdrop").onclick = closeDetail;
 
-document.getElementById("adminBtn").onclick = openAdmin;
-document.getElementById("ctaAdmin").onclick = openAdmin;
+const __adminBtn = document.getElementById("adminBtn");
+if(__adminBtn) __adminBtn.onclick = openAdmin;
+const __ctaAdmin = document.getElementById("ctaAdmin");
+if(__ctaAdmin) __ctaAdmin.onclick = openAdmin;
 
 document.getElementById("adminClose").onclick = closeAdmin;
 document.getElementById("adminBackdrop").onclick = closeAdmin;
