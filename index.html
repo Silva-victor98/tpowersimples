@@ -102,7 +102,17 @@
     /* Pequenos ajustes de tipografia */
     .tp-muted{color:var(--tp-muted);}
     .tp-muted2{color:var(--tp-muted2);}
-  </style>
+  
+    /* Dropdown do <select> mais escuro (para não ficar branco) */
+    select option{
+      background: #0b1220;
+      color: var(--tp-ink);
+    }
+    select{
+      color: var(--tp-ink);
+    }
+
+</style>
 </head>
 
 <body class="min-h-screen text-white tp-bg font-body">
@@ -450,6 +460,11 @@
                 <button id="createMotoBtn"
                         class="px-4 py-2 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold text-sm">
                   + Nova moto
+                </button>
+
+                <button id="deleteMotoBtn"
+                        class="px-4 py-2 rounded-2xl bg-red-500/20 hover:bg-red-500/30 border border-red-400/20 text-red-200 font-bold text-sm">
+                  Excluir moto
                 </button>
               </div>
             </div>
@@ -1075,6 +1090,60 @@ async function createNewMoto(){
   }
 }
 
+async function deleteMoto(){
+  if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
+  const sel = document.getElementById("adminMotoSelect");
+  const motoId = sel?.value;
+  if(!motoId) return toast("Nenhuma moto selecionada", "warn");
+
+  const d = motoDataStorage[motoId]?.moto_data || {};
+  const label = (d.name ? `${d.name} (${motoId})` : motoId);
+
+  const ok = confirm(`Tem certeza que deseja excluir esta moto?\n\n${label}\n\nIsso remove do Supabase e do site.`);
+  if(!ok) return;
+
+  try{
+    const client = ensureSupabase();
+
+    // Remove TODAS as linhas dessa moto (moto_data, thumbnail, photos)
+    const { error } = await client
+      .from("motos_store")
+      .delete()
+      .eq("moto_id", motoId);
+
+    if(error) throw error;
+
+    // Remove do storage local
+    delete motoDataStorage[motoId];
+
+    toast("Moto excluída ✅", "ok");
+
+    // Recarrega UI
+    const ids = getMotoIds();
+    if(sel){
+      sel.innerHTML = "";
+      ids.forEach(id=>{
+        const opt = document.createElement("option");
+        opt.value = id;
+        opt.textContent = id.toUpperCase();
+        sel.appendChild(opt);
+      });
+      sel.value = ids[0] || "";
+      if(sel.value) loadAdminForm(sel.value);
+    }
+
+    currentPage = 1;
+    renderFeatured();
+    renderGrid();
+    updateClearSearchBtn();
+  }catch(e){
+    console.error(e);
+    toast("Falha ao excluir (veja console)", "err");
+  }
+}
+
+
+
 function addPhotoUrl(){
   if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
   const motoId = document.getElementById("adminMotoSelect").value;
@@ -1205,6 +1274,8 @@ document.getElementById("adminLoginBtn").onclick = adminLogin;
 document.getElementById("adminLogoutBtn").onclick = adminLogout;
 
 document.getElementById("createMotoBtn").onclick = createNewMoto;
+const __delMotoBtn = document.getElementById("deleteMotoBtn");
+if(__delMotoBtn) __delMotoBtn.onclick = deleteMoto;
 document.getElementById("adminCancelBtn").onclick = closeAdmin;
 
 document.getElementById("adminHelpBtn").onclick = ()=>toast("Senha padrão: tpower2024 (troque no código depois)", "info");
