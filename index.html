@@ -234,7 +234,40 @@
 
 
 
-  <!-- Modal detalhes -->
+  
+  <!-- LOCALIZAÇÃO -->
+  <section id="localizacao" class="py-24 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-60 pointer-events-none"
+         style="background:
+           radial-gradient(900px 420px at 50% 20%, rgba(56,189,248,.18), transparent 60%);"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href="https://maps.app.goo.gl/sowMDzp94ZPjfzeH7"
+         target="_blank"
+         class="block rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md p-12 sm:p-14 text-center transition-all duration-500 hover:border-sky-400 hover:bg-sky-500/10">
+        <div class="flex justify-center mb-6">
+          <div class="w-16 h-16 rounded-full bg-sky-500/20 flex items-center justify-center border border-sky-400/20">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-sky-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 22s8-4.5 8-10A8 8 0 104 12c0 5.5 8 10 8 10z" />
+            </svg>
+          </div>
+        </div>
+
+        <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+          NOSSA LOCALIZAÇÃO
+        </h3>
+
+        <p class="mt-2 text-white/60">
+          Clique para abrir no Google Maps
+        </p>
+      </a>
+    </div>
+  </section>
+
+<!-- Modal detalhes -->
   <div id="detailModal" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black/70" id="detailBackdrop"></div>
 
@@ -250,8 +283,16 @@
 
         <div class="grid lg:grid-cols-2 gap-0">
           <div class="p-4">
-            <div class="rounded-2xl overflow-hidden border border-white/10 bg-black/30">
-              <img id="detailMainImg" class="w-full h-72 object-cover" src="" alt="Foto principal"/>
+            <div class="relative rounded-2xl overflow-hidden border border-white/10 bg-black/30">
+              <img id="detailMainImg" class="w-full h-[22rem] sm:h-[26rem] object-cover" src="" alt="Foto principal"/>
+              <button id="detailPrev" type="button"
+                class="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 hover:bg-black/70 border border-white/10 flex items-center justify-center text-white/90 text-2xl leading-none">
+                ‹
+              </button>
+              <button id="detailNext" type="button"
+                class="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 hover:bg-black/70 border border-white/10 flex items-center justify-center text-white/90 text-2xl leading-none">
+                ›
+              </button>
             </div>
 
             <div id="detailThumbs" class="mt-3 grid grid-cols-4 gap-2"></div>
@@ -694,9 +735,8 @@ function renderGrid(){
     const thumb = motoDataStorage[id]?.thumbnail || motoDataStorage[id]?.photos?.[0] || "";
     const badge = (d.year && String(d.year) === "2024") ? "NOVO" : "DESTAQUE";
 
-    const el = document.createElement("a");
-    el.href = `moto.html?id=${encodeURIComponent(id)}`;
-    el.className = "block text-left p-0 rounded-3xl overflow-hidden border border-white/10 card-gradient hover-glow w-full";
+    const el = document.createElement("button");
+    el.className = "text-left p-0 rounded-3xl overflow-hidden border border-white/10 card-gradient hover-glow w-full";
     el.innerHTML = `
       <div class="relative">
         <div class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-xs font-black tracking-wide
@@ -727,11 +767,31 @@ function renderGrid(){
         </div>
       </div>
     `;
+    el.onclick = ()=>openDetail(id);
     grid.appendChild(el);
   });
 }
 
 /* ====== Detalhe ====== */
+let detailPhotos = [];
+let detailIndex = 0;
+
+function setDetailIndex(i){
+  if(!detailPhotos.length) return;
+  detailIndex = (i + detailPhotos.length) % detailPhotos.length;
+  const main = document.getElementById("detailMainImg");
+  if(main) main.src = detailPhotos[detailIndex];
+
+  // destaca thumb ativo
+  document.querySelectorAll("#detailThumbs button[data-idx]").forEach(btn=>{
+    const idx = Number(btn.getAttribute("data-idx"));
+    btn.classList.toggle("ring-2", idx === detailIndex);
+    btn.classList.toggle("ring-sky-400", idx === detailIndex);
+  });
+}
+
+function stepDetail(delta){ setDetailIndex(detailIndex + delta); }
+
 function openDetail(motoId){
   const d = motoDataStorage[motoId]?.moto_data || {};
   const photos = motoDataStorage[motoId]?.photos || [];
@@ -744,7 +804,11 @@ function openDetail(motoId){
   document.getElementById("detailDesc").textContent = d.description || "—";
 
   const main = document.getElementById("detailMainImg");
-  main.src = thumb || "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80";
+  detailPhotos = (photos && photos.length) ? photos.slice() : (thumb ? [thumb] : []);
+  if(!detailPhotos.length){
+    detailPhotos = ["https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"];
+  }
+  setDetailIndex(0);
 
   const specsUl = document.getElementById("detailSpecs");
   specsUl.innerHTML = "";
@@ -765,19 +829,44 @@ function openDetail(motoId){
 
   const thumbs = document.getElementById("detailThumbs");
   thumbs.innerHTML = "";
-  const list = (photos.length ? photos : (thumb? [thumb] : []));
-  list.slice(0,8).forEach(url=>{
+  detailPhotos.slice(0, 12).forEach((url, idx)=>{
     const b = document.createElement("button");
-    b.className = "rounded-xl overflow-hidden border border-white/10 bg-black/30";
+    b.type = "button";
+    b.setAttribute("data-idx", String(idx));
+    b.className = "rounded-xl overflow-hidden border border-white/10 bg-black/30 hover:bg-black/40";
     b.innerHTML = `<img src="${url}" class="w-full h-16 object-cover" alt="thumb"/>`;
-    b.onclick = ()=>{ main.src = url; };
+    b.onclick = ()=>setDetailIndex(idx);
     thumbs.appendChild(b);
   });
 
   document.getElementById("detailLoadedFrom").textContent = "Supabase + fallback";
   document.getElementById("detailModal").classList.remove("hidden");
+
+  const prevBtn = document.getElementById("detailPrev");
+  const nextBtn = document.getElementById("detailNext");
+  if(prevBtn) prevBtn.onclick = ()=>stepDetail(-1);
+  if(nextBtn) nextBtn.onclick = ()=>stepDetail(1);
+
+  // teclado (← → Esc)
+  if(window.__detailKeyHandler){
+    document.removeEventListener("keydown", window.__detailKeyHandler);
+  }
+  window.__detailKeyHandler = (ev)=>{
+    if(document.getElementById("detailModal").classList.contains("hidden")) return;
+    if(ev.key === "ArrowLeft") stepDetail(-1);
+    else if(ev.key === "ArrowRight") stepDetail(1);
+    else if(ev.key === "Escape") closeDetail();
+  };
+  document.addEventListener("keydown", window.__detailKeyHandler);
+
 }
-function closeDetail(){ document.getElementById("detailModal").classList.add("hidden"); }
+function closeDetail(){
+  document.getElementById("detailModal").classList.add("hidden");
+  if(window.__detailKeyHandler){
+    document.removeEventListener("keydown", window.__detailKeyHandler);
+    window.__detailKeyHandler = null;
+  }
+}
 
 /* ====== Admin ====== */
 function openAdmin(){
@@ -1058,22 +1147,6 @@ const __next = document.getElementById("nextPageBtn");
 if(__prev) __prev.onclick = ()=>{ currentPage = Math.max(1, currentPage - 1); renderGrid(); window.scrollTo({top: document.getElementById("gridSection").offsetTop - 80, behavior: "smooth"}); };
 if(__next) __next.onclick = ()=>{ currentPage = currentPage + 1; renderGrid(); window.scrollTo({top: document.getElementById("gridSection").offsetTop - 80, behavior: "smooth"}); };
 init();
-
-// FIX DEFENSIVO: impede que "moto.html" vire clique em página inteira.
-// Só permite navegar para moto.html quando o clique aconteceu dentro do grid (#motosGrid).
-document.addEventListener("click", (e) => {
-  const a = e.target.closest('a[href*="moto.html"]');
-  if (!a) return;
-
-  const insideGrid = !!a.closest("#motosGrid");
-  if (!insideGrid) {
-    e.preventDefault();
-    e.stopPropagation();
-    // Se por acaso um link estiver "cobrindo" a tela, isso bloqueia a navegação indevida.
-    try { toast("Clique fora do card (bloqueado).", "warn"); } catch {}
-  }
-}, true);
-
 </script>
 
   <!-- CONTATO -->
