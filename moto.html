@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detalhes da Moto • T‑Power Motos</title>
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Supabase JS v2 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    .glass{backdrop-filter: blur(14px); background: rgba(0,0,0,.28);}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+  </style>
+</head>
+
+<body class="min-h-screen text-white" style="background:
+  radial-gradient(1200px 600px at 50% -10%, rgba(56,189,248,.35), transparent 60%),
+  radial-gradient(900px 500px at 80% 0%, rgba(99,102,241,.22), transparent 55%),
+  linear-gradient(180deg, #06122a 0%, #0b2a72 50%, #06122a 100%);">
+
+  <!-- Top bar -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+    <a href="index.html"
+       class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 transition">
+      <span aria-hidden="true">←</span>
+      <span class="text-sm font-semibold">Voltar</span>
+    </a>
+  </div>
+
+  <!-- Conteúdo -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <!-- Cabeçalho -->
+    <div class="text-center">
+      <div id="badge" class="inline-flex items-center justify-center px-4 py-1 rounded-full text-xs font-black tracking-wide bg-sky-400/90 text-black">
+        NOVO
+      </div>
+
+      <div id="brand" class="mt-3 text-sky-300 font-bold text-sm"></div>
+
+      <h1 id="title" class="mt-3 text-5xl sm:text-6xl font-extrabold tracking-tight"></h1>
+
+      <p id="desc" class="mt-4 text-white/70 max-w-2xl mx-auto"></p>
+
+      <div id="price" class="mt-6 text-3xl sm:text-4xl font-extrabold text-sky-300"></div>
+    </div>
+
+    <!-- Galeria (grande) -->
+    <section class="mt-10">
+      <div class="rounded-3xl overflow-hidden border border-white/10 glass">
+        <div class="relative">
+          <img id="mainImg" src="" alt="Foto da moto" class="w-full h-[320px] sm:h-[420px] md:h-[520px] object-cover"/>
+
+          <!-- setas -->
+          <button id="prevPhoto"
+                  class="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/40 hover:bg-black/55 border border-white/15 flex items-center justify-center">
+            ‹
+          </button>
+          <button id="nextPhoto"
+                  class="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/40 hover:bg-black/55 border border-white/15 flex items-center justify-center">
+            ›
+          </button>
+
+          <!-- contador -->
+          <div id="photoCounter"
+               class="absolute bottom-4 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-full bg-black/40 border border-white/10 text-xs mono">
+            1 / 1
+          </div>
+        </div>
+
+        <!-- thumbnails -->
+        <div id="thumbs" class="p-4 sm:p-5 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3 bg-black/10"></div>
+      </div>
+    </section>
+
+    <!-- Cards: especificações / destaques -->
+    <section class="mt-10 grid md:grid-cols-2 gap-6">
+      <!-- ESPECIFICAÇÕES -->
+      <div class="rounded-3xl border border-white/10 glass overflow-hidden">
+        <div class="p-5 flex items-center gap-3 border-b border-white/10">
+          <div class="w-10 h-10 rounded-2xl bg-sky-500/20 border border-sky-400/20 flex items-center justify-center">⚡</div>
+          <div class="font-extrabold tracking-wide text-sky-300">ESPECIFICAÇÕES</div>
+        </div>
+        <div id="specs" class="p-5 space-y-3"></div>
+      </div>
+
+      <!-- DESTAQUES -->
+      <div class="rounded-3xl border border-white/10 glass overflow-hidden">
+        <div class="p-5 flex items-center gap-3 border-b border-white/10">
+          <div class="w-10 h-10 rounded-2xl bg-sky-500/20 border border-sky-400/20 flex items-center justify-center">✓</div>
+          <div class="font-extrabold tracking-wide text-sky-300">DESTAQUES</div>
+        </div>
+        <div id="features" class="p-5 space-y-3"></div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="mt-10">
+      <div class="rounded-3xl border border-white/10 glass p-8 text-center">
+        <h2 class="text-2xl sm:text-3xl font-extrabold">GOSTOU DESTA MOTO?</h2>
+        <p class="mt-2 text-white/65">Entre em contato com nossa equipe agora mesmo!</p>
+
+        <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="#contato"
+             class="px-8 py-3 rounded-full bg-sky-500 hover:bg-sky-400 text-black font-extrabold">
+            Falar com Consultor
+          </a>
+          <a href="https://wa.me/5541996977148" target="_blank"
+             class="px-8 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold">
+            WhatsApp Direto
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contato rápido (âncora só para o botão acima) -->
+    <div id="contato" class="h-1"></div>
+  </main>
+
+<script>
+/* =========================================================
+   DETALHES (moto.html)
+   Lê o moto_id na URL (?id=cb500f) e carrega do Supabase
+   ========================================================= */
+
+const SUPABASE_URL = "https://cjmvurlcbelsircpiqbb.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_8lO0wrc_bFhXMPMn7LB_kA_PbEIQ8nE";
+
+let sb = null;
+
+// Fallback (mesmo do index)
+const DEFAULT_DB = {
+  cb500f: {
+    moto_data: {
+      name: "CB 500F",
+      brand: "Honda",
+      year: "2024",
+      price: "R$ 35.990",
+      description: "Naked equilibrada, ideal para o dia a dia e estrada.",
+      specs: ["Motor: 471cc", "Potência: 47 cv", "Torque: 4,4 kgf.m"],
+      features: ["ABS", "Painel LCD", "Econômica"]
+    },
+    thumbnail: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
+    photos: [
+      "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
+    ]
+  },
+  hornet: {
+    moto_data: {
+      name: "Hornet",
+      brand: "Honda",
+      year: "2023",
+      price: "R$ 49.990",
+      description: "Clássica naked com performance e presença.",
+      specs: ["Motor: 600cc", "Potência: 102 cv", "Torque: 6,5 kgf.m"],
+      features: ["Resposta rápida", "Confiável", "Boa revenda"]
+    },
+    thumbnail: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
+    photos: [
+      "https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1600&q=80"
+    ]
+  },
+  xj6: {
+    moto_data: {
+      name: "XJ6",
+      brand: "Yamaha",
+      year: "2019",
+      price: "R$ 38.990",
+      description: "Confortável, suave e ótima para uso misto.",
+      specs: ["Motor: 600cc", "Potência: 78 cv", "Torque: 6,1 kgf.m"],
+      features: ["Conforto", "Suavidade", "Boa ciclística"]
+    },
+    thumbnail: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1200&q=80",
+    photos: [
+      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
+    ]
+  }
+};
+
+let motoDataStorage = JSON.parse(JSON.stringify(DEFAULT_DB));
+let currentIndex = 0;
+let photoList = [];
+
+function ensureSupabase(){
+  if(sb) return sb;
+  if(!window.supabase) throw new Error("Supabase SDK não carregou");
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  return sb;
+}
+
+function getIdFromUrl(){
+  const params = new URLSearchParams(window.location.search);
+  return (params.get("id") || "").trim().toLowerCase();
+}
+
+async function loadAllFromSupabase(){
+  const client = ensureSupabase();
+  const { data, error } = await client
+    .from("motos_store")
+    .select("moto_id,data_type,data_json,updated_at");
+
+  if(error){
+    console.error("Supabase load error:", error);
+    return;
+  }
+
+  (data || []).forEach(row=>{
+    const motoId = row.moto_id;
+    const t = row.data_type;
+    if(!motoId || !t) return;
+
+    if(!motoDataStorage[motoId]) motoDataStorage[motoId] = { moto_data:{}, thumbnail:"", photos:[] };
+
+    if(t === "moto_data"){
+      motoDataStorage[motoId].moto_data = row.data_json || motoDataStorage[motoId].moto_data;
+    } else if(t === "thumbnail"){
+      motoDataStorage[motoId].thumbnail = (typeof row.data_json === "string") ? row.data_json : (row.data_json?.url || motoDataStorage[motoId].thumbnail);
+    } else if(t === "photos"){
+      const v = row.data_json;
+      if(Array.isArray(v)){
+        motoDataStorage[motoId].photos = v.map(x=> (typeof x==="string"? x : x?.url)).filter(Boolean);
+      } else if(typeof v === "string"){
+        try{
+          const parsed = JSON.parse(v);
+          if(Array.isArray(parsed)) motoDataStorage[motoId].photos = parsed.map(x=> (typeof x==="string"? x : x?.url)).filter(Boolean);
+        }catch{}
+      }
+    }
+  });
+}
+
+function renderSpecItem(text){
+  // tenta dividir "Chave: valor"
+  const parts = String(text || "").split(":");
+  const key = (parts[0] || "").trim();
+  const value = (parts.slice(1).join(":") || "").trim();
+  const wrap = document.createElement("div");
+  wrap.className = "p-4 rounded-2xl bg-white/5 border border-white/10";
+  wrap.innerHTML = `
+    <div class="text-xs text-white/55 font-semibold">${key || "Item"}</div>
+    <div class="mt-1 text-white font-bold">${value || text}</div>
+  `;
+  return wrap;
+}
+
+function renderFeatureItem(text){
+  const wrap = document.createElement("div");
+  wrap.className = "flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/10";
+  wrap.innerHTML = `
+    <div class="w-6 h-6 rounded-full bg-sky-500/20 border border-sky-400/20 flex items-center justify-center text-sky-300 text-sm">●</div>
+    <div class="font-semibold text-white">${text}</div>
+  `;
+  return wrap;
+}
+
+function setMainPhoto(idx){
+  if(!photoList.length) return;
+  currentIndex = (idx + photoList.length) % photoList.length;
+  document.getElementById("mainImg").src = photoList[currentIndex];
+  document.getElementById("photoCounter").textContent = `${currentIndex + 1} / ${photoList.length}`;
+
+  // ativa thumb
+  document.querySelectorAll("[data-thumb]").forEach(el=>{
+    const i = Number(el.getAttribute("data-thumb"));
+    el.classList.toggle("ring-2", i === currentIndex);
+    el.classList.toggle("ring-sky-400", i === currentIndex);
+  });
+}
+
+function renderGallery(urls){
+  photoList = (urls || []).filter(Boolean);
+  if(!photoList.length){
+    photoList = ["https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"];
+  }
+
+  const thumbs = document.getElementById("thumbs");
+  thumbs.innerHTML = "";
+
+  photoList.forEach((url, i)=>{
+    const b = document.createElement("button");
+    b.setAttribute("data-thumb", String(i));
+    b.className = "rounded-2xl overflow-hidden border border-white/10 bg-black/20 hover:bg-black/30 transition focus:outline-none";
+    b.innerHTML = `<img src="${url}" class="w-full h-16 sm:h-20 object-cover" alt="thumb"/>`;
+    b.onclick = ()=>setMainPhoto(i);
+    thumbs.appendChild(b);
+  });
+
+  setMainPhoto(0);
+}
+
+function renderPage(motoId){
+  const data = motoDataStorage[motoId] || null;
+  if(!data){
+    // fallback: volta pro index
+    window.location.href = "index.html";
+    return;
+  }
+
+  const d = data.moto_data || {};
+  const year = String(d.year || "");
+  const badge = (year === "2024") ? "NOVO" : "DESTAQUE";
+
+  const badgeEl = document.getElementById("badge");
+  badgeEl.textContent = badge;
+  badgeEl.className = "inline-flex items-center justify-center px-4 py-1 rounded-full text-xs font-black tracking-wide " +
+    (badge === "NOVO" ? "bg-sky-400/90 text-black" : "bg-red-500/90 text-white");
+
+  document.getElementById("brand").textContent = d.brand || "";
+  document.getElementById("title").textContent = d.name || motoId.toUpperCase();
+  document.getElementById("desc").textContent = d.description || "";
+  document.getElementById("price").textContent = d.price || "Consultar";
+
+  // specs
+  const specsWrap = document.getElementById("specs");
+  specsWrap.innerHTML = "";
+  (d.specs || []).forEach(s=>specsWrap.appendChild(renderSpecItem(s)));
+  if(!(d.specs || []).length){
+    specsWrap.appendChild(renderSpecItem("Especificações: —"));
+  }
+
+  // features
+  const featWrap = document.getElementById("features");
+  featWrap.innerHTML = "";
+  (d.features || []).forEach(f=>featWrap.appendChild(renderFeatureItem(f)));
+  if(!(d.features || []).length){
+    featWrap.appendChild(renderFeatureItem("Sem destaques cadastrados"));
+  }
+
+  // gallery: thumbnail + photos
+  const combined = [];
+  if(data.thumbnail) combined.push(data.thumbnail);
+  (data.photos || []).forEach(u=>combined.push(u));
+  // remove duplicadas mantendo ordem
+  const unique = Array.from(new Set(combined.filter(Boolean)));
+  renderGallery(unique);
+}
+
+// Eventos galeria
+document.getElementById("prevPhoto").onclick = ()=>setMainPhoto(currentIndex - 1);
+document.getElementById("nextPhoto").onclick = ()=>setMainPhoto(currentIndex + 1);
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "ArrowLeft") setMainPhoto(currentIndex - 1);
+  if(e.key === "ArrowRight") setMainPhoto(currentIndex + 1);
+});
+
+(async function init(){
+  const motoId = getIdFromUrl();
+  await loadAllFromSupabase();
+  renderPage(motoId || Object.keys(motoDataStorage)[0]);
+})();
+</script>
+
+</body>
+</html>
