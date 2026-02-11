@@ -1215,6 +1215,18 @@ if(__prev) __prev.onclick = ()=>{ currentPage = Math.max(1, currentPage - 1); re
 if(__next) __next.onclick = ()=>{ currentPage = currentPage + 1; renderGrid(); window.scrollTo({top: document.getElementById("gridSection").offsetTop - 80, behavior: "smooth"}); };
 init();
 
+// FIX: evita filtro "preso" na busca (ex.: você digita algo e esquece)
+function resetSearchAndRender(){
+  const si = document.getElementById("searchInput");
+  if(si){
+    si.value = "";
+    currentPage = 1;
+    renderGrid();
+  }
+}
+window.addEventListener("pageshow", resetSearchAndRender);
+
+
 // FIX DEFENSIVO: impede que "moto.html" vire clique em página inteira.
 // Só permite navegar para moto.html quando o clique aconteceu dentro do grid (#motosGrid).
 document.addEventListener("click", (e) => {
