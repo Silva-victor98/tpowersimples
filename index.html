@@ -102,29 +102,6 @@
     /* Pequenos ajustes de tipografia */
     .tp-muted{color:var(--tp-muted);}
     .tp-muted2{color:var(--tp-muted2);}
-  
-    /* Tipografia premium: mesma fonte no título, destaque por cor */
-    .hero-title{
-      font-family: 'Bebas Neue', sans-serif;
-      font-weight: 400;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    .hero-title .highlight{ color: #38BDF8; }
-
-
-/* ===== Admin UI (mais visível / alinhado) ===== */
-#adminModal select, #adminModal input, #adminModal textarea{
-  background-color: rgba(2, 6, 23, 0.35);
-}
-#adminModal select option{
-  background-color: #0b1220;
-  color: #ffffff;
-}
-#adminModal input::placeholder, #adminModal textarea::placeholder{
-  color: rgba(255,255,255,.35);
-}
-
   </style>
 </head>
 
@@ -133,9 +110,9 @@
   <header class="sticky top-0 z-40 border-b border-white/10 glass">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-4">
       <div class="flex items-center gap-3">
-        <a href="./" aria-label="Voltar para a página inicial" class="shrink-0">
-          <img src="https://i.imgur.com/FyCqY2d.png" alt="T-Power Motos" class="h-12 sm:h-14 w-auto object-contain cursor-pointer select-none" />
-        </a>
+        <div class="w-10 h-10 rounded-2xl bg-sky-500/20 border border-sky-400/25 flex items-center justify-center">
+          <span class="text-sky-300 font-black">T</span>
+        </div>
         <div>
           <div class="font-bold tracking-wide">T‑POWER MOTOS</div>
           <div class="text-xs text-white/60">Catálogo • Fotos • Painel</div>
@@ -177,8 +154,8 @@
   </div>
 
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
-    <h1 class="hero-title text-5xl sm:text-6xl lg:text-7xl text-white">
-      ACELERE SEUS <span class="highlight">SONHOS</span>
+    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight">
+      ACELERE SEUS <span class="text-sky-400">SONHOS</span>
     </h1>
 
     <p class="mt-6 max-w-2xl mx-auto text-lg text-white/70">
@@ -216,9 +193,49 @@
 </section>
 
 
-  
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 opacity-50 pointer-events-none"
+         style="background: radial-gradient(900px 400px at 20% 20%, rgba(56,189,248,.18), transparent 60%),
+                          radial-gradient(700px 300px at 80% 10%, rgba(99,102,241,.10), transparent 55%);"></div>
 
-<!-- Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
+      <div class="grid lg:grid-cols-2 gap-10 items-center">
+        <div>
+          <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight">
+            Encontre sua próxima <span class="text-sky-400">moto</span>
+          </h1>
+          <p class="mt-4 text-white/70 text-lg leading-relaxed">
+            Catálogo com fotos, ficha e edição via painel. Salva no <span class="text-sky-300">Supabase</span>
+            e usa URLs de imagem (ex.: Cloudinary).
+          </p>
+
+          
+
+          <div class="mt-8 flex flex-col sm:flex-row gap-3">
+            <button id="ctaOpenFirst"
+                    class="px-6 py-3 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold">
+              Ver motos
+            </button>
+            <button id="ctaAdmin"
+                    class="px-6 py-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
+              Abrir painel
+            </button>
+          </div>
+
+          <div class="mt-6 text-xs text-white/50 mono">
+            Status: <span id="statusText">inicializando…</span>
+          </div>
+        </div>
+
+        
+
+      </div>
+    </div>
+  </section>
+
+  
+  <!-- Grid -->
   <section id="gridSection" class="py-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-14">
@@ -445,14 +462,16 @@
             
             <div class="flex items-center gap-2 text-sm text-white/70 flex-wrap">
               <span class="mono">Editando:</span>
-              <select id="adminMotoSelect" class="px-4 py-2 h-12 rounded-2xl bg-black/40 border border-white/20 text-white shadow-lg focus:outline-none focus:border-sky-400">
+              <select id="adminMotoSelect" class="px-4 py-2 rounded-2xl bg-white/5 border border-white/10 text-white">
               </select>
 
               <!-- Criar nova moto (apenas UI, sem mudar backend) -->
               <div class="flex items-center gap-2 ml-0 sm:ml-3">
-                <input id="newMotoIdInput" class="w-36 sm:w-44 px-3 py-2 h-12 rounded-2xl bg-black/30 border border-white/10 focus:outline-none focus:border-sky-400 text-white mono text-sm"
+                <input id="newMotoIdInput"
+                       class="w-36 sm:w-44 px-3 py-2 rounded-2xl bg-black/30 border border-white/10 focus:outline-none focus:border-sky-400 text-white mono text-sm"
                        placeholder="novo_id"/>
-                <button id="createMotoBtn" class="px-4 py-2 h-12 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold text-sm">
+                <button id="createMotoBtn"
+                        class="px-4 py-2 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold text-sm">
                   + Nova moto
                 </button>
               </div>
@@ -460,10 +479,10 @@
 
 
             <div class="flex gap-2">
-              <button id="adminRefreshBtn" class="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 h-12">
+              <button id="adminRefreshBtn" class="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
                 Recarregar
               </button>
-              <button id="adminLogoutBtn" class="px-4 py-2 rounded-2xl bg-red-500/20 hover:bg-red-500/30 border border-red-400/20 h-12">
+              <button id="adminLogoutBtn" class="px-4 py-2 rounded-2xl bg-red-500/20 hover:bg-red-500/30 border border-red-400/20">
                 Sair
               </button>
             </div>
@@ -661,7 +680,7 @@ function toast(msg, type="info"){
   clearTimeout(window.__toastTimer);
   window.__toastTimer = setTimeout(()=>box.classList.add("hidden"), 2600);
 }
-function setStatus(t){ const el = document.getElementById("statusText"); if(el) el.textContent = t; }
+function setStatus(t){ document.getElementById("statusText").textContent = t; }
 
 
 function updateClearSearchBtn(){
@@ -926,31 +945,17 @@ function syncAdminVisibility(){
   document.getElementById("adminContent").classList.toggle("hidden", !isAdmin);
 
   if(isAdmin){
+    // popular select
     const sel = document.getElementById("adminMotoSelect");
-
-    // tenta manter a seleção correta (última moto editada)
-    const prev = sel?.value || "";
-    const saved = (function(){
-      try { return localStorage.getItem("tpower_admin_last_moto") || ""; } catch(e){ return ""; }
-    })();
-
     sel.innerHTML = "";
-    const ids = getMotoIds();
-
-    ids.forEach(id=>{
+    getMotoIds().forEach(id=>{
       const opt = document.createElement("option");
       opt.value = id;
       opt.textContent = id.toUpperCase();
       sel.appendChild(opt);
     });
-
-    const pick =
-      (saved && ids.includes(saved)) ? saved :
-      (prev && ids.includes(prev)) ? prev :
-      (ids[0] || "");
-
-    sel.value = pick;
-    loadAdminForm(pick);
+    sel.value = getMotoIds()[0] || "";
+    loadAdminForm(sel.value);
   }
 }
 function adminLogin(){
@@ -971,7 +976,6 @@ function adminLogout(){
 }
 
 function loadAdminForm(motoId){
-  try { localStorage.setItem("tpower_admin_last_moto", motoId); } catch(e) {}
   const d = motoDataStorage[motoId]?.moto_data || {};
   document.getElementById("f_name").value = d.name || "";
   document.getElementById("f_brand").value = d.brand || "";
@@ -1390,11 +1394,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
   <footer class="relative border-t border-white/10 bg-black/40 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col items-center gap-4">
       
-      <a href="./" aria-label="Voltar para a página inicial" class="inline-flex">
-        <img src="https://i.imgur.com/FyCqY2d.png"
-             alt="T-Power Motos"
-             class="h-14 w-auto object-contain cursor-pointer select-none" />
-      </a>
+      <img src="Design sem nome (2).png"
+           alt="T-Power Motos"
+           class="h-12 w-auto object-contain"/>
 
       <p class="text-white/60 text-sm text-center">
         © 2023 T-Power Motos. Todos os direitos reservados.
