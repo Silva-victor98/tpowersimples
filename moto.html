@@ -11,48 +11,153 @@
   <!-- Supabase JS v2 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <!-- Fonts (mesmo padrão do index) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <style>
-    .glass{backdrop-filter: blur(14px); background: rgba(0,0,0,.28);}
+    :root{
+      --tp-ink:#EAF2FF;
+      --tp-muted:rgba(234,242,255,.68);
+      --tp-muted2:rgba(234,242,255,.50);
+      --tp-line:rgba(255,255,255,.10);
+      --tp-glass:rgba(6,18,42,.55);
+      --tp-glass2:rgba(6,18,42,.35);
+      --tp-accent:#38BDF8; /* sky-400 */
+      --tp-accent2:#60A5FA; /* blue-400 */
+      --tp-bgA:#020617; /* slate-950 */
+      --tp-bgB:#06122a; /* deep navy */
+      --tp-bgC:#0b2a5a; /* richer blue */
+    }
+
+    body, p, span, label, input, textarea, select, button{
+      font-family:'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      color: var(--tp-ink);
+    }
+
+    .font-display{
+      font-family:'Bebas Neue', sans-serif;
+      font-weight:400;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+    }
+
+    .tp-bg{
+      background:
+        radial-gradient(1200px 520px at 50% -10%, rgba(56,189,248,.28), transparent 60%),
+        radial-gradient(900px 520px at 10% 20%, rgba(96,165,250,.16), transparent 55%),
+        radial-gradient(800px 520px at 90% 30%, rgba(59,130,246,.12), transparent 55%),
+        linear-gradient(180deg, var(--tp-bgA) 0%, var(--tp-bgB) 55%, #020617 100%);
+      color:var(--tp-ink);
+    }
+
+    .glass{
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: linear-gradient(180deg, var(--tp-glass), var(--tp-glass2));
+    }
+
+    .card-gradient{
+      background: linear-gradient(135deg, rgba(56,189,248,.14), rgba(255,255,255,.06));
+    }
+
+    .hover-glow{
+      box-shadow: 0 0 0 rgba(56,189,248,0);
+      transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+    }
+    .hover-glow:hover{
+      box-shadow: 0 0 40px rgba(56,189,248,.22);
+      transform: translateY(-2px);
+      border-color: rgba(56,189,248,.30);
+    }
+
     .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+
+    /* Loading shimmer */
+    .shimmer{
+      position: relative;
+      overflow: hidden;
+    }
+    .shimmer:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+      animation: shimmer 1.25s infinite;
+    }
+    @keyframes shimmer{
+      0%{ transform: translateX(-100%); }
+      100%{ transform: translateX(100%); }
+    }
   </style>
 </head>
 
-<body class="min-h-screen text-white" style="background:
-  radial-gradient(1200px 600px at 50% -10%, rgba(56,189,248,.35), transparent 60%),
-  radial-gradient(900px 500px at 80% 0%, rgba(99,102,241,.22), transparent 55%),
-  linear-gradient(180deg, #06122a 0%, #0b2a72 50%, #06122a 100%);">
+<body class="min-h-screen tp-bg">
 
-  <!-- Top bar -->
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-    <a href="index.html"
-       class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 transition">
-      <span aria-hidden="true">←</span>
-      <span class="text-sm font-semibold">Voltar</span>
-    </a>
-  </div>
+  <!-- Header (padrão premium + logo) -->
+  <header class="sticky top-0 z-40 border-b border-white/10 glass">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-4">
+      <a href="index.html" aria-label="Voltar para a página inicial" class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-400/25 flex items-center justify-center overflow-hidden">
+          <img src="https://i.imgur.com/FyCqY2d.png" alt="T-Power Motos" class="w-10 h-10 object-contain" />
+        </div>
+        <div class="leading-tight">
+          <div class="font-bold tracking-wide">T‑POWER MOTOS</div>
+          <div class="text-xs text-white/55">Detalhes da moto</div>
+        </div>
+      </a>
+
+      <div class="flex-1"></div>
+
+      <a href="index.html"
+         class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 transition">
+        <span aria-hidden="true">←</span>
+        <span class="text-sm font-semibold">Voltar</span>
+      </a>
+    </div>
+  </header>
 
   <!-- Conteúdo -->
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
     <!-- Cabeçalho -->
-    <div class="text-center">
-      <div id="badge" class="inline-flex items-center justify-center px-4 py-1 rounded-full text-xs font-black tracking-wide bg-sky-400/90 text-black">
-        NOVO
+    <section class="text-center">
+      <div class="inline-flex items-center justify-center gap-2">
+        <div id="badge" class="inline-flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-black tracking-wide bg-sky-400/90 text-black">
+          —
+        </div>
+        <div id="motoIdPill" class="hidden sm:inline-flex px-3 py-1.5 rounded-full text-xs mono bg-white/5 border border-white/10 text-white/70">
+          —
+        </div>
       </div>
 
-      <div id="brand" class="mt-3 text-sky-300 font-bold text-sm"></div>
+      <div id="brand" class="mt-4 text-sky-300 font-bold text-sm"></div>
 
-      <h1 id="title" class="mt-3 text-5xl sm:text-6xl font-extrabold tracking-tight"></h1>
+      <h1 id="title" class="mt-3 text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight"></h1>
 
-      <p id="desc" class="mt-4 text-white/70 max-w-2xl mx-auto"></p>
+      <p id="desc" class="mt-5 text-white/70 max-w-3xl mx-auto leading-relaxed"></p>
 
-      <div id="price" class="mt-6 text-3xl sm:text-4xl font-extrabold text-sky-300"></div>
-    </div>
+      <div class="mt-7 inline-flex flex-col sm:flex-row items-center justify-center gap-3">
+        <div id="price" class="text-3xl sm:text-4xl font-extrabold text-sky-300"></div>
+        <div class="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-white/65">
+          Parcelamento e avaliação na loja
+        </div>
+      </div>
+    </section>
 
-    <!-- Galeria (grande) -->
+    <!-- Galeria -->
     <section class="mt-10">
       <div class="rounded-3xl overflow-hidden border border-white/10 glass">
         <div class="relative">
-          <img id="mainImg" src="" alt="Foto da moto" class="w-full h-[320px] sm:h-[420px] md:h-[520px] object-cover"/>
+          <img id="mainImg" src="" alt="Foto da moto" class="w-full h-[320px] sm:h-[440px] md:h-[560px] object-cover"/>
+
+          <!-- Gradiente de leitura (deixa premium + legível) -->
+          <div class="pointer-events-none absolute inset-0"
+               style="background: linear-gradient(180deg, rgba(0,0,0,.0) 55%, rgba(0,0,0,.35) 100%);"></div>
 
           <!-- setas -->
           <button id="prevPhoto"
@@ -74,17 +179,29 @@
         <!-- thumbnails -->
         <div id="thumbs" class="p-4 sm:p-5 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3 bg-black/10"></div>
       </div>
+
+      <!-- Quick actions -->
+      <div class="mt-5 flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="#contato"
+           class="px-8 py-3 rounded-full bg-sky-500 hover:bg-sky-400 text-black font-extrabold hover-glow text-center">
+          Falar com Consultor
+        </a>
+        <a id="waCta" href="https://wa.me/5541996977148" target="_blank"
+           class="px-8 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold hover-glow text-center">
+          WhatsApp Direto
+        </a>
+      </div>
     </section>
 
     <!-- Cards: especificações / destaques -->
-    <section class="mt-10 grid md:grid-cols-2 gap-6">
+    <section class="mt-10 grid lg:grid-cols-2 gap-6">
       <!-- ESPECIFICAÇÕES -->
       <div class="rounded-3xl border border-white/10 glass overflow-hidden">
         <div class="p-5 flex items-center gap-3 border-b border-white/10">
           <div class="w-10 h-10 rounded-2xl bg-sky-500/20 border border-sky-400/20 flex items-center justify-center">⚡</div>
           <div class="font-extrabold tracking-wide text-sky-300">ESPECIFICAÇÕES</div>
         </div>
-        <div id="specs" class="p-5 space-y-3"></div>
+        <div id="specs" class="p-5 grid sm:grid-cols-2 gap-3"></div>
       </div>
 
       <!-- DESTAQUES -->
@@ -97,27 +214,39 @@
       </div>
     </section>
 
-    <!-- CTA -->
+    <!-- CTA premium (com contexto) -->
     <section class="mt-10">
       <div class="rounded-3xl border border-white/10 glass p-8 text-center">
-        <h2 class="text-2xl sm:text-3xl font-extrabold">GOSTOU DESTA MOTO?</h2>
-        <p class="mt-2 text-white/65">Entre em contato com nossa equipe agora mesmo!</p>
-
-        <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
-          <a href="#contato"
-             class="px-8 py-3 rounded-full bg-sky-500 hover:bg-sky-400 text-black font-extrabold">
-            Falar com Consultor
-          </a>
-          <a href="https://wa.me/5541996977148" target="_blank"
-             class="px-8 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold">
-            WhatsApp Direto
-          </a>
+        <div class="mx-auto max-w-3xl">
+          <div class="text-xs text-white/50 mono">T‑POWER MOTOS • Fazenda Rio Grande - PR</div>
+          <h2 class="mt-2 text-2xl sm:text-3xl font-extrabold">QUER NEGOCIAR ESTA MOTO?</h2>
+          <p class="mt-3 text-white/65 leading-relaxed">
+            Envie sua mensagem e informe o modelo de interesse. Nossa equipe responde o mais rápido possível.
+          </p>
+          <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="#contato"
+               class="px-8 py-3 rounded-full bg-sky-500 hover:bg-sky-400 text-black font-extrabold hover-glow">
+              Enviar Mensagem
+            </a>
+            <a href="index.html#contato"
+               class="px-8 py-3 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 font-semibold hover-glow">
+              Ver Contato Completo
+            </a>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Contato rápido (âncora só para o botão acima) -->
+    <!-- âncora -->
     <div id="contato" class="h-1"></div>
+
+    <!-- Rodapé simples (pra ficar “fechado” premium) -->
+    <footer class="mt-14 pb-10 text-center text-sm text-white/45">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
+        <span>©</span> <span class="font-semibold">T‑Power Motos</span> <span class="mono">•</span> <span>Todos os direitos reservados</span>
+      </div>
+    </footer>
+
   </main>
 
 <script>
@@ -234,12 +363,11 @@ async function loadAllFromSupabase(){
 }
 
 function renderSpecItem(text){
-  // tenta dividir "Chave: valor"
   const parts = String(text || "").split(":");
   const key = (parts[0] || "").trim();
   const value = (parts.slice(1).join(":") || "").trim();
   const wrap = document.createElement("div");
-  wrap.className = "p-4 rounded-2xl bg-white/5 border border-white/10";
+  wrap.className = "p-4 rounded-2xl bg-white/5 border border-white/10 hover-glow";
   wrap.innerHTML = `
     <div class="text-xs text-white/55 font-semibold">${key || "Item"}</div>
     <div class="mt-1 text-white font-bold">${value || text}</div>
@@ -249,7 +377,7 @@ function renderSpecItem(text){
 
 function renderFeatureItem(text){
   const wrap = document.createElement("div");
-  wrap.className = "flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/10";
+  wrap.className = "flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/10 hover-glow";
   wrap.innerHTML = `
     <div class="w-6 h-6 rounded-full bg-sky-500/20 border border-sky-400/20 flex items-center justify-center text-sky-300 text-sm">●</div>
     <div class="font-semibold text-white">${text}</div>
@@ -260,10 +388,10 @@ function renderFeatureItem(text){
 function setMainPhoto(idx){
   if(!photoList.length) return;
   currentIndex = (idx + photoList.length) % photoList.length;
-  document.getElementById("mainImg").src = photoList[currentIndex];
+  const main = document.getElementById("mainImg");
+  main.src = photoList[currentIndex];
   document.getElementById("photoCounter").textContent = `${currentIndex + 1} / ${photoList.length}`;
 
-  // ativa thumb
   document.querySelectorAll("[data-thumb]").forEach(el=>{
     const i = Number(el.getAttribute("data-thumb"));
     el.classList.toggle("ring-2", i === currentIndex);
@@ -295,9 +423,15 @@ function renderGallery(urls){
 function renderPage(motoId){
   const data = motoDataStorage[motoId] || null;
   if(!data){
-    // fallback: volta pro index
     window.location.href = "index.html";
     return;
+  }
+
+  // pílula do id
+  const idPill = document.getElementById("motoIdPill");
+  if(idPill){
+    idPill.textContent = `ID: ${motoId}`;
+    idPill.classList.remove("hidden");
   }
 
   const d = data.moto_data || {};
@@ -306,13 +440,16 @@ function renderPage(motoId){
 
   const badgeEl = document.getElementById("badge");
   badgeEl.textContent = badge;
-  badgeEl.className = "inline-flex items-center justify-center px-4 py-1 rounded-full text-xs font-black tracking-wide " +
+  badgeEl.className = "inline-flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-black tracking-wide " +
     (badge === "NOVO" ? "bg-sky-400/90 text-black" : "bg-red-500/90 text-white");
 
   document.getElementById("brand").textContent = d.brand || "";
   document.getElementById("title").textContent = d.name || motoId.toUpperCase();
   document.getElementById("desc").textContent = d.description || "";
   document.getElementById("price").textContent = d.price || "Consultar";
+
+  // atualiza title do navegador (bem premium)
+  document.title = `${(d.name || motoId.toUpperCase())} • T‑Power Motos`;
 
   // specs
   const specsWrap = document.getElementById("specs");
@@ -330,11 +467,17 @@ function renderPage(motoId){
     featWrap.appendChild(renderFeatureItem("Sem destaques cadastrados"));
   }
 
+  // WhatsApp com texto pronto (ajuda MUITO conversão)
+  const wa = document.getElementById("waCta");
+  if(wa){
+    const msg = `Olá! Tenho interesse na moto ${d.name || motoId.toUpperCase()} (${d.year || "—"}). Pode me passar mais informações?`;
+    wa.href = "https://wa.me/5541996977148?text=" + encodeURIComponent(msg);
+  }
+
   // gallery: thumbnail + photos
   const combined = [];
   if(data.thumbnail) combined.push(data.thumbnail);
   (data.photos || []).forEach(u=>combined.push(u));
-  // remove duplicadas mantendo ordem
   const unique = Array.from(new Set(combined.filter(Boolean)));
   renderGallery(unique);
 }
@@ -347,9 +490,22 @@ document.addEventListener("keydown", (e)=>{
   if(e.key === "ArrowRight") setMainPhoto(currentIndex + 1);
 });
 
+(function bootstrapSkeleton(){
+  // skeleton simples (não muda layout, só evita “branco”)
+  const main = document.getElementById("mainImg");
+  if(main){
+    main.classList.add("shimmer");
+    main.src = "data:image/gif;base64,R0lGODlhAQABAAAAACw=";
+  }
+})();
+
 (async function init(){
   const motoId = getIdFromUrl();
-  await loadAllFromSupabase();
+  try{
+    await loadAllFromSupabase();
+  }catch(e){
+    console.error(e);
+  }
   renderPage(motoId || Object.keys(motoDataStorage)[0]);
 })();
 </script>
