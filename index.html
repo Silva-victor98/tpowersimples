@@ -1264,5 +1264,28 @@ document.addEventListener('DOMContentLoaded', ()=>{
 })();
 </script>
 
+
+<script>
+/* =========================================================
+   FIX DEFENSIVO:
+   Se por algum motivo um <a href="moto.html?..."> ficar "cobrindo" a página inteira
+   (por tag <a> aberta/estilos), qualquer clique vira navegação e parece que "some tudo".
+   Este guard impede navegação para moto.html quando o clique NÃO foi em um card do grid.
+   ========================================================= */
+document.addEventListener('click', function(e){
+  const a = e.target.closest('a');
+  if(!a) return;
+
+  // normaliza href (pega apenas o final)
+  const href = (a.getAttribute('href') || '').trim();
+
+  // Só bloqueia navegação do detalhe quando NÃO é um card do grid
+  if(href.startsWith('moto.html') && !a.closest('#motosGrid')){
+    e.preventDefault();
+    e.stopPropagation();
+  }
+}, true);
+</script>
+
 </body>
 </html>
