@@ -111,7 +111,21 @@
       text-transform: uppercase;
     }
     .hero-title .highlight{ color: #38BDF8; }
-</style>
+
+
+/* ===== Admin UI (mais visível / alinhado) ===== */
+#adminModal select, #adminModal input, #adminModal textarea{
+  background-color: rgba(2, 6, 23, 0.35);
+}
+#adminModal select option{
+  background-color: #0b1220;
+  color: #ffffff;
+}
+#adminModal input::placeholder, #adminModal textarea::placeholder{
+  color: rgba(255,255,255,.35);
+}
+
+  </style>
 </head>
 
 <body class="min-h-screen text-white tp-bg font-body">
@@ -431,16 +445,14 @@
             
             <div class="flex items-center gap-2 text-sm text-white/70 flex-wrap">
               <span class="mono">Editando:</span>
-              <select id="adminMotoSelect" class="px-4 py-2 rounded-2xl bg-white/5 border border-white/10 text-white">
+              <select id="adminMotoSelect" class="px-4 py-2 h-12 rounded-2xl bg-black/40 border border-white/20 text-white shadow-lg focus:outline-none focus:border-sky-400">
               </select>
 
               <!-- Criar nova moto (apenas UI, sem mudar backend) -->
               <div class="flex items-center gap-2 ml-0 sm:ml-3">
-                <input id="newMotoIdInput"
-                       class="w-36 sm:w-44 px-3 py-2 rounded-2xl bg-black/30 border border-white/10 focus:outline-none focus:border-sky-400 text-white mono text-sm"
+                <input id="newMotoIdInput" class="w-36 sm:w-44 px-3 py-2 h-12 rounded-2xl bg-black/30 border border-white/10 focus:outline-none focus:border-sky-400 text-white mono text-sm"
                        placeholder="novo_id"/>
-                <button id="createMotoBtn"
-                        class="px-4 py-2 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold text-sm">
+                <button id="createMotoBtn" class="px-4 py-2 h-12 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold text-sm">
                   + Nova moto
                 </button>
               </div>
@@ -448,10 +460,10 @@
 
 
             <div class="flex gap-2">
-              <button id="adminRefreshBtn" class="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
+              <button id="adminRefreshBtn" class="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 h-12">
                 Recarregar
               </button>
-              <button id="adminLogoutBtn" class="px-4 py-2 rounded-2xl bg-red-500/20 hover:bg-red-500/30 border border-red-400/20">
+              <button id="adminLogoutBtn" class="px-4 py-2 rounded-2xl bg-red-500/20 hover:bg-red-500/30 border border-red-400/20 h-12">
                 Sair
               </button>
             </div>
@@ -914,17 +926,31 @@ function syncAdminVisibility(){
   document.getElementById("adminContent").classList.toggle("hidden", !isAdmin);
 
   if(isAdmin){
-    // popular select
     const sel = document.getElementById("adminMotoSelect");
+
+    // tenta manter a seleção correta (última moto editada)
+    const prev = sel?.value || "";
+    const saved = (function(){
+      try { return localStorage.getItem("tpower_admin_last_moto") || ""; } catch(e){ return ""; }
+    })();
+
     sel.innerHTML = "";
-    getMotoIds().forEach(id=>{
+    const ids = getMotoIds();
+
+    ids.forEach(id=>{
       const opt = document.createElement("option");
       opt.value = id;
       opt.textContent = id.toUpperCase();
       sel.appendChild(opt);
     });
-    sel.value = getMotoIds()[0] || "";
-    loadAdminForm(sel.value);
+
+    const pick =
+      (saved && ids.includes(saved)) ? saved :
+      (prev && ids.includes(prev)) ? prev :
+      (ids[0] || "");
+
+    sel.value = pick;
+    loadAdminForm(pick);
   }
 }
 function adminLogin(){
@@ -945,6 +971,7 @@ function adminLogout(){
 }
 
 function loadAdminForm(motoId){
+  try { localStorage.setItem("tpower_admin_last_moto", motoId); } catch(e) {}
   const d = motoDataStorage[motoId]?.moto_data || {};
   document.getElementById("f_name").value = d.name || "";
   document.getElementById("f_brand").value = d.brand || "";
