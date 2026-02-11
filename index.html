@@ -1553,48 +1553,22 @@ if(subj) subj.value = `Contato pelo site - ${motoFinal}`;
 
 
 <script>
-// HERO SLIDESHOW (automático) — com ajuste de enquadramento por imagem
+// HERO SLIDESHOW (automático)
 (function(){
-  const slides = [
-    { url: "https://i.imgur.com/TryCmgo.jpg", posDesktop: "center", posMobile: "center" },
-    { url: "https://i.imgur.com/B37xqkA.jpg", posDesktop: "center", posMobile: "center" },
-    { url: "https://i.imgur.com/KslMGtA.jpg", posDesktop: "center", posMobile: "center" },
-    // Foto dos donos: sobe o enquadramento para não cortar o rosto
-    { url: "https://i.imgur.com/0A8bQHa.jpg", posDesktop: "center top", posMobile: "center top" }
-  ];
-
+  const images = ['https://i.imgur.com/TryCmgo.jpg', 'https://i.imgur.com/B37xqkA.jpg', 'https://i.imgur.com/KslMGtA.jpg'];
   let i = 0;
   const hero = document.getElementById("hero-bg");
-  if(!hero || slides.length < 2) return;
-
-  const isMobile = () => window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
-
-  function applySlide(idx){
-    const s = slides[idx];
-    const pos = isMobile() ? (s.posMobile || s.posDesktop || "center") : (s.posDesktop || "center");
-    hero.style.backgroundImage =
-      `linear-gradient(rgba(2,6,23,.75), rgba(2,6,23,.85)), url('${s.url}')`;
-    hero.style.backgroundPosition = pos;
-    hero.style.backgroundSize = "cover";
-    hero.style.backgroundRepeat = "no-repeat";
-  }
-
-  // aplica a primeira imediatamente (e garante enquadramento)
-  applySlide(i);
+  if(!hero || images.length < 2) return;
 
   setInterval(() => {
-    i = (i + 1) % slides.length;
+    i = (i + 1) % images.length;
     hero.style.opacity = 0;
-
     setTimeout(() => {
-      applySlide(i);
+      hero.style.backgroundImage =
+        `linear-gradient(rgba(2,6,23,.75), rgba(2,6,23,.85)), url('${images[i]}')`;
       hero.style.opacity = 1;
     }, 600);
-
   }, 6000);
-
-  // se mudar orientação/tamanho, reajusta o enquadramento da imagem atual
-  window.addEventListener("resize", () => applySlide(i));
 })();
 </script>
 
