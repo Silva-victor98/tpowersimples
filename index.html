@@ -1563,42 +1563,51 @@ if(subj) subj.value = `Contato pelo site - ${motoFinal}`;
 
 
 <script>
-/* Scroll reveal: anima elementos quando entram na tela */
+/* Scroll reveal (seguro): anima apenas blocos (não mexe em inputs/botões/menus) */
 (function(){
   const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(prefersReduce) return;
 
-  function shouldSkip(el){
+  function inExcludedArea(el){
     return !!el.closest('header, #adminModal, #adminPanel, #detailModal, #loginModal');
   }
+  function isFormControl(el){
+    const t = el.tagName;
+    return t === 'BUTTON' || t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT' || t === 'LABEL';
+  }
 
-  // Seleciona elementos "grandes" + cards + CTAs
   const selectors = [
-    'section h1','section h2','section h3',
-    'section [class*="text-3xl"]','section [class*="text-4xl"]','section [class*="text-5xl"]','section [class*="text-6xl"]','section [class*="text-7xl"]',
+    'main section h1','main section h2','main section h3',
+    'main section p',
     '#motosGrid > a',
-    'section button','section a.btn','section a[href^="https://wa.me"]'
+    '[data-reveal]' // (se existir algum no futuro)
   ].join(',');
 
   const all = Array.from(document.querySelectorAll(selectors))
-    .filter(el => !shouldSkip(el));
+    .filter(el => !inExcludedArea(el))
+    .filter(el => !isFormControl(el));
 
-  // Aplica class reveal + delay em sequência por seção
-  const bySection = new Map();
-  all.forEach(el=>{
-    const s = el.closest('section');
-    const key = s || document.body;
-    if(!bySection.has(key)) bySection.set(key, []);
-    bySection.get(key).push(el);
+  // Evita animar elementos muito pequenos (ex: ícones) e inline
+  const filtered = all.filter(el=>{
+    const cs = window.getComputedStyle(el);
+    if(cs.display === 'inline') return false;
+    const r = el.getBoundingClientRect();
+    return (r.height >= 18 && r.width >= 60);
   });
 
-  bySection.forEach((els, section)=>{
-    // ordena por ordem no DOM (já vem assim)
+  // Atribui delays suaves por seção (cards aparecem em sequência)
+  const bySection = new Map();
+  filtered.forEach(el=>{
+    const s = el.closest('section') || document.body;
+    if(!bySection.has(s)) bySection.set(s, []);
+    bySection.get(s).push(el);
+  });
+
+  bySection.forEach((els)=>{
     els.forEach((el,i)=>{
       el.classList.add('reveal');
-      // delays suaves (cards em grid ficam bem)
       const step = 0.08;
-      const maxDelay = 0.8;
+      const maxDelay = 0.6;
       const d = Math.min(i*step, maxDelay);
       el.dataset.revealDelay = String(d);
     });
@@ -1615,7 +1624,7 @@ if(subj) subj.value = `Contato pelo site - ${motoFinal}`;
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
 
-  all.forEach(el=>io.observe(el));
+  filtered.forEach(el=>io.observe(el));
 })();
 </script>
 
