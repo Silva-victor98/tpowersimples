@@ -1,636 +1,621 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>T‑Power Motos</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>T‑Power Motos</title>
 
-  <!-- Tailwind (CDN) -->
-  <script src="https://cdn.tailwindcss.com"></script>
+<!-- Tailwind (CDN) -->
+<script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Supabase JS v2 -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Supabase JS v2 -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-    :root{
-      --tp-ink:#EAF2FF;
-      --tp-muted:rgba(234,242,255,.68);
-      --tp-muted2:rgba(234,242,255,.50);
-      --tp-line:rgba(255,255,255,.10);
-      --tp-glass:rgba(6,18,42,.55);
-      --tp-glass2:rgba(6,18,42,.35);
-      --tp-accent:#38BDF8; /* sky-400 */
-      --tp-accent2:#60A5FA; /* blue-400 */
-      --tp-bgA:#020617; /* slate-950 */
-      --tp-bgB:#06122a; /* deep navy */
-      --tp-bgC:#0b2a5a; /* richer blue */
-    }
+:root{
+--tp-ink:#EAF2FF;
+--tp-muted:rgba(234,242,255,.68);
+--tp-muted2:rgba(234,242,255,.50);
+--tp-line:rgba(255,255,255,.10);
+--tp-glass:rgba(6,18,42,.55);
+--tp-glass2:rgba(6,18,42,.35);
+--tp-accent:#38BDF8; /* sky-400 */
+--tp-accent2:#60A5FA; /* blue-400 */
+--tp-bgA:#020617; /* slate-950 */
+--tp-bgB:#06122a; /* deep navy */
+--tp-bgC:#0b2a5a; /* richer blue */
+}
 
-    /* Fonts */
-    .font-display{
-      font-family:'Bebas Neue', sans-serif;
-      font-weight:400;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-    }
-    .font-body{
-      font-family:'Inter', sans-serif;
-      font-weight:400;
-      letter-spacing:.005em;
-    }
-    body, p, span, label, input, textarea, select, button{
-      font-family:'Inter', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-    h1,h2,h3,.display{
-      font-family:'Bebas Neue', sans-serif;
-      font-weight:400;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-    }
+/* Fonts */
+.font-display{
+font-family:'Bebas Neue', sans-serif;
+font-weight:400;
+letter-spacing:.10em;
+text-transform:uppercase;
+}
+.font-body{
+font-family:'Inter', sans-serif;
+font-weight:400;
+letter-spacing:.005em;
+}
+    body, p, label, input, textarea, select, button{
+font-family:'Inter', sans-serif;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+h1,h2,h3,.display{
+font-family:'Inter', sans-serif;
+font-weight:400;
+letter-spacing:.10em;
+text-transform:uppercase;
+}
 
-    /* Background (mais azul, menos preto) */
-    .tp-bg{
-      background:
-        radial-gradient(1200px 520px at 50% -10%, rgba(56,189,248,.28), transparent 60%),
-        radial-gradient(900px 520px at 10% 20%, rgba(96,165,250,.16), transparent 55%),
-        radial-gradient(800px 520px at 90% 30%, rgba(59,130,246,.12), transparent 55%),
-        linear-gradient(180deg, var(--tp-bgA) 0%, var(--tp-bgB) 55%, #020617 100%);
-      color:var(--tp-ink);
-    }
+/* Background (mais azul, menos preto) */
+.tp-bg{
+background:
+radial-gradient(1200px 520px at 50% -10%, rgba(56,189,248,.28), transparent 60%),
+radial-gradient(900px 520px at 10% 20%, rgba(96,165,250,.16), transparent 55%),
+radial-gradient(800px 520px at 90% 30%, rgba(59,130,246,.12), transparent 55%),
+linear-gradient(180deg, var(--tp-bgA) 0%, var(--tp-bgB) 55%, #020617 100%);
+color:var(--tp-ink);
+}
 
-    /* Mantém o visual “premium” */
-    .card-gradient{
-      background: linear-gradient(135deg, rgba(56,189,248,.14), rgba(255,255,255,.06));
-    }
-    .hover-glow{
-      box-shadow: 0 0 0 rgba(56,189,248,0);
-      transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease;
-    }
-    .hover-glow:hover{
-      box-shadow: 0 0 40px rgba(56,189,248,.22);
-      transform: translateY(-2px);
-      border-color: rgba(56,189,248,.30);
-    }
-    .glass{
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      background: linear-gradient(180deg, var(--tp-glass), var(--tp-glass2));
-    }
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
-    .hidden{display:none;}
+/* Mantém o visual “premium” */
+.card-gradient{
+background: linear-gradient(135deg, rgba(56,189,248,.14), rgba(255,255,255,.06));
+}
+.hover-glow{
+box-shadow: 0 0 0 rgba(56,189,248,0);
+transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+}
+.hover-glow:hover{
+box-shadow: 0 0 40px rgba(56,189,248,.22);
+transform: translateY(-2px);
+border-color: rgba(56,189,248,.30);
+}
+.glass{
+backdrop-filter: blur(16px);
+-webkit-backdrop-filter: blur(16px);
+background: linear-gradient(180deg, var(--tp-glass), var(--tp-glass2));
+}
+.mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+.hidden{display:none;}
 
-    /* Inputs mais premium */
-    input, textarea, select{
-      color: var(--tp-ink);
-      caret-color: var(--tp-accent);
-    }
-    input::placeholder, textarea::placeholder{ color: rgba(234,242,255,.42); }
-    input:focus, textarea:focus, select:focus{
-      outline: none;
-      box-shadow: 0 0 0 4px rgba(56,189,248,.14);
-      border-color: rgba(56,189,248,.45) !important;
-    }
+/* Inputs mais premium */
+input, textarea, select{
+color: var(--tp-ink);
+caret-color: var(--tp-accent);
+}
+input::placeholder, textarea::placeholder{ color: rgba(234,242,255,.42); }
+input:focus, textarea:focus, select:focus{
+outline: none;
+box-shadow: 0 0 0 4px rgba(56,189,248,.14);
+border-color: rgba(56,189,248,.45) !important;
+}
 
-    /* Pequenos ajustes de tipografia */
-    .tp-muted{color:var(--tp-muted);}
-    .tp-muted2{color:var(--tp-muted2);}
-  
-    /* Dropdown do <select> mais escuro (para não ficar branco) */
-    select option{
-      background: #0b1220;
-      color: var(--tp-ink);
-    }
-    select{
-      color: var(--tp-ink);
-    }
+/* Pequenos ajustes de tipografia */
+.tp-muted{color:var(--tp-muted);}
+.tp-muted2{color:var(--tp-muted2);}
 
-
-    /* GARANTIA: spans dentro de títulos usam a MESMA fonte do título */
-    h1 span, h2 span, h3 span{
-      font-family: inherit !important;
-      letter-spacing: inherit;
-      text-transform: inherit;
-    }
+/* Dropdown do <select> mais escuro (para não ficar branco) */
+select option{
+background: #0b1220;
+color: var(--tp-ink);
+}
+select{
+color: var(--tp-ink);
+}
 
 
-    /* Hero com imagem de fundo */
-    .hero-bg::before{
-      content:'';
-      position:absolute;
-      inset:0;
-      background: linear-gradient(
-        180deg,
-        rgba(2,6,23,.75) 0%,
-        rgba(2,6,23,.65) 40%,
-        rgba(2,6,23,.85) 100%
-      );
-      z-index:0;
-    }
-    .hero-bg > *{
-      position:relative;
-      z-index:1;
-    }
+/* Força Bebas Neue em textos grandes (classes Tailwind) */
+[class*="text-3xl"],
+[class*="text-4xl"],
+[class*="text-5xl"],
+[class*="text-6xl"],
+[class*="text-7xl"]{
+font-family: 'Bebas Neue', sans-serif !important;
+letter-spacing: .10em;
+text-transform: uppercase;
+}
 
 </style>
 </head>
 
 <body class="min-h-screen text-white tp-bg font-body">
-  <!-- Header -->
-  <header class="sticky top-0 z-40 border-b border-white/10 glass">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-4">
-      <div class="flex items-center gap-3">
-        <a href="./" aria-label="Voltar para a página inicial" class="block">
-          <div class="w-14 h-14 rounded-2xl bg-sky-500/10 border border-sky-400/25 flex items-center justify-center overflow-hidden">
-            <img src="https://i.imgur.com/FyCqY2d.png" alt="T-Power Motos" class="w-12 h-12 object-contain" />
-          </div>
-        </a>
-        <div>
-          <div class="font-bold tracking-wide">T‑POWER MOTOS</div>
+<!-- Header -->
+<header class="sticky top-0 z-40 border-b border-white/10 glass">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-4">
+<div class="flex items-center gap-3">
+<a href="./" aria-label="Voltar para a página inicial" class="block">
+<div class="w-14 h-14 rounded-2xl bg-sky-500/10 border border-sky-400/25 flex items-center justify-center overflow-hidden">
+<img src="https://i.imgur.com/FyCqY2d.png" alt="T-Power Motos" class="w-12 h-12 object-contain" />
 </div>
-      </div>
+</a>
+<div>
+<div class="font-bold tracking-wide">T‑POWER MOTOS</div>
+</div>
+</div>
 
-      <div class="flex-1"></div>
+<div class="flex-1"></div>
 
-      <div class="relative w-full max-w-md">
-        <input id="searchInput"
-               class="w-full pl-12 pr-16 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400 text-sm"
-               placeholder="Buscar por modelo, marca, ano…"/>
-        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">🔎</div>
+<div class="relative w-full max-w-md">
+<input id="searchInput"
+class="w-full pl-12 pr-16 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400 text-sm"
+placeholder="Buscar por modelo, marca, ano…"/>
+<div class="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">🔎</div>
 
-        
-        <!-- Limpar busca -->
-        <button id="clearSearchBtn"
-                type="button"
-                class="absolute right-12 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/90 transition hidden"
-                title="Limpar busca"
-                aria-label="Limpar busca">✕</button>
+
+<!-- Limpar busca -->
+<button id="clearSearchBtn"
+type="button"
+class="absolute right-12 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/90 transition hidden"
+title="Limpar busca"
+aria-label="Limpar busca">✕</button>
 <!-- Botão admin discreto (como “cadeado quase invisível”) -->
-        <button id="adminBtn"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/90 transition"
-                title="Painel administrativo"
-                aria-label="Painel administrativo">
-          🔒
-        </button>
-      </div>
-    </div>
-  </header>
+<button id="adminBtn"
+class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/90 transition"
+title="Painel administrativo"
+aria-label="Painel administrativo">
+🔒
+</button>
+</div>
+</div>
+</header>
 
 <!-- HERO (visual novo, backend intacto) -->
-<section class="relative overflow-hidden hero-bg" style="background-image:url(https://i.imgur.com/TryCmgo.jpg);background-size:cover;background-position:center;">
-  <div class="absolute inset-0"
-       style="background:
-         radial-gradient(1200px 500px at 50% -10%, rgba(56,189,248,.35), transparent 60%),
-         linear-gradient(180deg, #020617 0%, #020617 100%);">
-  </div>
+<section class="relative overflow-hidden">
+<div class="absolute inset-0"
+style="background:
+        radial-gradient(1200px 500px at 50% -10%, rgba(56,189,248,.35), transparent 60%),
+        linear-gradient(180deg, #020617 0%, #020617 100%);">
+</div>
 
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
-    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight">
-      ACELERE SEUS <span class="text-sky-400 font-display">SONHOS</span>
-    </h1>
+<div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+<h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight">
+ACELERE SEUS <span class="text-sky-400">SONHOS</span>
+</h1>
 
-    <p class="mt-6 max-w-2xl mx-auto text-lg text-white/70">
-      Encontre a moto perfeita para sua jornada. Qualidade, performance e paixão em cada modelo.
-    </p>
+<p class="mt-6 max-w-2xl mx-auto text-lg text-white/70">
+Encontre a moto perfeita para sua jornada. Qualidade, performance e paixão em cada modelo.
+</p>
 
-    <div class="mt-10">
-      <button id="ctaOpenFirst"
-              class="px-10 py-4 rounded-full bg-sky-500 hover:bg-sky-400 text-black font-extrabold text-sm tracking-wide">
-        EXPLORAR MOTOS
-      </button>
-    </div>
-  </div>
+<div class="mt-10">
+<button id="ctaOpenFirst"
+class="px-10 py-4 rounded-full bg-sky-500 hover:bg-sky-400 text-black font-extrabold text-sm tracking-wide">
+EXPLORAR MOTOS
+</button>
+</div>
+</div>
 
-  <div class="relative border-t border-white/10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
-      <div>
-        <div class="text-3xl font-extrabold text-sky-400">500+</div>
-        <div class="text-sm text-white/60 mt-1">Motos Vendidas</div>
-      </div>
-      <div>
-        <div class="text-3xl font-extrabold text-sky-400">40+</div>
-        <div class="text-sm text-white/60 mt-1">Modelos</div>
-      </div>
-      <div>
-        <div class="text-3xl font-extrabold text-sky-400">3+</div>
-        <div class="text-sm text-white/60 mt-1">Anos no Mercado</div>
-      </div>
-      <div>
-        <div class="text-3xl font-extrabold text-sky-400">100%</div>
-        <div class="text-sm text-white/60 mt-1">Sonhos Realizados</div>
-      </div>
-    </div>
-  </div>
+<div class="relative border-t border-white/10">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
+<div>
+<div class="text-3xl font-extrabold text-sky-400">500+</div>
+<div class="text-sm text-white/60 mt-1">Motos Vendidas</div>
+</div>
+<div>
+<div class="text-3xl font-extrabold text-sky-400">40+</div>
+<div class="text-sm text-white/60 mt-1">Modelos</div>
+</div>
+<div>
+<div class="text-3xl font-extrabold text-sky-400">3+</div>
+<div class="text-sm text-white/60 mt-1">Anos no Mercado</div>
+</div>
+<div>
+<div class="text-3xl font-extrabold text-sky-400">100%</div>
+<div class="text-sm text-white/60 mt-1">Sonhos Realizados</div>
+</div>
+</div>
+</div>
 </section>
 
-  <!-- Hero -->
-  <section class="relative overflow-hidden">
-    <div class="absolute inset-0 opacity-50 pointer-events-none"
-         style="background: radial-gradient(900px 400px at 20% 20%, rgba(56,189,248,.18), transparent 60%),
-                          radial-gradient(700px 300px at 80% 10%, rgba(99,102,241,.10), transparent 55%);"></div>
+<!-- Hero -->
+<section class="relative overflow-hidden">
+<div class="absolute inset-0 opacity-50 pointer-events-none"
+style="background: radial-gradient(900px 400px at 20% 20%, rgba(56,189,248,.18), transparent 60%),
+                         radial-gradient(700px 300px at 80% 10%, rgba(99,102,241,.10), transparent 55%);"></div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
-      <div class="grid lg:grid-cols-2 gap-10 items-center">
-        <div>
-          <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight">
-          </h1>
-          <p class="mt-4 text-white/70 text-lg leading-relaxed">
-          </p>
-          <div class="mt-8 flex flex-col sm:flex-row gap-3">   
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  
-  <!-- Grid -->
-  <section id="gridSection" class="py-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-14">
-        <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight">
-          MOTOS EM <span class="text-sky-400">DESTAQUE</span>
-        </h2>
-        <p class="mt-4 text-white/60 text-lg">
-          Confira nossa seleção especial de motos com as melhores condições
-        </p>
-      </div>
-
-      <span id="countText" class="hidden">0</span>
-
-      <div id="motosGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"></div>
-
-      <!-- Paginação -->
-      <div class="mt-12 flex items-center justify-center gap-4">
-        <button id="prevPageBtn"
-                class="px-6 py-3 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 disabled:opacity-40 disabled:cursor-not-allowed">
-          ← Anterior
-        </button>
-
-        <div id="pageIndicator" class="text-white/70 text-sm mono"></div>
-
-        <button id="nextPageBtn"
-                class="px-6 py-3 rounded-full bg-sky-500 hover:bg-sky-400 text-black font-bold disabled:opacity-40 disabled:cursor-not-allowed">
-          Próxima →
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- POR QUE ESCOLHER -->
-  <section id="sobre" class="py-20 relative overflow-hidden">
-    <div class="absolute inset-0 opacity-60 pointer-events-none"
-         style="background:
-           radial-gradient(900px 420px at 15% 25%, rgba(56,189,248,.18), transparent 60%),
-           radial-gradient(800px 380px at 85% 15%, rgba(99,102,241,.12), transparent 55%);"></div>
-
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid lg:grid-cols-2 gap-10 items-start">
-        <div>
-          <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">
-            POR QUE ESCOLHER A <span class="text-sky-400">T‑POWER MOTOS</span>?
-          </h2>
-          <p class="mt-5 text-white/65 leading-relaxed max-w-xl">
-            Há mais de 3 anos no mercado, somos referência em qualidade e atendimento. Nossa missão é
-            realizar o sonho de cada cliente com as melhores condições.
-          </p>
-        </div>
-
-        <div class="space-y-5">
-          <div class="flex items-start gap-4 p-5 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/7 transition">
-            <div class="w-12 h-12 rounded-2xl bg-sky-500/15 border border-sky-400/20 flex items-center justify-center flex-shrink-0">
-              <span class="text-sky-300 text-xl">✓</span>
-            </div>
-            <div>
-              <div class="font-bold text-white text-lg">Garantia Exclusiva</div>
-              <div class="mt-1 text-white/60">Todas as motos com a nossa garantia exclusiva.</div>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-4 p-5 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/7 transition">
-            <div class="w-12 h-12 rounded-2xl bg-sky-500/15 border border-sky-400/20 flex items-center justify-center flex-shrink-0">
-              <span class="text-sky-300 text-xl">₿</span>
-            </div>
-            <div>
-              <div class="font-bold text-white text-lg">Financiamento Facilitado</div>
-              <div class="mt-1 text-white/60">Parcelas que cabem no seu bolso com as melhores taxas do mercado.</div>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-4 p-5 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/7 transition">
-            <div class="w-12 h-12 rounded-2xl bg-sky-500/15 border border-sky-400/20 flex items-center justify-center flex-shrink-0">
-              <span class="text-sky-300 text-xl">⚡</span>
-            </div>
-            <div>
-              <div class="font-bold text-white text-lg">Entrega Rápida</div>
-              <div class="mt-1 text-white/60">Sua moto emplacada e pronta para rodar em até 48 horas.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Modal detalhes -->
-  <div id="detailModal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/70" id="detailBackdrop"></div>
-
-    <div class="absolute inset-0 flex items-center justify-center p-4">
-      <div class="w-full max-w-4xl rounded-3xl border border-white/10 glass overflow-hidden">
-        <div class="flex items-center justify-between p-4 border-b border-white/10">
-          <div>
-            <div class="text-xs text-white/50 mono" id="detailMotoId"></div>
-            <div class="text-xl font-bold" id="detailTitle"></div>
-          </div>
-          <button id="detailClose" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15">✖</button>
-        </div>
-
-        <div class="grid lg:grid-cols-2 gap-0">
-          <div class="p-4">
-            <div class="rounded-2xl overflow-hidden border border-white/10 bg-black/30">
-              <img id="detailMainImg" class="w-full h-72 object-cover" src="" alt="Foto principal"/>
-            </div>
-
-            <div id="detailThumbs" class="mt-3 grid grid-cols-4 gap-2"></div>
-          </div>
-
-          <div class="p-4 border-t lg:border-t-0 lg:border-l border-white/10">
-            <div class="grid grid-cols-2 gap-3 text-sm">
-              <div class="p-3 rounded-2xl bg-white/5 border border-white/10">
-                <div class="text-white/50">Marca</div>
-                <div class="font-semibold" id="detailBrand"></div>
-              </div>
-              <div class="p-3 rounded-2xl bg-white/5 border border-white/10">
-                <div class="text-white/50">Ano</div>
-                <div class="font-semibold" id="detailYear"></div>
-              </div>
-              <div class="p-3 rounded-2xl bg-white/5 border border-white/10 col-span-2">
-                <div class="text-white/50">Preço</div>
-                <div class="font-semibold text-sky-300" id="detailPrice"></div>
-              </div>
-            </div>
-
-            <div class="mt-4">
-              <div class="text-white/50 text-sm">Descrição</div>
-              <p class="mt-1 text-white/75 leading-relaxed" id="detailDesc"></p>
-            </div>
-
-            <div class="mt-4">
-              <div class="text-white/50 text-sm">Especificações</div>
-              <ul class="mt-2 text-sm text-white/75 space-y-1" id="detailSpecs"></ul>
-            </div>
-
-            <div class="mt-4">
-              <div class="text-white/50 text-sm">Destaques</div>
-              <div class="mt-2 flex flex-wrap gap-2" id="detailFeatures"></div>
-            </div>
-
-            <div class="mt-5 text-xs text-white/40 mono">
-              Carregado do Supabase: <span id="detailLoadedFrom">—</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal admin (login + painel) -->
-  <div id="adminModal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/75" id="adminBackdrop"></div>
-
-    <div class="absolute inset-0 flex items-center justify-center p-4">
-      <div class="w-full max-w-3xl rounded-3xl border border-white/10 glass overflow-hidden">
-        <div class="flex items-center justify-between p-4 border-b border-white/10">
-          <div>
-            <div class="text-xs text-white/50 mono">Painel administrativo</div>
-            <div class="text-xl font-bold">Editar dados e fotos</div>
-          </div>
-          <button id="adminClose" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15">✖</button>
-        </div>
-
-        <!-- Login -->
-        <div id="adminLogin" class="p-6 sm:p-10">
-          <div class="mx-auto max-w-md text-center">
-            <div class="w-20 h-20 mx-auto rounded-3xl bg-sky-500/15 border border-sky-400/20 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-sky-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V8a4 4 0 10-8 0v3" />
-                <rect x="5" y="11" width="14" height="10" rx="2" ry="2" />
-              </svg>
-            </div>
-
-            <div class="mt-6 text-2xl font-extrabold tracking-wide text-sky-300">ACESSO RESTRITO</div>
-            <div class="mt-1 text-white/60">Área Administrativa</div>
-          </div>
-
-          <div class="mt-8 mx-auto max-w-md space-y-4">
-            <div>
-              <label class="text-sm text-white/60">Usuário</label>
-              <input id="adminUser" type="text" autocomplete="username"
-                     class="w-full mt-1 px-4 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400"
-                     placeholder="Digite seu usuário"/>
-            </div>
-
-            <div>
-              <label class="text-sm text-white/60">Senha do painel</label>
-              <input id="adminPassword" type="password" autocomplete="current-password"
-                     class="w-full mt-1 px-4 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400"
-                     placeholder="Digite sua senha"/>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3 pt-2">
-              <button id="adminCancelBtn"
-                      type="button"
-                      class="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 font-semibold">
-                Cancelar
-              </button>
-              <button id="adminLoginBtn"
-                      type="button"
-                      class="px-5 py-3 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-500 hover:from-sky-400 hover:to-blue-400 text-black font-extrabold">
-                Entrar
-              </button>
-            </div>
-
-            <button id="adminHelpBtn"
-                    type="button"
-                    class="w-full text-center text-sm text-white/55 hover:text-white/80 transition underline underline-offset-4">
-              Precisa de ajuda?
-            </button>
-
-            <div class="pt-2 text-xs text-white/45">
-              ⚠️ Este painel é “client-side”. Para segurança real, use Edge Function/servidor. Aqui é foco em funcionar no GitHub Pages.
-            </div>
-          </div>
-        </div>
-
-        <!-- Conteúdo admin -->
-        <div id="adminContent" class="hidden p-4">
-          <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-            
-            <div class="flex items-center gap-2 text-sm text-white/70 flex-wrap">
-              <span class="mono">Editando:</span>
-              <select id="adminMotoSelect" class="px-4 py-2 rounded-2xl bg-white/5 border border-white/10 text-white">
-              </select>
-
-              <!-- Criar nova moto (apenas UI, sem mudar backend) -->
-              <div class="flex items-center gap-2 ml-0 sm:ml-3">
-                <input id="newMotoIdInput"
-                       class="w-36 sm:w-44 px-3 py-2 rounded-2xl bg-black/30 border border-white/10 focus:outline-none focus:border-sky-400 text-white mono text-sm"
-                       placeholder="novo_id"/>
-                <button id="createMotoBtn"
-                        class="px-4 py-2 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold text-sm">
-                  + Nova moto
-                </button>
-
-                <button id="deleteMotoBtn"
-                        class="px-4 py-2 rounded-2xl bg-red-500/20 hover:bg-red-500/30 border border-red-400/20 text-red-200 font-bold text-sm">
-                  Excluir moto
-                </button>
-              </div>
-            </div>
-
-            <div class="flex gap-2">
-              <button id="adminRefreshBtn" class="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
-                Recarregar
-              </button>
-              <button id="adminLogoutBtn" class="px-4 py-2 rounded-2xl bg-red-500/20 hover:bg-red-500/30 border border-red-400/20">
-                Sair
-              </button>
-            </div>
-          </div>
-
-          <div class="grid lg:grid-cols-2 gap-4 mt-4">
-            <div class="p-4 rounded-3xl bg-white/5 border border-white/10">
-              <div class="font-semibold mb-3">Dados da moto</div>
-
-              <div class="grid grid-cols-2 gap-3 text-sm">
-                <div>
-                  <label class="text-white/60">Nome</label>
-                  <input id="f_name" class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10" />
-                </div>
-                <div>
-                  <label class="text-white/60">Marca</label>
-                  <input id="f_brand" class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10" />
-                </div>
-                <div>
-                  <label class="text-white/60">Ano</label>
-                  <input id="f_year" class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10" />
-                </div>
-                <div>
-                  <label class="text-white/60">Preço</label>
-                  <input id="f_price" class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10" />
-                </div>
-                <div class="col-span-2">
-                  <label class="text-white/60">Descrição</label>
-                  <textarea id="f_desc" rows="3"
-                            class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10"></textarea>
-                </div>
-              </div>
-
-              <div class="mt-3 text-sm">
-                <label class="text-white/60">Especificações (1 por linha, ex: Motor: 471cc)</label>
-                <textarea id="f_specs" rows="4"
-                          class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10 mono"></textarea>
-              </div>
-
-              <div class="mt-3 text-sm">
-                <label class="text-white/60">Destaques (1 por linha)</label>
-                <textarea id="f_features" rows="3"
-                          class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10"></textarea>
-              </div>
-
-              <button id="saveMotoBtn"
-                      class="mt-4 w-full px-5 py-3 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold">
-                Salvar dados
-              </button>
-            </div>
-
-            <div class="p-4 rounded-3xl bg-white/5 border border-white/10">
-              <div class="font-semibold mb-3">Fotos (URLs)</div>
-
-              <div class="text-xs text-white/50 mb-2">
-                Cole URLs (Cloudinary) — <span class="text-white/70">não fazemos upload de arquivo aqui</span>.
-              </div>
-
-              <div class="flex gap-2">
-                <input id="photoUrlInput"
-                       class="flex-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10 focus:outline-none focus:border-sky-400"
-                       placeholder="https://res.cloudinary.com/.../moto.jpg" />
-                <button id="addPhotoBtn"
-                        class="px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
-                  Adicionar
-                </button>
-              </div>
-
-              <div class="mt-3">
-                <label class="text-sm text-white/60">Adicionar várias fotos (1 URL por linha)</label>
-                <textarea id="photoUrlsBulk"
-                          rows="5"
-                          class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10 focus:outline-none focus:border-sky-400"
-                          placeholder="https://.../foto1.jpg&#10;https://.../foto2.jpg&#10;https://.../foto3.jpg"></textarea>
-
-                <button id="addPhotosBulkBtn"
-                        type="button"
-                        class="mt-2 w-full px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
-                  Adicionar em massa
-                </button>
-              </div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
+<div class="grid lg:grid-cols-2 gap-10 items-center">
+<div>
+<h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight">
+</h1>
+<p class="mt-4 text-white/70 text-lg leading-relaxed">
+</p>
+<div class="mt-8 flex flex-col sm:flex-row gap-3">   
+</div>
+</div>
+</div>
+</div>
+</section>
 
 
-              <div class="mt-3">
-                <label class="text-sm text-white/60">Thumbnail (URL)</label>
-                <div class="flex gap-2 mt-1">
-                  <input id="thumbUrlInput"
-                         class="flex-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10 focus:outline-none focus:border-sky-400"
-                         placeholder="https://res.cloudinary.com/.../thumb.jpg" />
-                  <button id="saveThumbBtn"
-                          class="px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
-                    Salvar
-                  </button>
-                </div>
-              </div>
+<!-- Grid -->
+<section id="gridSection" class="py-10">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-14">
+<h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight">
+MOTOS EM <span class="text-sky-400">DESTAQUE</span>
+</h2>
+<p class="mt-4 text-white/60 text-lg">
+Confira nossa seleção especial de motos com as melhores condições
+</p>
+</div>
 
-              <div class="mt-4">
-                <div class="text-sm text-white/60 mb-2">Lista de fotos</div>
-                <div id="adminPhotosList" class="space-y-2"></div>
-              </div>
+<span id="countText" class="hidden">0</span>
 
-              <button id="savePhotosBtn"
-                      class="mt-4 w-full px-5 py-3 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold">
-                Salvar fotos
-              </button>
+<div id="motosGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"></div>
 
-              <div class="mt-3 text-xs text-white/45 mono" id="adminDebug"></div>
-            </div>
-          </div>
-        </div>
+<!-- Paginação -->
+<div class="mt-12 flex items-center justify-center gap-4">
+<button id="prevPageBtn"
+class="px-6 py-3 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 disabled:opacity-40 disabled:cursor-not-allowed">
+← Anterior
+</button>
 
-      </div>
-    </div>
-  </div>
+<div id="pageIndicator" class="text-white/70 text-sm mono"></div>
 
-  <!-- Toast -->
-  <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-[999] hidden">
-    <div id="toastInner" class="px-4 py-3 rounded-2xl border border-white/10 glass text-sm"></div>
-  </div>
+<button id="nextPageBtn"
+class="px-6 py-3 rounded-full bg-sky-500 hover:bg-sky-400 text-black font-bold disabled:opacity-40 disabled:cursor-not-allowed">
+Próxima →
+</button>
+</div>
+</div>
+</section>
+
+<!-- POR QUE ESCOLHER -->
+<section id="sobre" class="py-20 relative overflow-hidden">
+<div class="absolute inset-0 opacity-60 pointer-events-none"
+style="background:
+          radial-gradient(900px 420px at 15% 25%, rgba(56,189,248,.18), transparent 60%),
+          radial-gradient(800px 380px at 85% 15%, rgba(99,102,241,.12), transparent 55%);"></div>
+
+<div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid lg:grid-cols-2 gap-10 items-start">
+<div>
+<h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">
+POR QUE ESCOLHER A <span class="text-sky-400">T‑POWER MOTOS</span>?
+</h2>
+<p class="mt-5 text-white/65 leading-relaxed max-w-xl">
+Há mais de 3 anos no mercado, somos referência em qualidade e atendimento. Nossa missão é
+realizar o sonho de cada cliente com as melhores condições.
+</p>
+</div>
+
+<div class="space-y-5">
+<div class="flex items-start gap-4 p-5 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/7 transition">
+<div class="w-12 h-12 rounded-2xl bg-sky-500/15 border border-sky-400/20 flex items-center justify-center flex-shrink-0">
+<span class="text-sky-300 text-xl">✓</span>
+</div>
+<div>
+<div class="font-bold text-white text-lg">Garantia Exclusiva</div>
+<div class="mt-1 text-white/60">Todas as motos com a nossa garantia exclusiva.</div>
+</div>
+</div>
+
+<div class="flex items-start gap-4 p-5 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/7 transition">
+<div class="w-12 h-12 rounded-2xl bg-sky-500/15 border border-sky-400/20 flex items-center justify-center flex-shrink-0">
+<span class="text-sky-300 text-xl">₿</span>
+</div>
+<div>
+<div class="font-bold text-white text-lg">Financiamento Facilitado</div>
+<div class="mt-1 text-white/60">Parcelas que cabem no seu bolso com as melhores taxas do mercado.</div>
+</div>
+</div>
+
+<div class="flex items-start gap-4 p-5 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/7 transition">
+<div class="w-12 h-12 rounded-2xl bg-sky-500/15 border border-sky-400/20 flex items-center justify-center flex-shrink-0">
+<span class="text-sky-300 text-xl">⚡</span>
+</div>
+<div>
+<div class="font-bold text-white text-lg">Entrega Rápida</div>
+<div class="mt-1 text-white/60">Sua moto emplacada e pronta para rodar em até 48 horas.</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Modal detalhes -->
+<div id="detailModal" class="fixed inset-0 z-50 hidden">
+<div class="absolute inset-0 bg-black/70" id="detailBackdrop"></div>
+
+<div class="absolute inset-0 flex items-center justify-center p-4">
+<div class="w-full max-w-4xl rounded-3xl border border-white/10 glass overflow-hidden">
+<div class="flex items-center justify-between p-4 border-b border-white/10">
+<div>
+<div class="text-xs text-white/50 mono" id="detailMotoId"></div>
+<div class="text-xl font-bold" id="detailTitle"></div>
+</div>
+<button id="detailClose" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15">✖</button>
+</div>
+
+<div class="grid lg:grid-cols-2 gap-0">
+<div class="p-4">
+<div class="rounded-2xl overflow-hidden border border-white/10 bg-black/30">
+<img id="detailMainImg" class="w-full h-72 object-cover" src="" alt="Foto principal"/>
+</div>
+
+<div id="detailThumbs" class="mt-3 grid grid-cols-4 gap-2"></div>
+</div>
+
+<div class="p-4 border-t lg:border-t-0 lg:border-l border-white/10">
+<div class="grid grid-cols-2 gap-3 text-sm">
+<div class="p-3 rounded-2xl bg-white/5 border border-white/10">
+<div class="text-white/50">Marca</div>
+<div class="font-semibold" id="detailBrand"></div>
+</div>
+<div class="p-3 rounded-2xl bg-white/5 border border-white/10">
+<div class="text-white/50">Ano</div>
+<div class="font-semibold" id="detailYear"></div>
+</div>
+<div class="p-3 rounded-2xl bg-white/5 border border-white/10 col-span-2">
+<div class="text-white/50">Preço</div>
+<div class="font-semibold text-sky-300" id="detailPrice"></div>
+</div>
+</div>
+
+<div class="mt-4">
+<div class="text-white/50 text-sm">Descrição</div>
+<p class="mt-1 text-white/75 leading-relaxed" id="detailDesc"></p>
+</div>
+
+<div class="mt-4">
+<div class="text-white/50 text-sm">Especificações</div>
+<ul class="mt-2 text-sm text-white/75 space-y-1" id="detailSpecs"></ul>
+</div>
+
+<div class="mt-4">
+<div class="text-white/50 text-sm">Destaques</div>
+<div class="mt-2 flex flex-wrap gap-2" id="detailFeatures"></div>
+</div>
+
+<div class="mt-5 text-xs text-white/40 mono">
+Carregado do Supabase: <span id="detailLoadedFrom">—</span>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- Modal admin (login + painel) -->
+<div id="adminModal" class="fixed inset-0 z-50 hidden">
+<div class="absolute inset-0 bg-black/75" id="adminBackdrop"></div>
+
+<div class="absolute inset-0 flex items-center justify-center p-4">
+<div class="w-full max-w-3xl rounded-3xl border border-white/10 glass overflow-hidden">
+<div class="flex items-center justify-between p-4 border-b border-white/10">
+<div>
+<div class="text-xs text-white/50 mono">Painel administrativo</div>
+<div class="text-xl font-bold">Editar dados e fotos</div>
+</div>
+<button id="adminClose" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15">✖</button>
+</div>
+
+<!-- Login -->
+<div id="adminLogin" class="p-6 sm:p-10">
+<div class="mx-auto max-w-md text-center">
+<div class="w-20 h-20 mx-auto rounded-3xl bg-sky-500/15 border border-sky-400/20 flex items-center justify-center">
+<svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-sky-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path stroke-linecap="round" stroke-linejoin="round" d="M16 11V8a4 4 0 10-8 0v3" />
+<rect x="5" y="11" width="14" height="10" rx="2" ry="2" />
+</svg>
+</div>
+
+<div class="mt-6 text-2xl font-extrabold tracking-wide text-sky-300">ACESSO RESTRITO</div>
+<div class="mt-1 text-white/60">Área Administrativa</div>
+</div>
+
+<div class="mt-8 mx-auto max-w-md space-y-4">
+<div>
+<label class="text-sm text-white/60">Usuário</label>
+<input id="adminUser" type="text" autocomplete="username"
+class="w-full mt-1 px-4 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400"
+placeholder="Digite seu usuário"/>
+</div>
+
+<div>
+<label class="text-sm text-white/60">Senha do painel</label>
+<input id="adminPassword" type="password" autocomplete="current-password"
+class="w-full mt-1 px-4 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400"
+placeholder="Digite sua senha"/>
+</div>
+
+<div class="grid grid-cols-2 gap-3 pt-2">
+<button id="adminCancelBtn"
+type="button"
+class="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 font-semibold">
+Cancelar
+</button>
+<button id="adminLoginBtn"
+type="button"
+class="px-5 py-3 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-500 hover:from-sky-400 hover:to-blue-400 text-black font-extrabold">
+Entrar
+</button>
+</div>
+
+<button id="adminHelpBtn"
+type="button"
+class="w-full text-center text-sm text-white/55 hover:text-white/80 transition underline underline-offset-4">
+Precisa de ajuda?
+</button>
+
+<div class="pt-2 text-xs text-white/45">
+⚠️ Este painel é “client-side”. Para segurança real, use Edge Function/servidor. Aqui é foco em funcionar no GitHub Pages.
+</div>
+</div>
+</div>
+
+<!-- Conteúdo admin -->
+<div id="adminContent" class="hidden p-4">
+<div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+
+<div class="flex items-center gap-2 text-sm text-white/70 flex-wrap">
+<span class="mono">Editando:</span>
+<select id="adminMotoSelect" class="px-4 py-2 rounded-2xl bg-white/5 border border-white/10 text-white">
+</select>
+
+<!-- Criar nova moto (apenas UI, sem mudar backend) -->
+<div class="flex items-center gap-2 ml-0 sm:ml-3">
+<input id="newMotoIdInput"
+class="w-36 sm:w-44 px-3 py-2 rounded-2xl bg-black/30 border border-white/10 focus:outline-none focus:border-sky-400 text-white mono text-sm"
+placeholder="novo_id"/>
+<button id="createMotoBtn"
+class="px-4 py-2 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold text-sm">
++ Nova moto
+</button>
+
+<button id="deleteMotoBtn"
+class="px-4 py-2 rounded-2xl bg-red-500/20 hover:bg-red-500/30 border border-red-400/20 text-red-200 font-bold text-sm">
+Excluir moto
+</button>
+</div>
+</div>
+
+<div class="flex gap-2">
+<button id="adminRefreshBtn" class="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
+Recarregar
+</button>
+<button id="adminLogoutBtn" class="px-4 py-2 rounded-2xl bg-red-500/20 hover:bg-red-500/30 border border-red-400/20">
+Sair
+</button>
+</div>
+</div>
+
+<div class="grid lg:grid-cols-2 gap-4 mt-4">
+<div class="p-4 rounded-3xl bg-white/5 border border-white/10">
+<div class="font-semibold mb-3">Dados da moto</div>
+
+<div class="grid grid-cols-2 gap-3 text-sm">
+<div>
+<label class="text-white/60">Nome</label>
+<input id="f_name" class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10" />
+</div>
+<div>
+<label class="text-white/60">Marca</label>
+<input id="f_brand" class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10" />
+</div>
+<div>
+<label class="text-white/60">Ano</label>
+<input id="f_year" class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10" />
+</div>
+<div>
+<label class="text-white/60">Preço</label>
+<input id="f_price" class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10" />
+</div>
+<div class="col-span-2">
+<label class="text-white/60">Descrição</label>
+<textarea id="f_desc" rows="3"
+class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10"></textarea>
+</div>
+</div>
+
+<div class="mt-3 text-sm">
+<label class="text-white/60">Especificações (1 por linha, ex: Motor: 471cc)</label>
+<textarea id="f_specs" rows="4"
+class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10 mono"></textarea>
+</div>
+
+<div class="mt-3 text-sm">
+<label class="text-white/60">Destaques (1 por linha)</label>
+<textarea id="f_features" rows="3"
+class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10"></textarea>
+</div>
+
+<button id="saveMotoBtn"
+class="mt-4 w-full px-5 py-3 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold">
+Salvar dados
+</button>
+</div>
+
+<div class="p-4 rounded-3xl bg-white/5 border border-white/10">
+<div class="font-semibold mb-3">Fotos (URLs)</div>
+
+<div class="text-xs text-white/50 mb-2">
+Cole URLs (Cloudinary) — <span class="text-white/70">não fazemos upload de arquivo aqui</span>.
+</div>
+
+<div class="flex gap-2">
+<input id="photoUrlInput"
+class="flex-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10 focus:outline-none focus:border-sky-400"
+placeholder="https://res.cloudinary.com/.../moto.jpg" />
+<button id="addPhotoBtn"
+class="px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
+Adicionar
+</button>
+</div>
+
+<div class="mt-3">
+<label class="text-sm text-white/60">Adicionar várias fotos (1 URL por linha)</label>
+<textarea id="photoUrlsBulk"
+rows="5"
+class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10 focus:outline-none focus:border-sky-400"
+placeholder="https://.../foto1.jpg&#10;https://.../foto2.jpg&#10;https://.../foto3.jpg"></textarea>
+
+<button id="addPhotosBulkBtn"
+type="button"
+class="mt-2 w-full px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
+Adicionar em massa
+</button>
+</div>
+
+
+<div class="mt-3">
+<label class="text-sm text-white/60">Thumbnail (URL)</label>
+<div class="flex gap-2 mt-1">
+<input id="thumbUrlInput"
+class="flex-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10 focus:outline-none focus:border-sky-400"
+placeholder="https://res.cloudinary.com/.../thumb.jpg" />
+<button id="saveThumbBtn"
+class="px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
+Salvar
+</button>
+</div>
+</div>
+
+<div class="mt-4">
+<div class="text-sm text-white/60 mb-2">Lista de fotos</div>
+<div id="adminPhotosList" class="space-y-2"></div>
+</div>
+
+<button id="savePhotosBtn"
+class="mt-4 w-full px-5 py-3 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold">
+Salvar fotos
+</button>
+
+<div class="mt-3 text-xs text-white/45 mono" id="adminDebug"></div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-[999] hidden">
+<div id="toastInner" class="px-4 py-3 rounded-2xl border border-white/10 glass text-sm"></div>
+</div>
 
 <script>
 /* =========================================================
-   T-POWER MOTOS (versão limpa, escrita do zero)
-   1 fonte de verdade: Supabase (tabela public.motos_store)
-   - moto_id (text)
-   - data_type (text)  -> 'moto_data' | 'thumbnail' | 'photos'
-   - data_json (jsonb) -> objeto ou array ou string
-   - updated_at (timestamptz) default now()
-   Recomendo UNIQUE (moto_id, data_type) p/ UPSERT funcionar 100%.
-   ========================================================= */
+  T-POWER MOTOS (versão limpa, escrita do zero)
+  1 fonte de verdade: Supabase (tabela public.motos_store)
+  - moto_id (text)
+  - data_type (text)  -> 'moto_data' | 'thumbnail' | 'photos'
+  - data_json (jsonb) -> objeto ou array ou string
+  - updated_at (timestamptz) default now()
+  Recomendo UNIQUE (moto_id, data_type) p/ UPSERT funcionar 100%.
+  ========================================================= */
 
 /* ====== CONFIG: coloque seu projeto aqui (já preenchido com o que você mandou) ====== */
 const SUPABASE_URL = "https://cjmvurlcbelsircpiqbb.supabase.co";
@@ -645,52 +630,52 @@ let isAdmin = false;
 
 // Base “fallback” (se não tiver nada no banco, o site ainda funciona)
 const DEFAULT_DB = {
-  cb500f: {
-    moto_data: {
-      name: "CB 500F",
-      brand: "Honda",
-      year: "2024",
-      price: "R$ 35.990",
-      description: "Naked equilibrada, ideal para o dia a dia e estrada.",
-      specs: ["Motor: 471cc", "Potência: 47 cv", "Torque: 4,4 kgf.m"],
-      features: ["ABS", "Painel LCD", "Econômica"]
-    },
-    thumbnail: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    photos: [
-      "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  hornet: {
-    moto_data: {
-      name: "Hornet",
-      brand: "Honda",
-      year: "2023",
-      price: "R$ 49.990",
-      description: "Clássica naked com performance e presença.",
-      specs: ["Motor: 600cc", "Potência: 102 cv", "Torque: 6,5 kgf.m"],
-      features: ["Resposta rápida", "Confiável", "Boa revenda"]
-    },
-    thumbnail: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-    photos: [
-      "https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1600&q=80"
-    ]
-  },
-  xj6: {
-    moto_data: {
-      name: "XJ6",
-      brand: "Yamaha",
-      year: "2019",
-      price: "R$ 38.990",
-      description: "Confortável, suave e ótima para uso misto.",
-      specs: ["Motor: 600cc", "Potência: 78 cv", "Torque: 6,1 kgf.m"],
-      features: ["Conforto", "Suavidade", "Boa ciclística"]
-    },
-    thumbnail: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1200&q=80",
-    photos: [
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-    ]
-  }
+cb500f: {
+moto_data: {
+name: "CB 500F",
+brand: "Honda",
+year: "2024",
+price: "R$ 35.990",
+description: "Naked equilibrada, ideal para o dia a dia e estrada.",
+specs: ["Motor: 471cc", "Potência: 47 cv", "Torque: 4,4 kgf.m"],
+features: ["ABS", "Painel LCD", "Econômica"]
+},
+thumbnail: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
+photos: [
+"https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1600&q=80",
+"https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
+]
+},
+hornet: {
+moto_data: {
+name: "Hornet",
+brand: "Honda",
+year: "2023",
+price: "R$ 49.990",
+description: "Clássica naked com performance e presença.",
+specs: ["Motor: 600cc", "Potência: 102 cv", "Torque: 6,5 kgf.m"],
+features: ["Resposta rápida", "Confiável", "Boa revenda"]
+},
+thumbnail: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
+photos: [
+"https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1600&q=80"
+]
+},
+xj6: {
+moto_data: {
+name: "XJ6",
+brand: "Yamaha",
+year: "2019",
+price: "R$ 38.990",
+description: "Confortável, suave e ótima para uso misto.",
+specs: ["Motor: 600cc", "Potência: 78 cv", "Torque: 6,1 kgf.m"],
+features: ["Conforto", "Suavidade", "Boa ciclística"]
+},
+thumbnail: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1200&q=80",
+photos: [
+"https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
+]
+}
 };
 
 // Armazenamento runtime (sempre alimentado do banco + fallback)
@@ -702,584 +687,584 @@ const PAGE_SIZE = 9;
 
 /* ====== Helpers ====== */
 function toast(msg, type="info"){
-  const box = document.getElementById("toast");
-  const inner = document.getElementById("toastInner");
-  inner.textContent = msg;
-  inner.className = "px-4 py-3 rounded-2xl border border-white/10 glass text-sm";
-  if(type==="ok") inner.className += " text-green-200 border-green-400/20";
-  if(type==="err") inner.className += " text-red-200 border-red-400/20";
-  if(type==="warn") inner.className += " text-yellow-200 border-yellow-400/20";
-  box.classList.remove("hidden");
-  clearTimeout(window.__toastTimer);
-  window.__toastTimer = setTimeout(()=>box.classList.add("hidden"), 2600);
+const box = document.getElementById("toast");
+const inner = document.getElementById("toastInner");
+inner.textContent = msg;
+inner.className = "px-4 py-3 rounded-2xl border border-white/10 glass text-sm";
+if(type==="ok") inner.className += " text-green-200 border-green-400/20";
+if(type==="err") inner.className += " text-red-200 border-red-400/20";
+if(type==="warn") inner.className += " text-yellow-200 border-yellow-400/20";
+box.classList.remove("hidden");
+clearTimeout(window.__toastTimer);
+window.__toastTimer = setTimeout(()=>box.classList.add("hidden"), 2600);
 }
 function setStatus(t){
-  const el = document.getElementById("statusText");
-  if(el) el.textContent = t;
+const el = document.getElementById("statusText");
+if(el) el.textContent = t;
 }
 
 function updateClearSearchBtn(){
-  const input = document.getElementById("searchInput");
-  const btn = document.getElementById("clearSearchBtn");
-  if(!input || !btn) return;
-  const has = (input.value || "").trim().length > 0;
-  btn.classList.toggle("hidden", !has);
+const input = document.getElementById("searchInput");
+const btn = document.getElementById("clearSearchBtn");
+if(!input || !btn) return;
+const has = (input.value || "").trim().length > 0;
+btn.classList.toggle("hidden", !has);
 }
 function clearSearch(){
-  const input = document.getElementById("searchInput");
-  if(input) input.value = "";
-  currentPage = 1;
-  renderGrid();
-  updateClearSearchBtn();
+const input = document.getElementById("searchInput");
+if(input) input.value = "";
+currentPage = 1;
+renderGrid();
+updateClearSearchBtn();
 }
 
 function ensureSupabase(){
-  if(sb) return sb;
-  if(!window.supabase){ throw new Error("Supabase SDK não carregou"); }
-  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  return sb;
+if(sb) return sb;
+if(!window.supabase){ throw new Error("Supabase SDK não carregou"); }
+sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+return sb;
 }
 
 /* ====== Supabase I/O (1 chamada para carregar tudo) ====== */
 async function loadAllFromSupabase(){
-  const client = ensureSupabase();
-  // 1 request: pega tudo de uma vez (evita rate-limit e loops)
-  const { data, error } = await client
-    .from("motos_store")
-    .select("moto_id,data_type,data_json,updated_at");
+const client = ensureSupabase();
+// 1 request: pega tudo de uma vez (evita rate-limit e loops)
+const { data, error } = await client
+.from("motos_store")
+.select("moto_id,data_type,data_json,updated_at");
 
-  if(error){
-    console.error("Supabase load error:", error);
-    setStatus("Supabase: falha ao carregar (ver console)");
-    return { ok:false, error };
-  }
+if(error){
+console.error("Supabase load error:", error);
+setStatus("Supabase: falha ao carregar (ver console)");
+return { ok:false, error };
+}
 
-  // aplica no storage (sem apagar fallback de motos que não existam ainda)
-  (data || []).forEach(row=>{
-    const motoId = row.moto_id;
-    const t = row.data_type;
+// aplica no storage (sem apagar fallback de motos que não existam ainda)
+(data || []).forEach(row=>{
+const motoId = row.moto_id;
+const t = row.data_type;
 
-    if(!motoId || !t) return;
-    if(!motoDataStorage[motoId]) motoDataStorage[motoId] = { moto_data:{}, thumbnail:"", photos:[] };
+if(!motoId || !t) return;
+if(!motoDataStorage[motoId]) motoDataStorage[motoId] = { moto_data:{}, thumbnail:"", photos:[] };
 
-    if(t === "moto_data"){
-      motoDataStorage[motoId].moto_data = row.data_json || motoDataStorage[motoId].moto_data;
-    } else if(t === "thumbnail"){
-      motoDataStorage[motoId].thumbnail = (typeof row.data_json === "string") ? row.data_json : (row.data_json?.url || motoDataStorage[motoId].thumbnail);
-    } else if(t === "photos"){
-      // aceita json array de strings OU array de objetos {url}
-      const v = row.data_json;
-      if(Array.isArray(v)){
-        motoDataStorage[motoId].photos = v.map(x=> (typeof x==="string"? x : x?.url)).filter(Boolean);
-      } else if(typeof v === "string"){
-        // caso antigo: string json
-        try {
-          const parsed = JSON.parse(v);
-          if(Array.isArray(parsed)) motoDataStorage[motoId].photos = parsed.map(x=> (typeof x==="string"? x : x?.url)).filter(Boolean);
-        } catch {}
-      }
-    }
-  });
+if(t === "moto_data"){
+motoDataStorage[motoId].moto_data = row.data_json || motoDataStorage[motoId].moto_data;
+} else if(t === "thumbnail"){
+motoDataStorage[motoId].thumbnail = (typeof row.data_json === "string") ? row.data_json : (row.data_json?.url || motoDataStorage[motoId].thumbnail);
+} else if(t === "photos"){
+// aceita json array de strings OU array de objetos {url}
+const v = row.data_json;
+if(Array.isArray(v)){
+motoDataStorage[motoId].photos = v.map(x=> (typeof x==="string"? x : x?.url)).filter(Boolean);
+} else if(typeof v === "string"){
+// caso antigo: string json
+try {
+const parsed = JSON.parse(v);
+if(Array.isArray(parsed)) motoDataStorage[motoId].photos = parsed.map(x=> (typeof x==="string"? x : x?.url)).filter(Boolean);
+} catch {}
+}
+}
+});
 
-  setStatus("Supabase: carregado ✅");
-  return { ok:true, data };
+setStatus("Supabase: carregado ✅");
+return { ok:true, data };
 }
 
 /* ====== Supabase UPSERT (salvar) ====== */
 async function upsertRow(moto_id, data_type, data_json){
-  const client = ensureSupabase();
-  const payload = { moto_id, data_type, data_json, updated_at: new Date().toISOString() };
+const client = ensureSupabase();
+const payload = { moto_id, data_type, data_json, updated_at: new Date().toISOString() };
 
-  // IMPORTANT: se você tiver UNIQUE (moto_id, data_type), o upsert fica perfeito.
-  // Se não tiver, ainda assim tentamos.
-  const { data, error } = await client
-    .from("motos_store")
-    .upsert(payload, { onConflict: "moto_id,data_type" })
-    .select()
-    .single();
+// IMPORTANT: se você tiver UNIQUE (moto_id, data_type), o upsert fica perfeito.
+// Se não tiver, ainda assim tentamos.
+const { data, error } = await client
+.from("motos_store")
+.upsert(payload, { onConflict: "moto_id,data_type" })
+.select()
+.single();
 
-  if(error){
-    console.error("Supabase upsert error:", error);
-    throw error;
-  }
-  return data;
+if(error){
+console.error("Supabase upsert error:", error);
+throw error;
+}
+return data;
 }
 
 /* ====== Render ====== */
 function getMotoIds(){
-  // garante ordem estável
-  return Object.keys(motoDataStorage);
+// garante ordem estável
+return Object.keys(motoDataStorage);
 }
 function matchesSearch(m, q){
-  if(!q) return true;
-  const d = motoDataStorage[m]?.moto_data || {};
-  const hay = `${m} ${d.name||""} ${d.brand||""} ${d.year||""}`.toLowerCase();
-  return hay.includes(q);
+if(!q) return true;
+const d = motoDataStorage[m]?.moto_data || {};
+const hay = `${m} ${d.name||""} ${d.brand||""} ${d.year||""}`.toLowerCase();
+return hay.includes(q);
 }
 function renderFeatured(){
-  const titleEl = document.getElementById("featuredTitle");
-  const descEl = document.getElementById("featuredDesc");
-  const imgEl = document.getElementById("featuredImg");
-  if(!titleEl || !descEl || !imgEl) return;
-  const ids = getMotoIds();
-  const first = ids[0];
-  const d = motoDataStorage[first]?.moto_data || {};
-  document.getElementById("featuredTitle").textContent = d.name || first.toUpperCase();
-  document.getElementById("featuredDesc").textContent = d.description || "—";
-  const img = motoDataStorage[first]?.thumbnail || (motoDataStorage[first]?.photos?.[0] || "");
-  document.getElementById("featuredImg").src = img || "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80";
+const titleEl = document.getElementById("featuredTitle");
+const descEl = document.getElementById("featuredDesc");
+const imgEl = document.getElementById("featuredImg");
+if(!titleEl || !descEl || !imgEl) return;
+const ids = getMotoIds();
+const first = ids[0];
+const d = motoDataStorage[first]?.moto_data || {};
+document.getElementById("featuredTitle").textContent = d.name || first.toUpperCase();
+document.getElementById("featuredDesc").textContent = d.description || "—";
+const img = motoDataStorage[first]?.thumbnail || (motoDataStorage[first]?.photos?.[0] || "");
+document.getElementById("featuredImg").src = img || "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80";
 }
 function renderGrid(){
-  const q = (document.getElementById("searchInput").value || "").trim().toLowerCase();
-  const grid = document.getElementById("motosGrid");
-  grid.innerHTML = "";
+const q = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+const grid = document.getElementById("motosGrid");
+grid.innerHTML = "";
 
-  // Lista filtrada
-  const allIds = getMotoIds().filter(id=>matchesSearch(id,q));
-  document.getElementById("countText").textContent = allIds.length;
+// Lista filtrada
+const allIds = getMotoIds().filter(id=>matchesSearch(id,q));
+document.getElementById("countText").textContent = allIds.length;
 
-  // Paginação
-  const totalPages = Math.max(1, Math.ceil(allIds.length / PAGE_SIZE));
-  if(currentPage > totalPages) currentPage = totalPages;
-  if(currentPage < 1) currentPage = 1;
+// Paginação
+const totalPages = Math.max(1, Math.ceil(allIds.length / PAGE_SIZE));
+if(currentPage > totalPages) currentPage = totalPages;
+if(currentPage < 1) currentPage = 1;
 
-  const start = (currentPage - 1) * PAGE_SIZE;
-  const ids = allIds.slice(start, start + PAGE_SIZE);
+const start = (currentPage - 1) * PAGE_SIZE;
+const ids = allIds.slice(start, start + PAGE_SIZE);
 
-  // Atualiza controles
-  const prevBtn = document.getElementById("prevPageBtn");
-  const nextBtn = document.getElementById("nextPageBtn");
-  const indicator = document.getElementById("pageIndicator");
+// Atualiza controles
+const prevBtn = document.getElementById("prevPageBtn");
+const nextBtn = document.getElementById("nextPageBtn");
+const indicator = document.getElementById("pageIndicator");
 
-  if(prevBtn && nextBtn && indicator){
-    prevBtn.disabled = (currentPage <= 1);
-    nextBtn.disabled = (currentPage >= totalPages);
-    indicator.textContent = allIds.length
-      ? `Página ${currentPage} de ${totalPages} • Mostrando ${ids.length} de ${allIds.length}`
-      : "Nenhuma moto encontrada";
-  }
+if(prevBtn && nextBtn && indicator){
+prevBtn.disabled = (currentPage <= 1);
+nextBtn.disabled = (currentPage >= totalPages);
+indicator.textContent = allIds.length
+? `Página ${currentPage} de ${totalPages} • Mostrando ${ids.length} de ${allIds.length}`
+: "Nenhuma moto encontrada";
+}
 
 // Estado vazio (quando a busca filtra tudo)
 if(!allIds.length){
-  grid.innerHTML = `
-    <div class="col-span-full p-10 rounded-3xl bg-white/5 border border-white/10 text-center">
-      <div class="text-2xl font-extrabold tracking-tight">Nenhuma moto encontrada</div>
-      <div class="mt-2 text-white/60">Tente limpar a busca ou pesquisar por marca/modelo.</div>
-      <button type="button"
-              onclick="clearSearch()"
-              class="mt-6 px-6 py-3 rounded-full bg-sky-500 hover:bg-sky-400 text-black font-extrabold">
-        Limpar busca
-      </button>
-    </div>
-  `;
-  return;
+grid.innerHTML = `
+   <div class="col-span-full p-10 rounded-3xl bg-white/5 border border-white/10 text-center">
+     <div class="text-2xl font-extrabold tracking-tight">Nenhuma moto encontrada</div>
+     <div class="mt-2 text-white/60">Tente limpar a busca ou pesquisar por marca/modelo.</div>
+     <button type="button"
+             onclick="clearSearch()"
+             class="mt-6 px-6 py-3 rounded-full bg-sky-500 hover:bg-sky-400 text-black font-extrabold">
+       Limpar busca
+     </button>
+   </div>
+ `;
+return;
 }
 
-  // Renderiza 9 cards por página (3x3 em telas grandes)
-  ids.forEach(id=>{
-    const d = motoDataStorage[id]?.moto_data || {};
-    const thumb = motoDataStorage[id]?.thumbnail || motoDataStorage[id]?.photos?.[0] || "";
-    const badge = (d.year && String(d.year) === "2024") ? "NOVO" : "DESTAQUE";
+// Renderiza 9 cards por página (3x3 em telas grandes)
+ids.forEach(id=>{
+const d = motoDataStorage[id]?.moto_data || {};
+const thumb = motoDataStorage[id]?.thumbnail || motoDataStorage[id]?.photos?.[0] || "";
+const badge = (d.year && String(d.year) === "2024") ? "NOVO" : "DESTAQUE";
 
-    const el = document.createElement("a");
-    el.href = `moto.html?id=${encodeURIComponent(id)}`;
-    el.className = "block text-left p-0 rounded-3xl overflow-hidden border border-white/10 card-gradient hover-glow w-full";
-    el.innerHTML = `
-      <div class="relative">
-        <div class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-xs font-black tracking-wide
-                    ${badge==="NOVO" ? "bg-sky-500 text-black" : "bg-red-500 text-white"}">
-          ${badge}
-        </div>
-        <div class="h-56 bg-black/30 border-b border-white/10 flex items-center justify-center">
-          <img src="${thumb || "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80"}"
-               class="w-full h-full object-cover" alt="${d.name||id}"/>
-        </div>
-      </div>
+const el = document.createElement("a");
+el.href = `moto.html?id=${encodeURIComponent(id)}`;
+el.className = "block text-left p-0 rounded-3xl overflow-hidden border border-white/10 card-gradient hover-glow w-full";
+el.innerHTML = `
+     <div class="relative">
+       <div class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-xs font-black tracking-wide
+                   ${badge==="NOVO" ? "bg-sky-500 text-black" : "bg-red-500 text-white"}">
+         ${badge}
+       </div>
+       <div class="h-56 bg-black/30 border-b border-white/10 flex items-center justify-center">
+         <img src="${thumb || "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80"}"
+              class="w-full h-full object-cover" alt="${d.name||id}"/>
+       </div>
+     </div>
 
-      <div class="p-6">
-        <div class="flex items-center justify-between text-sm">
-          <div class="text-sky-300 font-semibold">${(d.brand||"—")}</div>
-          <div class="text-white/50 font-semibold">${(d.year||"—")}</div>
-        </div>
+     <div class="p-6">
+       <div class="flex items-center justify-between text-sm">
+         <div class="text-sky-300 font-semibold">${(d.brand||"—")}</div>
+         <div class="text-white/50 font-semibold">${(d.year||"—")}</div>
+       </div>
 
-        <div class="mt-2 text-2xl font-extrabold tracking-tight">${d.name || id.toUpperCase()}</div>
+       <div class="mt-2 text-2xl font-extrabold tracking-tight">${d.name || id.toUpperCase()}</div>
 
-        <div class="mt-2 text-white/65 text-sm leading-relaxed line-clamp-2">
-          ${d.description || ""}
-        </div>
+       <div class="mt-2 text-white/65 text-sm leading-relaxed line-clamp-2">
+         ${d.description || ""}
+       </div>
 
-        <div class="mt-5">
-          <div class="text-xs text-white/40 font-semibold">A partir de</div>
-          <div class="mt-1 text-2xl font-extrabold text-sky-300">${d.price || "Consultar"}</div>
-        </div>
-      </div>
-    `;
-    grid.appendChild(el);
-  });
+       <div class="mt-5">
+         <div class="text-xs text-white/40 font-semibold">A partir de</div>
+         <div class="mt-1 text-2xl font-extrabold text-sky-300">${d.price || "Consultar"}</div>
+       </div>
+     </div>
+   `;
+grid.appendChild(el);
+});
 }
 
 /* ====== Detalhe ====== */
 function openDetail(motoId){
-  const d = motoDataStorage[motoId]?.moto_data || {};
-  const photos = motoDataStorage[motoId]?.photos || [];
-  const thumb = motoDataStorage[motoId]?.thumbnail || photos[0] || "";
-  document.getElementById("detailMotoId").textContent = motoId;
-  document.getElementById("detailTitle").textContent = d.name || motoId.toUpperCase();
-  document.getElementById("detailBrand").textContent = d.brand || "—";
-  document.getElementById("detailYear").textContent = d.year || "—";
-  document.getElementById("detailPrice").textContent = d.price || "Consultar";
-  document.getElementById("detailDesc").textContent = d.description || "—";
+const d = motoDataStorage[motoId]?.moto_data || {};
+const photos = motoDataStorage[motoId]?.photos || [];
+const thumb = motoDataStorage[motoId]?.thumbnail || photos[0] || "";
+document.getElementById("detailMotoId").textContent = motoId;
+document.getElementById("detailTitle").textContent = d.name || motoId.toUpperCase();
+document.getElementById("detailBrand").textContent = d.brand || "—";
+document.getElementById("detailYear").textContent = d.year || "—";
+document.getElementById("detailPrice").textContent = d.price || "Consultar";
+document.getElementById("detailDesc").textContent = d.description || "—";
 
-  const main = document.getElementById("detailMainImg");
-  main.src = thumb || "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80";
+const main = document.getElementById("detailMainImg");
+main.src = thumb || "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80";
 
-  const specsUl = document.getElementById("detailSpecs");
-  specsUl.innerHTML = "";
-  (d.specs || []).forEach(s=>{
-    const li = document.createElement("li");
-    li.textContent = "• " + s;
-    specsUl.appendChild(li);
-  });
+const specsUl = document.getElementById("detailSpecs");
+specsUl.innerHTML = "";
+(d.specs || []).forEach(s=>{
+const li = document.createElement("li");
+li.textContent = "• " + s;
+specsUl.appendChild(li);
+});
 
-  const feat = document.getElementById("detailFeatures");
-  feat.innerHTML = "";
-  (d.features || []).forEach(f=>{
-    const chip = document.createElement("span");
-    chip.className = "px-3 py-1 rounded-full bg-white/10 border border-white/10 text-xs";
-    chip.textContent = f;
-    feat.appendChild(chip);
-  });
+const feat = document.getElementById("detailFeatures");
+feat.innerHTML = "";
+(d.features || []).forEach(f=>{
+const chip = document.createElement("span");
+chip.className = "px-3 py-1 rounded-full bg-white/10 border border-white/10 text-xs";
+chip.textContent = f;
+feat.appendChild(chip);
+});
 
-  const thumbs = document.getElementById("detailThumbs");
-  thumbs.innerHTML = "";
-  const list = (photos.length ? photos : (thumb? [thumb] : []));
-  list.slice(0,8).forEach(url=>{
-    const b = document.createElement("button");
-    b.className = "rounded-xl overflow-hidden border border-white/10 bg-black/30";
-    b.innerHTML = `<img src="${url}" class="w-full h-16 object-cover" alt="thumb"/>`;
-    b.onclick = ()=>{ main.src = url; };
-    thumbs.appendChild(b);
-  });
+const thumbs = document.getElementById("detailThumbs");
+thumbs.innerHTML = "";
+const list = (photos.length ? photos : (thumb? [thumb] : []));
+list.slice(0,8).forEach(url=>{
+const b = document.createElement("button");
+b.className = "rounded-xl overflow-hidden border border-white/10 bg-black/30";
+b.innerHTML = `<img src="${url}" class="w-full h-16 object-cover" alt="thumb"/>`;
+b.onclick = ()=>{ main.src = url; };
+thumbs.appendChild(b);
+});
 
-  document.getElementById("detailLoadedFrom").textContent = "Supabase + fallback";
-  document.getElementById("detailModal").classList.remove("hidden");
+document.getElementById("detailLoadedFrom").textContent = "Supabase + fallback";
+document.getElementById("detailModal").classList.remove("hidden");
 }
 function closeDetail(){ document.getElementById("detailModal").classList.add("hidden"); }
 
 /* ====== Admin ====== */
 function openAdmin(){
-  document.getElementById("adminModal").classList.remove("hidden");
-  // se já estiver logado, mostra conteúdo
-  syncAdminVisibility();
+document.getElementById("adminModal").classList.remove("hidden");
+// se já estiver logado, mostra conteúdo
+syncAdminVisibility();
 }
 function closeAdmin(){ document.getElementById("adminModal").classList.add("hidden"); }
 
 function syncAdminVisibility(){
-  document.getElementById("adminLogin").classList.toggle("hidden", isAdmin);
-  document.getElementById("adminContent").classList.toggle("hidden", !isAdmin);
+document.getElementById("adminLogin").classList.toggle("hidden", isAdmin);
+document.getElementById("adminContent").classList.toggle("hidden", !isAdmin);
 
-  if(isAdmin){
-    // popular select
-    const sel = document.getElementById("adminMotoSelect");
-    sel.innerHTML = "";
-    getMotoIds().forEach(id=>{
-      const opt = document.createElement("option");
-      opt.value = id;
-      opt.textContent = id.toUpperCase();
-      sel.appendChild(opt);
-    });
-    sel.value = getMotoIds()[0] || "";
-    loadAdminForm(sel.value);
-  }
+if(isAdmin){
+// popular select
+const sel = document.getElementById("adminMotoSelect");
+sel.innerHTML = "";
+getMotoIds().forEach(id=>{
+const opt = document.createElement("option");
+opt.value = id;
+opt.textContent = id.toUpperCase();
+sel.appendChild(opt);
+});
+sel.value = getMotoIds()[0] || "";
+loadAdminForm(sel.value);
+}
 }
 function adminLogin(){
-  const pass = document.getElementById("adminPassword").value || "";
-  if(pass !== ADMIN_PASSWORD){
-    toast("Senha incorreta", "err");
-    return;
-  }
-  isAdmin = true;
-  toast("Admin logado ✅", "ok");
-  syncAdminVisibility();
+const pass = document.getElementById("adminPassword").value || "";
+if(pass !== ADMIN_PASSWORD){
+toast("Senha incorreta", "err");
+return;
+}
+isAdmin = true;
+toast("Admin logado ✅", "ok");
+syncAdminVisibility();
 }
 function adminLogout(){
-  isAdmin = false;
-  document.getElementById("adminPassword").value = "";
-  toast("Saiu do painel", "warn");
-  syncAdminVisibility();
+isAdmin = false;
+document.getElementById("adminPassword").value = "";
+toast("Saiu do painel", "warn");
+syncAdminVisibility();
 }
 
 function loadAdminForm(motoId){
-  const d = motoDataStorage[motoId]?.moto_data || {};
-  document.getElementById("f_name").value = d.name || "";
-  document.getElementById("f_brand").value = d.brand || "";
-  document.getElementById("f_year").value = d.year || "";
-  document.getElementById("f_price").value = d.price || "";
-  document.getElementById("f_desc").value = d.description || "";
-  document.getElementById("f_specs").value = (d.specs || []).join("\n");
-  document.getElementById("f_features").value = (d.features || []).join("\n");
+const d = motoDataStorage[motoId]?.moto_data || {};
+document.getElementById("f_name").value = d.name || "";
+document.getElementById("f_brand").value = d.brand || "";
+document.getElementById("f_year").value = d.year || "";
+document.getElementById("f_price").value = d.price || "";
+document.getElementById("f_desc").value = d.description || "";
+document.getElementById("f_specs").value = (d.specs || []).join("\n");
+document.getElementById("f_features").value = (d.features || []).join("\n");
 
-  // photos
-  document.getElementById("thumbUrlInput").value = motoDataStorage[motoId]?.thumbnail || "";
-  renderAdminPhotosList(motoId);
-  document.getElementById("adminDebug").textContent = "";
+// photos
+document.getElementById("thumbUrlInput").value = motoDataStorage[motoId]?.thumbnail || "";
+renderAdminPhotosList(motoId);
+document.getElementById("adminDebug").textContent = "";
 }
 function renderAdminPhotosList(motoId){
-  const wrap = document.getElementById("adminPhotosList");
-  wrap.innerHTML = "";
-  const photos = motoDataStorage[motoId]?.photos || [];
-  if(!photos.length){
-    wrap.innerHTML = `<div class="text-white/50 text-sm">Nenhuma foto ainda.</div>`;
-    return;
-  }
-  photos.forEach((url, idx)=>{
-    const row = document.createElement("div");
-    row.className = "flex items-center gap-2 p-2 rounded-2xl bg-black/25 border border-white/10";
-    row.innerHTML = `
-      <img src="${url}" class="w-14 h-10 object-cover rounded-xl border border-white/10" alt="foto"/>
-      <div class="flex-1 min-w-0">
-        <div class="text-xs text-white/60 mono truncate">${url}</div>
-      </div>
-      <button class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15" title="Remover">🗑️</button>
-      <button class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15" title="Subir">⬆️</button>
-      <button class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15" title="Descer">⬇️</button>
-    `;
-    const [delBtn, upBtn, downBtn] = row.querySelectorAll("button");
-    delBtn.onclick = ()=>{
-      motoDataStorage[motoId].photos.splice(idx,1);
-      renderAdminPhotosList(motoId);
-    };
-    upBtn.onclick = ()=>{
-      if(idx===0) return;
-      const arr = motoDataStorage[motoId].photos;
-      [arr[idx-1], arr[idx]] = [arr[idx], arr[idx-1]];
-      renderAdminPhotosList(motoId);
-    };
-    downBtn.onclick = ()=>{
-      const arr = motoDataStorage[motoId].photos;
-      if(idx>=arr.length-1) return;
-      [arr[idx+1], arr[idx]] = [arr[idx], arr[idx+1]];
-      renderAdminPhotosList(motoId);
-    };
-    wrap.appendChild(row);
-  });
+const wrap = document.getElementById("adminPhotosList");
+wrap.innerHTML = "";
+const photos = motoDataStorage[motoId]?.photos || [];
+if(!photos.length){
+wrap.innerHTML = `<div class="text-white/50 text-sm">Nenhuma foto ainda.</div>`;
+return;
+}
+photos.forEach((url, idx)=>{
+const row = document.createElement("div");
+row.className = "flex items-center gap-2 p-2 rounded-2xl bg-black/25 border border-white/10";
+row.innerHTML = `
+     <img src="${url}" class="w-14 h-10 object-cover rounded-xl border border-white/10" alt="foto"/>
+     <div class="flex-1 min-w-0">
+       <div class="text-xs text-white/60 mono truncate">${url}</div>
+     </div>
+     <button class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15" title="Remover">🗑️</button>
+     <button class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15" title="Subir">⬆️</button>
+     <button class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15" title="Descer">⬇️</button>
+   `;
+const [delBtn, upBtn, downBtn] = row.querySelectorAll("button");
+delBtn.onclick = ()=>{
+motoDataStorage[motoId].photos.splice(idx,1);
+renderAdminPhotosList(motoId);
+};
+upBtn.onclick = ()=>{
+if(idx===0) return;
+const arr = motoDataStorage[motoId].photos;
+[arr[idx-1], arr[idx]] = [arr[idx], arr[idx-1]];
+renderAdminPhotosList(motoId);
+};
+downBtn.onclick = ()=>{
+const arr = motoDataStorage[motoId].photos;
+if(idx>=arr.length-1) return;
+[arr[idx+1], arr[idx]] = [arr[idx], arr[idx+1]];
+renderAdminPhotosList(motoId);
+};
+wrap.appendChild(row);
+});
 }
 
 async function createNewMoto(){
-  if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
-  const raw = (document.getElementById("newMotoIdInput").value || "").trim().toLowerCase();
-  const motoId = raw.replace(/[^a-z0-9_-]/g,""); // sane id
-  if(!motoId) return toast("Digite um moto_id (ex: mt03, ninja400)", "warn");
+if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
+const raw = (document.getElementById("newMotoIdInput").value || "").trim().toLowerCase();
+const motoId = raw.replace(/[^a-z0-9_-]/g,""); // sane id
+if(!motoId) return toast("Digite um moto_id (ex: mt03, ninja400)", "warn");
 
-  if(motoDataStorage[motoId]){
-    toast("Esse moto_id já existe", "warn");
-    // Seleciona o existente
-    const sel = document.getElementById("adminMotoSelect");
-    if(sel){
-      sel.value = motoId;
-      loadAdminForm(motoId);
-    }
-    return;
-  }
+if(motoDataStorage[motoId]){
+toast("Esse moto_id já existe", "warn");
+// Seleciona o existente
+const sel = document.getElementById("adminMotoSelect");
+if(sel){
+sel.value = motoId;
+loadAdminForm(motoId);
+}
+return;
+}
 
-  // Cria no storage local
-  motoDataStorage[motoId] = { moto_data:{ name:"", brand:"", year:"", price:"", description:"", specs:[], features:[] }, thumbnail:"", photos:[] };
+// Cria no storage local
+motoDataStorage[motoId] = { moto_data:{ name:"", brand:"", year:"", price:"", description:"", specs:[], features:[] }, thumbnail:"", photos:[] };
 
-  // Persiste no Supabase criando as 3 linhas (moto_data, thumbnail, photos) vazias
-  try{
-    await upsertRow(motoId, "moto_data", motoDataStorage[motoId].moto_data);
-    await upsertRow(motoId, "thumbnail", "");
-    await upsertRow(motoId, "photos", []);
+// Persiste no Supabase criando as 3 linhas (moto_data, thumbnail, photos) vazias
+try{
+await upsertRow(motoId, "moto_data", motoDataStorage[motoId].moto_data);
+await upsertRow(motoId, "thumbnail", "");
+await upsertRow(motoId, "photos", []);
 
-    toast("Nova moto criada ✅", "ok");
+toast("Nova moto criada ✅", "ok");
 
-    // Atualiza select e renderizações
-    const sel = document.getElementById("adminMotoSelect");
-    if(sel){
-      const opt = document.createElement("option");
-      opt.value = motoId;
-      opt.textContent = motoId.toUpperCase();
-      sel.appendChild(opt);
-      sel.value = motoId;
-    }
-    document.getElementById("newMotoIdInput").value = "";
-    loadAdminForm(motoId);
+// Atualiza select e renderizações
+const sel = document.getElementById("adminMotoSelect");
+if(sel){
+const opt = document.createElement("option");
+opt.value = motoId;
+opt.textContent = motoId.toUpperCase();
+sel.appendChild(opt);
+sel.value = motoId;
+}
+document.getElementById("newMotoIdInput").value = "";
+loadAdminForm(motoId);
 
-    // Atualiza grid (paginação respeita)
-    renderFeatured(); 
-    renderGrid();
-    updateClearSearchBtn();
-  }catch(e){
-    console.error(e);
-    toast("Falha ao criar no Supabase (veja console)", "err");
-    // rollback local para não ficar “fantasma”
-    delete motoDataStorage[motoId];
-  }
+// Atualiza grid (paginação respeita)
+renderFeatured(); 
+renderGrid();
+updateClearSearchBtn();
+}catch(e){
+console.error(e);
+toast("Falha ao criar no Supabase (veja console)", "err");
+// rollback local para não ficar “fantasma”
+delete motoDataStorage[motoId];
+}
 }
 
 async function deleteMoto(){
-  if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
-  const sel = document.getElementById("adminMotoSelect");
-  const motoId = sel?.value;
-  if(!motoId) return toast("Nenhuma moto selecionada", "warn");
+if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
+const sel = document.getElementById("adminMotoSelect");
+const motoId = sel?.value;
+if(!motoId) return toast("Nenhuma moto selecionada", "warn");
 
-  const d = motoDataStorage[motoId]?.moto_data || {};
-  const label = (d.name ? `${d.name} (${motoId})` : motoId);
+const d = motoDataStorage[motoId]?.moto_data || {};
+const label = (d.name ? `${d.name} (${motoId})` : motoId);
 
-  const ok = confirm(`Tem certeza que deseja excluir esta moto?\n\n${label}\n\nIsso remove do Supabase e do site.`);
-  if(!ok) return;
+const ok = confirm(`Tem certeza que deseja excluir esta moto?\n\n${label}\n\nIsso remove do Supabase e do site.`);
+if(!ok) return;
 
-  try{
-    const client = ensureSupabase();
+try{
+const client = ensureSupabase();
 
-    // Remove TODAS as linhas dessa moto (moto_data, thumbnail, photos)
-    const { error } = await client
-      .from("motos_store")
-      .delete()
-      .eq("moto_id", motoId);
+// Remove TODAS as linhas dessa moto (moto_data, thumbnail, photos)
+const { error } = await client
+.from("motos_store")
+.delete()
+.eq("moto_id", motoId);
 
-    if(error) throw error;
+if(error) throw error;
 
-    // Remove do storage local
-    delete motoDataStorage[motoId];
+// Remove do storage local
+delete motoDataStorage[motoId];
 
-    toast("Moto excluída ✅", "ok");
+toast("Moto excluída ✅", "ok");
 
-    // Recarrega UI
-    const ids = getMotoIds();
-    if(sel){
-      sel.innerHTML = "";
-      ids.forEach(id=>{
-        const opt = document.createElement("option");
-        opt.value = id;
-        opt.textContent = id.toUpperCase();
-        sel.appendChild(opt);
-      });
-      sel.value = ids[0] || "";
-      if(sel.value) loadAdminForm(sel.value);
-    }
+// Recarrega UI
+const ids = getMotoIds();
+if(sel){
+sel.innerHTML = "";
+ids.forEach(id=>{
+const opt = document.createElement("option");
+opt.value = id;
+opt.textContent = id.toUpperCase();
+sel.appendChild(opt);
+});
+sel.value = ids[0] || "";
+if(sel.value) loadAdminForm(sel.value);
+}
 
-    currentPage = 1;
-    renderFeatured();
-    renderGrid();
-    updateClearSearchBtn();
-  }catch(e){
-    console.error(e);
-    toast("Falha ao excluir (veja console)", "err");
-  }
+currentPage = 1;
+renderFeatured();
+renderGrid();
+updateClearSearchBtn();
+}catch(e){
+console.error(e);
+toast("Falha ao excluir (veja console)", "err");
+}
 }
 
 
 
 function addPhotoUrl(){
-  if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
-  const motoId = document.getElementById("adminMotoSelect").value;
-  const url = (document.getElementById("photoUrlInput").value || "").trim();
-  if(!url) return toast("Cole a URL da foto", "warn");
-  if(!motoDataStorage[motoId]) motoDataStorage[motoId] = { moto_data:{}, thumbnail:"", photos:[] };
-  if(!motoDataStorage[motoId].photos) motoDataStorage[motoId].photos = [];
-  motoDataStorage[motoId].photos.push(url);
-  document.getElementById("photoUrlInput").value = "";
-  renderAdminPhotosList(motoId);
+if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
+const motoId = document.getElementById("adminMotoSelect").value;
+const url = (document.getElementById("photoUrlInput").value || "").trim();
+if(!url) return toast("Cole a URL da foto", "warn");
+if(!motoDataStorage[motoId]) motoDataStorage[motoId] = { moto_data:{}, thumbnail:"", photos:[] };
+if(!motoDataStorage[motoId].photos) motoDataStorage[motoId].photos = [];
+motoDataStorage[motoId].photos.push(url);
+document.getElementById("photoUrlInput").value = "";
+renderAdminPhotosList(motoId);
 }
 
 function addPhotosBulk(){
-  if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
-  const motoId = document.getElementById("adminMotoSelect").value;
+if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
+const motoId = document.getElementById("adminMotoSelect").value;
 
-  const raw = (document.getElementById("photoUrlsBulk").value || "").trim();
-  if(!raw) return toast("Cole pelo menos 1 URL (uma por linha)", "warn");
+const raw = (document.getElementById("photoUrlsBulk").value || "").trim();
+if(!raw) return toast("Cole pelo menos 1 URL (uma por linha)", "warn");
 
-  const urls = raw
-    .split(/\n|,|\s+/) // aceita linha, vírgula ou espaço
-    .map(s => s.trim())
-    .filter(Boolean);
+const urls = raw
+.split(/\n|,|\s+/) // aceita linha, vírgula ou espaço
+.map(s => s.trim())
+.filter(Boolean);
 
-  if(!urls.length) return toast("Nenhuma URL válida encontrada", "warn");
+if(!urls.length) return toast("Nenhuma URL válida encontrada", "warn");
 
-  if(!motoDataStorage[motoId]) motoDataStorage[motoId] = { moto_data:{}, thumbnail:"", photos:[] };
-  if(!motoDataStorage[motoId].photos) motoDataStorage[motoId].photos = [];
+if(!motoDataStorage[motoId]) motoDataStorage[motoId] = { moto_data:{}, thumbnail:"", photos:[] };
+if(!motoDataStorage[motoId].photos) motoDataStorage[motoId].photos = [];
 
-  // adiciona sem duplicar
-  const set = new Set(motoDataStorage[motoId].photos);
-  urls.forEach(u => set.add(u));
-  motoDataStorage[motoId].photos = Array.from(set);
+// adiciona sem duplicar
+const set = new Set(motoDataStorage[motoId].photos);
+urls.forEach(u => set.add(u));
+motoDataStorage[motoId].photos = Array.from(set);
 
-  document.getElementById("photoUrlsBulk").value = "";
-  renderAdminPhotosList(motoId);
-  toast(`Adicionadas ${urls.length} URLs ✅`, "ok");
+document.getElementById("photoUrlsBulk").value = "";
+renderAdminPhotosList(motoId);
+toast(`Adicionadas ${urls.length} URLs ✅`, "ok");
 }
 
 
 
 async function saveMotoData(){
-  if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
-  const motoId = document.getElementById("adminMotoSelect").value;
-  const motoData = {
-    name: document.getElementById("f_name").value.trim(),
-    brand: document.getElementById("f_brand").value.trim(),
-    year: document.getElementById("f_year").value.trim(),
-    price: document.getElementById("f_price").value.trim(),
-    description: document.getElementById("f_desc").value.trim(),
-    specs: (document.getElementById("f_specs").value || "").split("\n").map(s=>s.trim()).filter(Boolean),
-    features: (document.getElementById("f_features").value || "").split("\n").map(s=>s.trim()).filter(Boolean),
-  };
+if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
+const motoId = document.getElementById("adminMotoSelect").value;
+const motoData = {
+name: document.getElementById("f_name").value.trim(),
+brand: document.getElementById("f_brand").value.trim(),
+year: document.getElementById("f_year").value.trim(),
+price: document.getElementById("f_price").value.trim(),
+description: document.getElementById("f_desc").value.trim(),
+specs: (document.getElementById("f_specs").value || "").split("\n").map(s=>s.trim()).filter(Boolean),
+features: (document.getElementById("f_features").value || "").split("\n").map(s=>s.trim()).filter(Boolean),
+};
 
-  try{
-    await upsertRow(motoId, "moto_data", motoData);
-    motoDataStorage[motoId].moto_data = motoData;
-    toast("Dados salvos ✅", "ok");
-    renderFeatured(); renderGrid();
-  }catch(e){
-    toast("Falha ao salvar dados (veja console)", "err");
-  }
+try{
+await upsertRow(motoId, "moto_data", motoData);
+motoDataStorage[motoId].moto_data = motoData;
+toast("Dados salvos ✅", "ok");
+renderFeatured(); renderGrid();
+}catch(e){
+toast("Falha ao salvar dados (veja console)", "err");
+}
 }
 
 async function saveThumbnail(){
-  if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
-  const motoId = document.getElementById("adminMotoSelect").value;
-  const url = (document.getElementById("thumbUrlInput").value || "").trim();
-  if(!url) return toast("Cole a URL do thumbnail", "warn");
+if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
+const motoId = document.getElementById("adminMotoSelect").value;
+const url = (document.getElementById("thumbUrlInput").value || "").trim();
+if(!url) return toast("Cole a URL do thumbnail", "warn");
 
-  try{
-    await upsertRow(motoId, "thumbnail", url);
-    motoDataStorage[motoId].thumbnail = url;
-    toast("Thumbnail salvo ✅", "ok");
-    renderFeatured(); renderGrid();
-  }catch(e){
-    toast("Falha ao salvar thumbnail", "err");
-  }
+try{
+await upsertRow(motoId, "thumbnail", url);
+motoDataStorage[motoId].thumbnail = url;
+toast("Thumbnail salvo ✅", "ok");
+renderFeatured(); renderGrid();
+}catch(e){
+toast("Falha ao salvar thumbnail", "err");
+}
 }
 
 async function savePhotos(){
-  if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
-  const motoId = document.getElementById("adminMotoSelect").value;
-  const photos = (motoDataStorage[motoId]?.photos || []).filter(Boolean);
+if(!isAdmin){ toast("Faça login no painel", "warn"); return; }
+const motoId = document.getElementById("adminMotoSelect").value;
+const photos = (motoDataStorage[motoId]?.photos || []).filter(Boolean);
 
-  try{
-    await upsertRow(motoId, "photos", photos);
-    toast("Fotos salvas ✅ (persistente)", "ok");
-    document.getElementById("adminDebug").textContent = `Salvo ${photos.length} URLs em motos_store (photos)`;
-    renderFeatured(); renderGrid();
-  }catch(e){
-    toast("Falha ao salvar fotos (veja console)", "err");
-  }
+try{
+await upsertRow(motoId, "photos", photos);
+toast("Fotos salvas ✅ (persistente)", "ok");
+document.getElementById("adminDebug").textContent = `Salvo ${photos.length} URLs em motos_store (photos)`;
+renderFeatured(); renderGrid();
+}catch(e){
+toast("Falha ao salvar fotos (veja console)", "err");
+}
 }
 
 /* ====== Init ====== */
 async function init(){
-  try{
-    ensureSupabase();
-    setStatus("carregando do Supabase…");
-    await loadAllFromSupabase();
-    renderFeatured();
-    renderGrid();
-    // admin select se já estiver logado
-    syncAdminVisibility();
-  }catch(e){
-    console.error(e);
-    setStatus("erro ao iniciar (console)");
-  }
+try{
+ensureSupabase();
+setStatus("carregando do Supabase…");
+await loadAllFromSupabase();
+renderFeatured();
+renderGrid();
+// admin select se já estiver logado
+syncAdminVisibility();
+}catch(e){
+console.error(e);
+setStatus("erro ao iniciar (console)");
+}
 }
 
 /* ====== Events ====== */
@@ -1309,10 +1294,10 @@ document.getElementById("adminHelpBtn").onclick = ()=>toast("Senha padrão: tpow
 
 document.getElementById("adminMotoSelect").onchange = (e)=>loadAdminForm(e.target.value);
 document.getElementById("adminRefreshBtn").onclick = async ()=>{
-  toast("Recarregando…", "info");
-  await loadAllFromSupabase();
-  renderFeatured(); renderGrid();
-  loadAdminForm(document.getElementById("adminMotoSelect").value);
+toast("Recarregando…", "info");
+await loadAllFromSupabase();
+renderFeatured(); renderGrid();
+loadAdminForm(document.getElementById("adminMotoSelect").value);
 };
 
 document.getElementById("saveMotoBtn").onclick = saveMotoData;
@@ -1323,13 +1308,13 @@ document.getElementById("saveThumbBtn").onclick = saveThumbnail;
 document.getElementById("savePhotosBtn").onclick = savePhotos;
 
 document.getElementById("searchInput").addEventListener("input", ()=>{
-  currentPage = 1;
-  renderGrid();
-  updateClearSearchBtn();
+currentPage = 1;
+renderGrid();
+updateClearSearchBtn();
 });
 
 document.getElementById("ctaOpenFirst").onclick = ()=>{
-  document.getElementById("gridSection").scrollIntoView({behavior:"smooth"});
+document.getElementById("gridSection").scrollIntoView({behavior:"smooth"});
 };
 
 // Paginação (9 por página)
@@ -1342,218 +1327,218 @@ init();
 // FIX DEFENSIVO: impede que "moto.html" vire clique em página inteira.
 // Só permite navegar para moto.html quando o clique aconteceu dentro do grid (#motosGrid).
 document.addEventListener("click", (e) => {
-  const a = e.target.closest('a[href*="moto.html"]');
-  if (!a) return;
+const a = e.target.closest('a[href*="moto.html"]');
+if (!a) return;
 
-  const insideGrid = !!a.closest("#motosGrid");
-  if (!insideGrid) {
-    e.preventDefault();
-    e.stopPropagation();
-    // Se por acaso um link estiver "cobrindo" a tela, isso bloqueia a navegação indevida.
-    try { toast("Clique fora do card (bloqueado).", "warn"); } catch {}
-  }
+const insideGrid = !!a.closest("#motosGrid");
+if (!insideGrid) {
+e.preventDefault();
+e.stopPropagation();
+// Se por acaso um link estiver "cobrindo" a tela, isso bloqueia a navegação indevida.
+try { toast("Clique fora do card (bloqueado).", "warn"); } catch {}
+}
 }, true);
 
 </script>
 
-  <!-- CONTATO -->
-  <section id="contato" class="py-24 relative overflow-hidden">
-    <div class="absolute inset-0 opacity-60 pointer-events-none"
-         style="background:
-           radial-gradient(900px 420px at 50% 20%, rgba(56,189,248,.18), transparent 60%);"></div>
+<!-- CONTATO -->
+<section id="contato" class="py-24 relative overflow-hidden">
+<div class="absolute inset-0 opacity-60 pointer-events-none"
+style="background:
+          radial-gradient(900px 420px at 50% 20%, rgba(56,189,248,.18), transparent 60%);"></div>
 
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight">
-          ENTRE EM <span class="text-sky-400">CONTATO</span>
-        </h2>
-        <p class="mt-4 text-white/60 text-lg">
-          Estamos prontos para te ajudar a encontrar a moto perfeita
-        </p>
-      </div>
+<div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-16">
+<h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight">
+ENTRE EM <span class="text-sky-400">CONTATO</span>
+</h2>
+<p class="mt-4 text-white/60 text-lg">
+Estamos prontos para te ajudar a encontrar a moto perfeita
+</p>
+</div>
 
-      <div class="grid lg:grid-cols-2 gap-10">
-        <!-- FORM -->
-        <div class="p-8 rounded-3xl bg-white/5 border border-white/10">
-          <!--
-            Envio de e-mail real (sem depender do app de e-mail do visitante) via FormSubmit.
-            Depois de publicar, faça 1 envio de teste e confirme o e-mail de autorização do FormSubmit.
-          -->
-          <form id="contactForm" action="https://formsubmit.co/tpowermotos@hotmail.com" method="POST">
+<div class="grid lg:grid-cols-2 gap-10">
+<!-- FORM -->
+<div class="p-8 rounded-3xl bg-white/5 border border-white/10">
+<!--
+           Envio de e-mail real (sem depender do app de e-mail do visitante) via FormSubmit.
+           Depois de publicar, faça 1 envio de teste e confirme o e-mail de autorização do FormSubmit.
+         -->
+<form id="contactForm" action="https://formsubmit.co/tpowermotos@hotmail.com" method="POST">
 
-            <!-- Config do FormSubmit -->
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_subject" value="Contato pelo site - T-Power Motos" />
-            <input type="hidden" name="_template" value="table" />
+<!-- Config do FormSubmit -->
+<input type="hidden" name="_captcha" value="false" />
+<input type="hidden" name="_subject" value="Contato pelo site - T-Power Motos" />
+<input type="hidden" name="_template" value="table" />
 
-            <!-- Campo que receberá a mensagem formatada (preenchido via JS no submit) -->
-            <input type="hidden" id="compiled_message" name="Mensagem formatada" value="" />
-            <div class="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label class="text-sm text-white/60">Nome</label>
-                <input id="c_name" name="Nome" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="Seu nome" required/>
-              </div>
-              <div>
-                <label class="text-sm text-white/60">Telefone</label>
-                <input id="c_whatsapp" name="Whatsapp" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="(00) 00000-0000"/>
-              </div>
-            </div>
+<!-- Campo que receberá a mensagem formatada (preenchido via JS no submit) -->
+<input type="hidden" id="compiled_message" name="Mensagem formatada" value="" />
+<div class="grid sm:grid-cols-2 gap-4">
+<div>
+<label class="text-sm text-white/60">Nome</label>
+<input id="c_name" name="Nome" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="Seu nome" required/>
+</div>
+<div>
+<label class="text-sm text-white/60">Telefone</label>
+<input id="c_whatsapp" name="Whatsapp" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="(00) 00000-0000"/>
+</div>
+</div>
 
-            <div class="mt-4">
-              <label class="text-sm text-white/60">E-mail</label>
-              <input id="c_email" name="Email" type="email" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="seu@email.com" required/>
-            </div>
+<div class="mt-4">
+<label class="text-sm text-white/60">E-mail</label>
+<input id="c_email" name="Email" type="email" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="seu@email.com" required/>
+</div>
 
-            <div class="mt-4">
-              <label class="text-sm text-white/60">Moto de Interesse</label>
-              <select id="c_moto" name="Moto de interesse" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10">
-                <option>Selecione uma moto</option>
-              </select>
-            </div>
+<div class="mt-4">
+<label class="text-sm text-white/60">Moto de Interesse</label>
+<select id="c_moto" name="Moto de interesse" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10">
+<option>Selecione uma moto</option>
+</select>
+</div>
 
-            <div class="mt-4">
-              <label class="text-sm text-white/60">Mensagem</label>
-              <textarea id="c_message" name="Mensagem" rows="4" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="Como podemos ajudar?" required></textarea>
-            </div>
+<div class="mt-4">
+<label class="text-sm text-white/60">Mensagem</label>
+<textarea id="c_message" name="Mensagem" rows="4" class="w-full mt-1 px-4 py-3 rounded-2xl bg-black/30 border border-white/10" placeholder="Como podemos ajudar?" required></textarea>
+</div>
 
-            <button type="submit"
-                    class="mt-6 w-full px-6 py-4 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-extrabold">
-              Enviar Mensagem →
-            </button>
-          </form>
-        </div>
+<button type="submit"
+class="mt-6 w-full px-6 py-4 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-extrabold">
+Enviar Mensagem →
+</button>
+</form>
+</div>
 
-        <!-- INFO -->
-        <div class="space-y-6">
-          <div class="p-6 rounded-3xl bg-white/5 border border-white/10 flex gap-4">
-            <div class="w-12 h-12 rounded-2xl bg-sky-500/20 flex items-center justify-center">📍</div>
-            <div>
-              <div class="font-bold">Endereço</div>
-              <div class="text-white/70 text-sm mt-1">
-                Av. Paineiras, 93 - Eucaliptos<br>
-                Fazenda Rio Grande - PR, 83820-479
-              </div>
-            </div>
-          </div>
+<!-- INFO -->
+<div class="space-y-6">
+<div class="p-6 rounded-3xl bg-white/5 border border-white/10 flex gap-4">
+<div class="w-12 h-12 rounded-2xl bg-sky-500/20 flex items-center justify-center">📍</div>
+<div>
+<div class="font-bold">Endereço</div>
+<div class="text-white/70 text-sm mt-1">
+Av. Paineiras, 93 - Eucaliptos<br>
+Fazenda Rio Grande - PR, 83820-479
+</div>
+</div>
+</div>
 
-          <div class="p-6 rounded-3xl bg-white/5 border border-white/10 flex gap-4">
-            <div class="w-12 h-12 rounded-2xl bg-sky-500/20 flex items-center justify-center">📞</div>
-            <div>
-              <div class="font-bold">Telefone</div>
-              <div class="text-white/70 text-sm mt-1">(41) 99697-7148</div>
-            </div>
-          </div>
+<div class="p-6 rounded-3xl bg-white/5 border border-white/10 flex gap-4">
+<div class="w-12 h-12 rounded-2xl bg-sky-500/20 flex items-center justify-center">📞</div>
+<div>
+<div class="font-bold">Telefone</div>
+<div class="text-white/70 text-sm mt-1">(41) 99697-7148</div>
+</div>
+</div>
 
-          <div class="p-6 rounded-3xl bg-white/5 border border-white/10 flex gap-4">
-            <div class="w-12 h-12 rounded-2xl bg-sky-500/20 flex items-center justify-center">⏰</div>
-            <div>
-              <div class="font-bold">Horário</div>
-              <div class="text-white/70 text-sm mt-1">
-                Seg - Sex: 9h às 18h<br>
-                Sáb: 9h às 15h
-              </div>
-            </div>
-          </div>
+<div class="p-6 rounded-3xl bg-white/5 border border-white/10 flex gap-4">
+<div class="w-12 h-12 rounded-2xl bg-sky-500/20 flex items-center justify-center">⏰</div>
+<div>
+<div class="font-bold">Horário</div>
+<div class="text-white/70 text-sm mt-1">
+Seg - Sex: 9h às 18h<br>
+Sáb: 9h às 15h
+</div>
+</div>
+</div>
 
-          
-          <div class="p-6 rounded-3xl bg-white/5 border border-white/10">
-            <div class="font-bold mb-3">Redes Sociais</div>
-            <div class="flex gap-4">
-              <a href="https://www.facebook.com/share/1C2XCLTMdC/?mibextid=wwXIfr" target="_blank" aria-label="Facebook"
-                 class="w-12 h-12 rounded-2xl bg-white/10 hover:bg-sky-500/20 border border-white/10 flex items-center justify-center">
-                <svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white">
-                  <path d="M22 12a10 10 0 1 0-11.6 9.9v-7H8v-3h2.4V9.5c0-2.4 1.4-3.7 3.6-3.7 1 0 2 .1 2 .1v2.2h-1.1c-1.1 0-1.4.7-1.4 1.4V12H16l-.5 3h-2.6v7A10 10 0 0 0 22 12z"/>
-                </svg>
-              </a>
-              <a href="https://www.instagram.com/tpowermotos?igsh=cXBmcXRmZ2RnZHdm" target="_blank" aria-label="Instagram"
-                 class="w-12 h-12 rounded-2xl bg-white/10 hover:bg-sky-500/20 border border-white/10 flex items-center justify-center">
-                <svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white">
-                  <path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 2 .3 2.7.6.8.3 1.4.8 2 1.4.6.6 1.1 1.2 1.4 2 .3.7.5 1.5.6 2.7.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.3 2-.6 2.7-.3.8-.8 1.4-1.4 2-.6.6-1.2 1.1-2 1.4-.7.3-1.5.5-2.7.6-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-2-.3-2.7-.6-.8-.3-1.4-.8-2-1.4-.6-.6-1.1-1.2-1.4-2-.3-.7-.5-1.5-.6-2.7C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.3-2 .6-2.7.3-.8.8-1.4 1.4-2 .6-.6 1.2-1.1 2-1.4.7-.3 1.5-.5 2.7-.6C8.4 2.2 8.8 2.2 12 2.2zm0 3.2a6.6 6.6 0 1 0 0 13.2 6.6 6.6 0 0 0 0-13.2zm0 10.9a4.3 4.3 0 1 1 0-8.6 4.3 4.3 0 0 1 0 8.6zm6.8-11.2a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                </svg>
-              </a>
-              <a href="https://wa.me/5541996977148" target="_blank" aria-label="WhatsApp"
-                 class="w-12 h-12 rounded-2xl bg-white/10 hover:bg-sky-500/20 border border-white/10 flex items-center justify-center">
-                <svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white">
-                  <path d="M20.5 3.5A11.9 11.9 0 0 0 12.1 0C5.5 0 .1 5.4.1 12c0 2.1.5 4.1 1.6 5.9L0 24l6.3-1.6c1.7.9 3.6 1.4 5.8 1.4 6.6 0 12-5.4 12-12 0-3.2-1.3-6.2-3.6-8.3zM12.1 21.6c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4a9.4 9.4 0 1 1 8.3 4.6zm5.1-7.1c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-1 .9-.2.1-.4.1-.7 0-.3-.1-1.3-.5-2.5-1.6-.9-.8-1.6-1.9-1.8-2.2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.4.1-.1.2-.3.3-.4.1-.1.1-.3 0-.4-.1-.1-.7-1.6-.9-2.2-.2-.6-.4-.5-.7-.5h-.6c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2 0 1.2.9 2.4 1 2.5.1.2 1.8 2.8 4.4 3.9 1.6.7 2.2.8 3 .7.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.1-1.4-.1-.1-.3-.2-.6-.3z"/>
-                </svg>
-              </a>
-            </div>
-          </div>
 
-        </div>
-      </div>
-    </div>
-  </section>
+<div class="p-6 rounded-3xl bg-white/5 border border-white/10">
+<div class="font-bold mb-3">Redes Sociais</div>
+<div class="flex gap-4">
+<a href="https://www.facebook.com/share/1C2XCLTMdC/?mibextid=wwXIfr" target="_blank" aria-label="Facebook"
+class="w-12 h-12 rounded-2xl bg-white/10 hover:bg-sky-500/20 border border-white/10 flex items-center justify-center">
+<svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white">
+<path d="M22 12a10 10 0 1 0-11.6 9.9v-7H8v-3h2.4V9.5c0-2.4 1.4-3.7 3.6-3.7 1 0 2 .1 2 .1v2.2h-1.1c-1.1 0-1.4.7-1.4 1.4V12H16l-.5 3h-2.6v7A10 10 0 0 0 22 12z"/>
+</svg>
+</a>
+<a href="https://www.instagram.com/tpowermotos?igsh=cXBmcXRmZ2RnZHdm" target="_blank" aria-label="Instagram"
+class="w-12 h-12 rounded-2xl bg-white/10 hover:bg-sky-500/20 border border-white/10 flex items-center justify-center">
+<svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white">
+<path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 2 .3 2.7.6.8.3 1.4.8 2 1.4.6.6 1.1 1.2 1.4 2 .3.7.5 1.5.6 2.7.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.3 2-.6 2.7-.3.8-.8 1.4-1.4 2-.6.6-1.2 1.1-2 1.4-.7.3-1.5.5-2.7.6-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-2-.3-2.7-.6-.8-.3-1.4-.8-2-1.4-.6-.6-1.1-1.2-1.4-2-.3-.7-.5-1.5-.6-2.7C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.3-2 .6-2.7.3-.8.8-1.4 1.4-2 .6-.6 1.2-1.1 2-1.4.7-.3 1.5-.5 2.7-.6C8.4 2.2 8.8 2.2 12 2.2zm0 3.2a6.6 6.6 0 1 0 0 13.2 6.6 6.6 0 0 0 0-13.2zm0 10.9a4.3 4.3 0 1 1 0-8.6 4.3 4.3 0 0 1 0 8.6zm6.8-11.2a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+</svg>
+</a>
+<a href="https://wa.me/5541996977148" target="_blank" aria-label="WhatsApp"
+class="w-12 h-12 rounded-2xl bg-white/10 hover:bg-sky-500/20 border border-white/10 flex items-center justify-center">
+<svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white">
+<path d="M20.5 3.5A11.9 11.9 0 0 0 12.1 0C5.5 0 .1 5.4.1 12c0 2.1.5 4.1 1.6 5.9L0 24l6.3-1.6c1.7.9 3.6 1.4 5.8 1.4 6.6 0 12-5.4 12-12 0-3.2-1.3-6.2-3.6-8.3zM12.1 21.6c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4a9.4 9.4 0 1 1 8.3 4.6zm5.1-7.1c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-1 .9-.2.1-.4.1-.7 0-.3-.1-1.3-.5-2.5-1.6-.9-.8-1.6-1.9-1.8-2.2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.4.1-.1.2-.3.3-.4.1-.1.1-.3 0-.4-.1-.1-.7-1.6-.9-2.2-.2-.6-.4-.5-.7-.5h-.6c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2 0 1.2.9 2.4 1 2.5.1.2 1.8 2.8 4.4 3.9 1.6.7 2.2.8 3 .7.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.1-1.4-.1-.1-.3-.2-.6-.3z"/>
+</svg>
+</a>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
 
 <script>
 // Preenche o select "Moto de Interesse" com as motos carregadas do site
 function populateMotoInteresse(){
-  const sel = document.querySelector('#contato select');
-  if(!sel || typeof motoDataStorage === 'undefined') return;
-  const current = sel.value;
-  sel.innerHTML = '<option value="">Selecione uma moto</option>';
-  Object.keys(motoDataStorage).forEach(id=>{
-    const d = motoDataStorage[id]?.moto_data || {};
-    const opt = document.createElement('option');
-    opt.value = id;
-    opt.textContent = d.name ? `${d.name} (${id.toUpperCase()})` : id.toUpperCase();
-    sel.appendChild(opt);
-  });
-  if(current) sel.value = current;
+const sel = document.querySelector('#contato select');
+if(!sel || typeof motoDataStorage === 'undefined') return;
+const current = sel.value;
+sel.innerHTML = '<option value="">Selecione uma moto</option>';
+Object.keys(motoDataStorage).forEach(id=>{
+const d = motoDataStorage[id]?.moto_data || {};
+const opt = document.createElement('option');
+opt.value = id;
+opt.textContent = d.name ? `${d.name} (${id.toUpperCase()})` : id.toUpperCase();
+sel.appendChild(opt);
+});
+if(current) sel.value = current;
 }
 
 // Chama após carregar dados
 document.addEventListener('DOMContentLoaded', ()=>{
-  setTimeout(populateMotoInteresse, 800);
+setTimeout(populateMotoInteresse, 800);
 });
 </script>
 
-  <!-- FOOTER -->
-  <footer class="relative border-t border-white/10 bg-black/40 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col items-center gap-4">
-      
-      <img src="Design sem nome (2).png"
-           alt="T-Power Motos"
-           class="h-12 w-auto object-contain"/>
+<!-- FOOTER -->
+<footer class="relative border-t border-white/10 bg-black/40 backdrop-blur-md">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col items-center gap-4">
 
-      <p class="text-white/60 text-sm text-center">
-        © 2023 T-Power Motos. Todos os direitos reservados.
-      </p>
-    </div>
-  </footer>
+<img src="Design sem nome (2).png"
+alt="T-Power Motos"
+class="h-12 w-auto object-contain"/>
+
+<p class="text-white/60 text-sm text-center">
+© 2023 T-Power Motos. Todos os direitos reservados.
+</p>
+</div>
+</footer>
 
 <script>
 // Envio de contato (GitHub Pages): FormSubmit envia direto para seu e-mail.
 // Aqui a gente apenas monta a mensagem no formato que você pediu e deixa o formulário enviar.
 (function(){
-  const form = document.getElementById('contactForm');
-  if(!form) return;
+const form = document.getElementById('contactForm');
+if(!form) return;
 
-  form.addEventListener('submit', function(){
-    const nome = (document.getElementById('c_name')?.value || '').trim();
-    const whatsapp = (document.getElementById('c_whatsapp')?.value || '').trim();
-    const email = (document.getElementById('c_email')?.value || '').trim();
-    const motoId = (document.getElementById('c_moto')?.value || '').trim();
+form.addEventListener('submit', function(){
+const nome = (document.getElementById('c_name')?.value || '').trim();
+const whatsapp = (document.getElementById('c_whatsapp')?.value || '').trim();
+const email = (document.getElementById('c_email')?.value || '').trim();
+const motoId = (document.getElementById('c_moto')?.value || '').trim();
 
-    // tenta pegar o nome da moto do option selecionado
-    const motoLabel = (document.getElementById('c_moto')?.selectedOptions?.[0]?.textContent || '').trim();
-    const motoFinal = motoLabel || motoId || '—';
+// tenta pegar o nome da moto do option selecionado
+const motoLabel = (document.getElementById('c_moto')?.selectedOptions?.[0]?.textContent || '').trim();
+const motoFinal = motoLabel || motoId || '—';
 
-    const mensagemCliente = (document.getElementById('c_message')?.value || '').trim();
+const mensagemCliente = (document.getElementById('c_message')?.value || '').trim();
 
-    const mensagemFormatada =
-      `Olá, me chamo "${nome}", meu Whatsapp é "${whatsapp}", estou enviando essa mensagem através do meu email "${email}", ` +
-      `eu gostaria de ter mais informações sobre a moto "${motoFinal}".\n\n` +
-      `Texto enviado pelo cliente: ${mensagemCliente}`;
+const mensagemFormatada =
+`Olá, me chamo "${nome}", meu Whatsapp é "${whatsapp}", estou enviando essa mensagem através do meu email "${email}", ` +
+`eu gostaria de ter mais informações sobre a moto "${motoFinal}".\n\n` +
+`Texto enviado pelo cliente: ${mensagemCliente}`;
 
-    // Preenche o campo oculto que vai no e-mail
-    const compiled = document.getElementById('compiled_message');
-    if(compiled) compiled.value = mensagemFormatada;
+// Preenche o campo oculto que vai no e-mail
+const compiled = document.getElementById('compiled_message');
+if(compiled) compiled.value = mensagemFormatada;
 
-    // Atualiza assunto com a moto selecionada
-    const subj = form.querySelector('input[name="_subject"]');
-    if(subj) subj.value = `Contato pelo site - ${motoFinal}`;
-  });
+// Atualiza assunto com a moto selecionada
+const subj = form.querySelector('input[name="_subject"]');
+if(subj) subj.value = `Contato pelo site - ${motoFinal}`;
+});
 })();
 </script>
 
