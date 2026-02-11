@@ -124,6 +124,25 @@ letter-spacing: .10em;
 text-transform: uppercase;
 }
 
+
+    /* Scroll reveal (fade in up) */
+    .reveal{
+      opacity: 0;
+      transform: translateY(18px);
+      will-change: transform, opacity;
+    }
+    .reveal.reveal-in{
+      animation: fadeInUp .8s ease-out forwards;
+    }
+    @keyframes fadeInUp{
+      from{ opacity:0; transform: translateY(18px); }
+      to{ opacity:1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce){
+      .reveal{ opacity:1 !important; transform:none !important; }
+      .reveal.reveal-in{ animation:none !important; }
+    }
+
 </style>
 </head>
 
@@ -1539,6 +1558,64 @@ if(compiled) compiled.value = mensagemFormatada;
 const subj = form.querySelector('input[name="_subject"]');
 if(subj) subj.value = `Contato pelo site - ${motoFinal}`;
 });
+})();
+</script>
+
+
+<script>
+/* Scroll reveal: anima elementos quando entram na tela */
+(function(){
+  const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(prefersReduce) return;
+
+  function shouldSkip(el){
+    return !!el.closest('header, #adminModal, #adminPanel, #detailModal, #loginModal');
+  }
+
+  // Seleciona elementos "grandes" + cards + CTAs
+  const selectors = [
+    'section h1','section h2','section h3',
+    'section [class*="text-3xl"]','section [class*="text-4xl"]','section [class*="text-5xl"]','section [class*="text-6xl"]','section [class*="text-7xl"]',
+    '#motosGrid > a',
+    'section button','section a.btn','section a[href^="https://wa.me"]'
+  ].join(',');
+
+  const all = Array.from(document.querySelectorAll(selectors))
+    .filter(el => !shouldSkip(el));
+
+  // Aplica class reveal + delay em sequência por seção
+  const bySection = new Map();
+  all.forEach(el=>{
+    const s = el.closest('section');
+    const key = s || document.body;
+    if(!bySection.has(key)) bySection.set(key, []);
+    bySection.get(key).push(el);
+  });
+
+  bySection.forEach((els, section)=>{
+    // ordena por ordem no DOM (já vem assim)
+    els.forEach((el,i)=>{
+      el.classList.add('reveal');
+      // delays suaves (cards em grid ficam bem)
+      const step = 0.08;
+      const maxDelay = 0.8;
+      const d = Math.min(i*step, maxDelay);
+      el.dataset.revealDelay = String(d);
+    });
+  });
+
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(!entry.isIntersecting) return;
+      const el = entry.target;
+      const d = parseFloat(el.dataset.revealDelay || '0');
+      el.style.animationDelay = d ? (d + 's') : '0s';
+      el.classList.add('reveal-in');
+      io.unobserve(el);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+
+  all.forEach(el=>io.observe(el));
 })();
 </script>
 
