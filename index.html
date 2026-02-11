@@ -112,18 +112,21 @@
     }
     .hero-title .highlight{ color: #38BDF8; }
 
-
-/* ===== Admin UI (mais visível / alinhado) ===== */
-#adminModal select, #adminModal input, #adminModal textarea{
-  background-color: rgba(2, 6, 23, 0.35);
-}
-#adminModal select option{
-  background-color: #0b1220;
-  color: #ffffff;
-}
-#adminModal input::placeholder, #adminModal textarea::placeholder{
-  color: rgba(255,255,255,.35);
-}
+    /* --- Admin select mais visível (premium) --- */
+    #adminMotoSelect {
+      background: rgba(0,0,0,.45) !important;
+      border: 1px solid rgba(255,255,255,.18) !important;
+      box-shadow: 0 8px 24px rgba(0,0,0,.35);
+    }
+    #adminMotoSelect:focus {
+      outline: none !important;
+      border-color: rgba(56,189,248,.65) !important;
+      box-shadow: 0 0 0 4px rgba(56,189,248,.18);
+    }
+    #adminMotoSelect option {
+      background: #0b1220;
+      color: #ffffff;
+    }
 
   </style>
 </head>
@@ -138,7 +141,7 @@
         </a>
         <div>
           <div class="font-bold tracking-wide">T‑POWER MOTOS</div>
-        
+          <div class="text-xs text-white/60">Catálogo • Fotos • Painel</div>
         </div>
       </div>
 
@@ -147,7 +150,7 @@
       <div class="relative w-full max-w-md">
         <input id="searchInput"
                class="w-full pl-12 pr-16 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400 text-sm"
-               placeholder="Buscar por modelo, marca, ano…"/>
+                autocomplete="off" placeholder="Buscar por modelo, marca, ano…" />
         <div class="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">🔎</div>
 
         
@@ -157,7 +160,16 @@
                 class="absolute right-12 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/90 transition hidden"
                 title="Limpar busca"
                 aria-label="Limpar busca">✕</button>
-<!-- Botão admin discreto (como “cadeado quase invisível”) -->
+<!-- Botão limpar busca -->
+        <button id="clearSearchBtn"
+                type="button"
+                class="absolute right-11 top-1/2 -translate-y-1/2 text-white/35 hover:text-white/80 transition hidden"
+                title="Limpar busca"
+                aria-label="Limpar busca">
+          ✕
+        </button>
+
+        <!-- Botão admin discreto (como “cadeado quase invisível”) -->
         <button id="adminBtn"
                 class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/90 transition"
                 title="Painel administrativo"
@@ -178,7 +190,7 @@
 
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
     <h1 class="hero-title text-5xl sm:text-6xl lg:text-7xl text-white">
-      ACELERE SEUS SONHOS</span>
+      ACELERE SEUS <span class="highlight">SONHOS</span>
     </h1>
 
     <p class="mt-6 max-w-2xl mx-auto text-lg text-white/70">
@@ -233,6 +245,16 @@
       <span id="countText" class="hidden">0</span>
 
       <div id="motosGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"></div>
+
+      <!-- Nenhum resultado -->
+      <div id="noResultsBox" class="hidden mt-10 p-8 rounded-3xl bg-white/5 border border-white/10 text-center">
+        <div class="text-2xl font-extrabold text-white">Nenhuma moto encontrada</div>
+        <div class="mt-2 text-white/60">Limpe a busca para ver o catálogo completo.</div>
+        <button id="clearSearchBtn2" type="button"
+                class="mt-6 px-6 py-3 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-extrabold">
+          Limpar busca
+        </button>
+      </div>
 
       <!-- Paginação -->
       <div class="mt-12 flex items-center justify-center gap-4">
@@ -445,14 +467,16 @@
             
             <div class="flex items-center gap-2 text-sm text-white/70 flex-wrap">
               <span class="mono">Editando:</span>
-              <select id="adminMotoSelect" class="px-4 py-2 h-12 rounded-2xl bg-black/40 border border-white/20 text-white shadow-lg focus:outline-none focus:border-sky-400">
+              <select id="adminMotoSelect" class="px-4 py-2 rounded-2xl bg-white/5 border border-white/10 text-white">
               </select>
 
               <!-- Criar nova moto (apenas UI, sem mudar backend) -->
               <div class="flex items-center gap-2 ml-0 sm:ml-3">
-                <input id="newMotoIdInput" class="w-36 sm:w-44 px-3 py-2 h-12 rounded-2xl bg-black/30 border border-white/10 focus:outline-none focus:border-sky-400 text-white mono text-sm"
+                <input id="newMotoIdInput"
+                       class="w-36 sm:w-44 px-3 py-2 rounded-2xl bg-black/30 border border-white/10 focus:outline-none focus:border-sky-400 text-white mono text-sm"
                        placeholder="novo_id"/>
-                <button id="createMotoBtn" class="px-4 py-2 h-12 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold text-sm">
+                <button id="createMotoBtn"
+                        class="px-4 py-2 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-bold text-sm">
                   + Nova moto
                 </button>
               </div>
@@ -460,10 +484,10 @@
 
 
             <div class="flex gap-2">
-              <button id="adminRefreshBtn" class="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 h-12">
+              <button id="adminRefreshBtn" class="px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10">
                 Recarregar
               </button>
-              <button id="adminLogoutBtn" class="px-4 py-2 rounded-2xl bg-red-500/20 hover:bg-red-500/30 border border-red-400/20 h-12">
+              <button id="adminLogoutBtn" class="px-4 py-2 rounded-2xl bg-red-500/20 hover:bg-red-500/30 border border-red-400/20">
                 Sair
               </button>
             </div>
@@ -863,6 +887,17 @@ if(!allIds.length){
     `;
     grid.appendChild(el);
   });
+
+  // --- UI: nenhum resultado ---
+  const noBox = document.getElementById("noResultsBox");
+  if(noBox){
+    if(Number(document.getElementById("countText")?.textContent || 0) === 0) && q){
+      noBox.classList.remove("hidden");
+    } else {
+      noBox.classList.add("hidden");
+    }
+  }
+
 }
 
 /* ====== Detalhe ====== */
@@ -926,31 +961,20 @@ function syncAdminVisibility(){
   document.getElementById("adminContent").classList.toggle("hidden", !isAdmin);
 
   if(isAdmin){
+    // popular select
     const sel = document.getElementById("adminMotoSelect");
-
-    // tenta manter a seleção correta (última moto editada)
-    const prev = sel?.value || "";
-    const saved = (function(){
-      try { return localStorage.getItem("tpower_admin_last_moto") || ""; } catch(e){ return ""; }
-    })();
-
     sel.innerHTML = "";
-    const ids = getMotoIds();
-
-    ids.forEach(id=>{
+    getMotoIds().forEach(id=>{
       const opt = document.createElement("option");
       opt.value = id;
       opt.textContent = id.toUpperCase();
       sel.appendChild(opt);
     });
-
-    const pick =
-      (saved && ids.includes(saved)) ? saved :
-      (prev && ids.includes(prev)) ? prev :
-      (ids[0] || "");
-
-    sel.value = pick;
-    loadAdminForm(pick);
+    const saved = (()=>{ try{ return localStorage.getItem("tp_lastMotoId"); }catch{ return null; }})();
+    const first = getMotoIds()[0] || "";
+    sel.value = (saved && motoDataStorage[saved]) ? saved : first;
+    loadAdminForm(sel.value);
+    try{ if(sel.value) localStorage.setItem("tp_lastMotoId", sel.value); }catch{}
   }
 }
 function adminLogin(){
@@ -971,7 +995,6 @@ function adminLogout(){
 }
 
 function loadAdminForm(motoId){
-  try { localStorage.setItem("tpower_admin_last_moto", motoId); } catch(e) {}
   const d = motoDataStorage[motoId]?.moto_data || {};
   document.getElementById("f_name").value = d.name || "";
   document.getElementById("f_brand").value = d.brand || "";
@@ -1184,7 +1207,7 @@ document.getElementById("adminCancelBtn").onclick = closeAdmin;
 
 document.getElementById("adminHelpBtn").onclick = ()=>toast("Senha padrão: tpower2024 (troque no código depois)", "info");
 
-document.getElementById("adminMotoSelect").onchange = (e)=>loadAdminForm(e.target.value);
+document.getElementById("adminMotoSelect").onchange = (e)=>{ const id=e.target.value; try{ localStorage.setItem("tp_lastMotoId", id); }catch{} loadAdminForm(id); };
 document.getElementById("adminRefreshBtn").onclick = async ()=>{
   toast("Recarregando…", "info");
   await loadAllFromSupabase();
@@ -1203,6 +1226,32 @@ document.getElementById("searchInput").addEventListener("input", ()=>{
   updateClearSearchBtn();
 });
 
+
+// Limpar busca (botões + auto)
+const clearBtn = document.getElementById("clearSearchBtn");
+const clearBtn2 = document.getElementById("clearSearchBtn2");
+function updateClearBtn(){
+  const has = (document.getElementById("searchInput").value || "").trim().length > 0;
+  if(clearBtn) clearBtn.classList.toggle("hidden", !has);
+}
+function clearSearch(){
+  const inp = document.getElementById("searchInput");
+  if(!inp) return;
+  inp.value = "";
+  currentPage = 1;
+  renderGrid();
+  updateClearBtn();
+}
+if(clearBtn) clearBtn.onclick = clearSearch;
+if(clearBtn2) clearBtn2.onclick = clearSearch;
+updateClearBtn();
+
+// Quando voltar pelo botão do navegador, limpa busca para não “sumir” o catálogo
+window.addEventListener("pageshow", ()=>{
+  clearSearch();
+});
+
+
 document.getElementById("ctaOpenFirst").onclick = ()=>{
   document.getElementById("gridSection").scrollIntoView({behavior:"smooth"});
 };
@@ -1214,18 +1263,6 @@ const __next = document.getElementById("nextPageBtn");
 if(__prev) __prev.onclick = ()=>{ currentPage = Math.max(1, currentPage - 1); renderGrid(); window.scrollTo({top: document.getElementById("gridSection").offsetTop - 80, behavior: "smooth"}); };
 if(__next) __next.onclick = ()=>{ currentPage = currentPage + 1; renderGrid(); window.scrollTo({top: document.getElementById("gridSection").offsetTop - 80, behavior: "smooth"}); };
 init();
-
-// FIX: evita filtro "preso" na busca (ex.: você digita algo e esquece)
-function resetSearchAndRender(){
-  const si = document.getElementById("searchInput");
-  if(si){
-    si.value = "";
-    currentPage = 1;
-    renderGrid();
-  }
-}
-window.addEventListener("pageshow", resetSearchAndRender);
-
 
 // FIX DEFENSIVO: impede que "moto.html" vire clique em página inteira.
 // Só permite navegar para moto.html quando o clique aconteceu dentro do grid (#motosGrid).
