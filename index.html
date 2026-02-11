@@ -835,7 +835,6 @@ if(prevBtn && nextBtn && indicator){
 prevBtn.disabled = (currentPage <= 1);
 nextBtn.disabled = (currentPage >= totalPages);
 indicator.textContent = allIds.length
-? `Página ${currentPage} de ${totalPages} • Mostrando ${ids.length} de ${allIds.length}`
 : "Nenhuma moto encontrada";
 }
 
