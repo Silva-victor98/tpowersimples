@@ -44,13 +44,13 @@
       font-weight:400;
       letter-spacing:.005em;
     }
-    body, p, label, input, textarea, select, button{
+    body, p, span, label, input, textarea, select, button{
       font-family:'Inter', sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
     h1,h2,h3,.display{
-      font-family:'Inter', sans-serif;
+      font-family:'Bebas Neue', sans-serif;
       font-weight:400;
       letter-spacing:.10em;
       text-transform:uppercase;
@@ -113,15 +113,30 @@
     }
 
 
-    /* Força Bebas Neue em textos grandes (classes Tailwind) */
-    [class*="text-3xl"],
-    [class*="text-4xl"],
-    [class*="text-5xl"],
-    [class*="text-6xl"],
-    [class*="text-7xl"]{
-      font-family: 'Bebas Neue', sans-serif !important;
-      letter-spacing: .10em;
-      text-transform: uppercase;
+    /* GARANTIA: spans dentro de títulos usam a MESMA fonte do título */
+    h1 span, h2 span, h3 span{
+      font-family: inherit !important;
+      letter-spacing: inherit;
+      text-transform: inherit;
+    }
+
+
+    /* Hero com imagem de fundo */
+    .hero-bg::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background: linear-gradient(
+        180deg,
+        rgba(2,6,23,.75) 0%,
+        rgba(2,6,23,.65) 40%,
+        rgba(2,6,23,.85) 100%
+      );
+      z-index:0;
+    }
+    .hero-bg > *{
+      position:relative;
+      z-index:1;
     }
 
 </style>
@@ -169,7 +184,7 @@
   </header>
 
 <!-- HERO (visual novo, backend intacto) -->
-<section class="relative overflow-hidden">
+<section class="relative overflow-hidden hero-bg" style="background-image:url(https://i.imgur.com/TryCmgo.jpg);background-size:cover;background-position:center;">
   <div class="absolute inset-0"
        style="background:
          radial-gradient(1200px 500px at 50% -10%, rgba(56,189,248,.35), transparent 60%),
@@ -178,7 +193,7 @@
 
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
     <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight">
-      ACELERE SEUS <span class="text-sky-400">SONHOS</span>
+      ACELERE SEUS <span class="text-sky-400 font-display">SONHOS</span>
     </h1>
 
     <p class="mt-6 max-w-2xl mx-auto text-lg text-white/70">
