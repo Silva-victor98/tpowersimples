@@ -1058,6 +1058,22 @@ const __next = document.getElementById("nextPageBtn");
 if(__prev) __prev.onclick = ()=>{ currentPage = Math.max(1, currentPage - 1); renderGrid(); window.scrollTo({top: document.getElementById("gridSection").offsetTop - 80, behavior: "smooth"}); };
 if(__next) __next.onclick = ()=>{ currentPage = currentPage + 1; renderGrid(); window.scrollTo({top: document.getElementById("gridSection").offsetTop - 80, behavior: "smooth"}); };
 init();
+
+// FIX DEFENSIVO: impede que "moto.html" vire clique em página inteira.
+// Só permite navegar para moto.html quando o clique aconteceu dentro do grid (#motosGrid).
+document.addEventListener("click", (e) => {
+  const a = e.target.closest('a[href*="moto.html"]');
+  if (!a) return;
+
+  const insideGrid = !!a.closest("#motosGrid");
+  if (!insideGrid) {
+    e.preventDefault();
+    e.stopPropagation();
+    // Se por acaso um link estiver "cobrindo" a tela, isso bloqueia a navegação indevida.
+    try { toast("Clique fora do card (bloqueado).", "warn"); } catch {}
+  }
+}, true);
+
 </script>
 
   <!-- CONTATO -->
@@ -1262,29 +1278,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     if(subj) subj.value = `Contato pelo site - ${motoFinal}`;
   });
 })();
-</script>
-
-
-<script>
-/* =========================================================
-   FIX DEFENSIVO:
-   Se por algum motivo um <a href="moto.html?..."> ficar "cobrindo" a página inteira
-   (por tag <a> aberta/estilos), qualquer clique vira navegação e parece que "some tudo".
-   Este guard impede navegação para moto.html quando o clique NÃO foi em um card do grid.
-   ========================================================= */
-document.addEventListener('click', function(e){
-  const a = e.target.closest('a');
-  if(!a) return;
-
-  // normaliza href (pega apenas o final)
-  const href = (a.getAttribute('href') || '').trim();
-
-  // Só bloqueia navegação do detalhe quando NÃO é um card do grid
-  if(href.startsWith('moto.html') && !a.closest('#motosGrid')){
-    e.preventDefault();
-    e.stopPropagation();
-  }
-}, true);
 </script>
 
 </body>
