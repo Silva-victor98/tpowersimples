@@ -113,12 +113,12 @@
     }
 
 
-    /* Força Bebas Neue em TODOS os textos grandes (consistência visual) */
-    h1, h2, h3,
-    .display,
-    .font-display,
-    .hero-title,
-    .section-title {
+    /* Força Bebas Neue em textos grandes (classes Tailwind) */
+    [class*="text-3xl"],
+    [class*="text-4xl"],
+    [class*="text-5xl"],
+    [class*="text-6xl"],
+    [class*="text-7xl"]{
       font-family: 'Bebas Neue', sans-serif !important;
       letter-spacing: .10em;
       text-transform: uppercase;
