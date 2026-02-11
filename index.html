@@ -11,18 +11,101 @@
   <!-- Supabase JS v2 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <style>
-    /* Mantém o visual “dark + sky” sem depender do seu HTML antigo */
-    .card-gradient{background:linear-gradient(135deg, rgba(56,189,248,.12), rgba(255,255,255,.06));}
-    .hover-glow{box-shadow:0 0 0 rgba(56,189,248,0); transition:box-shadow .25s ease, transform .25s ease;}
-    .hover-glow:hover{box-shadow:0 0 32px rgba(56,189,248,.22); transform:translateY(-2px);}
-    .glass{backdrop-filter: blur(14px); background: rgba(0,0,0,.35);}
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    :root{
+      --tp-ink:#EAF2FF;
+      --tp-muted:rgba(234,242,255,.68);
+      --tp-muted2:rgba(234,242,255,.50);
+      --tp-line:rgba(255,255,255,.10);
+      --tp-glass:rgba(6,18,42,.55);
+      --tp-glass2:rgba(6,18,42,.35);
+      --tp-accent:#38BDF8; /* sky-400 */
+      --tp-accent2:#60A5FA; /* blue-400 */
+      --tp-bgA:#020617; /* slate-950 */
+      --tp-bgB:#06122a; /* deep navy */
+      --tp-bgC:#0b2a5a; /* richer blue */
+    }
+
+    /* Fonts */
+    .font-display{
+      font-family:'Bebas Neue', sans-serif;
+      font-weight:400;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+    }
+    .font-body{
+      font-family:'Inter', sans-serif;
+      font-weight:400;
+      letter-spacing:.005em;
+    }
+    body, p, span, label, input, textarea, select, button{
+      font-family:'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    h1,h2,h3,.display{
+      font-family:'Bebas Neue', sans-serif;
+      font-weight:400;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+    }
+
+    /* Background (mais azul, menos preto) */
+    .tp-bg{
+      background:
+        radial-gradient(1200px 520px at 50% -10%, rgba(56,189,248,.28), transparent 60%),
+        radial-gradient(900px 520px at 10% 20%, rgba(96,165,250,.16), transparent 55%),
+        radial-gradient(800px 520px at 90% 30%, rgba(59,130,246,.12), transparent 55%),
+        linear-gradient(180deg, var(--tp-bgA) 0%, var(--tp-bgB) 55%, #020617 100%);
+      color:var(--tp-ink);
+    }
+
+    /* Mantém o visual “premium” */
+    .card-gradient{
+      background: linear-gradient(135deg, rgba(56,189,248,.14), rgba(255,255,255,.06));
+    }
+    .hover-glow{
+      box-shadow: 0 0 0 rgba(56,189,248,0);
+      transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+    }
+    .hover-glow:hover{
+      box-shadow: 0 0 40px rgba(56,189,248,.22);
+      transform: translateY(-2px);
+      border-color: rgba(56,189,248,.30);
+    }
+    .glass{
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: linear-gradient(180deg, var(--tp-glass), var(--tp-glass2));
+    }
     .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
     .hidden{display:none;}
+
+    /* Inputs mais premium */
+    input, textarea, select{
+      color: var(--tp-ink);
+      caret-color: var(--tp-accent);
+    }
+    input::placeholder, textarea::placeholder{ color: rgba(234,242,255,.42); }
+    input:focus, textarea:focus, select:focus{
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(56,189,248,.14);
+      border-color: rgba(56,189,248,.45) !important;
+    }
+
+    /* Pequenos ajustes de tipografia */
+    .tp-muted{color:var(--tp-muted);}
+    .tp-muted2{color:var(--tp-muted2);}
   </style>
 </head>
 
-<body class="min-h-screen bg-black text-white">
+<body class="min-h-screen text-white tp-bg font-body">
   <!-- Header -->
   <header class="sticky top-0 z-40 border-b border-white/10 glass">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-4">
