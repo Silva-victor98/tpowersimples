@@ -831,14 +831,11 @@ const prevBtn = document.getElementById("prevPageBtn");
 const nextBtn = document.getElementById("nextPageBtn");
 const indicator = document.getElementById("pageIndicator");
 
-if(prevBtn && nextBtn && indicator){
-prevBtn.disabled = (currentPage <= 1);
-nextBtn.disabled = (currentPage >= totalPages);
-indicator.textContent = allIds.length
-? `Página ${currentPage} de ${totalPages} • Mostrando ${ids.length} de ${allIds.length}`
-: "Nenhuma moto encontrada";
+if (prevBtn && nextBtn && indicator){
+  prevBtn.disabled = (currentPage <= 1);
+  nextBtn.disabled = (currentPage >= totalPages);
+  indicator.textContent = ""; // remove o texto feio
 }
-
 // Estado vazio (quando a busca filtra tudo)
 if(!allIds.length){
 grid.innerHTML = `
