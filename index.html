@@ -125,23 +125,18 @@ text-transform: uppercase;
 }
 
 
-/* ===== Modal (Admin) - melhoria de responsividade/scroll ===== */
-.tp-modal-shell{ max-height: 90vh; }
-.tp-modal-scroll{
-  max-height: calc(90vh - 72px); /* desconta header do modal */
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 12px;
+/* Admin (cadeado) oculto até hover/focus - mais premium */
+.admin-reveal #adminBtn{
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) scale(.95);
+  transition: opacity .18s ease, transform .18s ease;
 }
-/* Em telas baixas, garante mais espaço útil */
-@media (max-height: 700px){
-  .tp-modal-shell{ max-height: 94vh; }
-  .tp-modal-scroll{ max-height: calc(94vh - 64px); }
-}
-/* Evita que inputs “grudem” nas bordas em mobile */
-@media (max-width: 640px){
-  .tp-modal-scroll{ padding-left: 4px; padding-right: 4px; }
+.admin-reveal:hover #adminBtn,
+.admin-reveal:focus-within #adminBtn{
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-50%) scale(1);
 }
 
 </style>
@@ -169,6 +164,14 @@ text-transform: uppercase;
     Contato
   </a>
 
+  <a href="https://www.google.com/maps/place/T-Power+Motos/@-25.6471509,-49.310465,17z/data=!4m8!3m7!1s0x94dcffc13f144283:0x1798d348f5d8eb2d!8m2!3d-25.6471558!4d-49.3055941!9m1!1b1!16s%2Fg%2F11tt91p5sl!5m1!1e1?entry=ttu&g_ep=EgoyMDI2MDIxMS4wIKXMDSoASAFQAw%3D%3D"
+     target="_blank" rel="noopener noreferrer"
+     data-track="reviews_click"
+     class="px-3 py-2 rounded-2xl text-sm text-white/70 hover:text-white hover:bg-white/10 border border-transparent hover:border-white/10 transition">
+    Depoimentos
+  </a>
+
+
   <a href="financiamento.html"
      class="px-3 py-2 rounded-2xl text-sm text-white/70 hover:text-white hover:bg-white/10 border border-transparent hover:border-white/10 transition">
     Financiamento
@@ -180,7 +183,7 @@ text-transform: uppercase;
 
 <a href="https://wa.me/5541996977148?text=Ol%C3%A1%21+Vim+pelo+site+da+T-Power+Motos+e+quero+informa%C3%A7%C3%B5es."
    target="_blank" rel="noopener noreferrer"
-   class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#25D366] hover:bg-[#1ebe5d] text-black font-extrabold text-sm border border-white/10 transition">
+   data-track="whatsapp_click" data-moto-id="header" class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#25D366] hover:bg-[#1ebe5d] text-black font-extrabold text-sm border border-white/10 transition">
   <img src="whatsapp1.png" alt="WhatsApp" class="w-5 h-5" />
   <span class="hidden xl:inline">(41) 99697-7148</span>
   <span class="xl:hidden">Whats</span>
@@ -189,13 +192,13 @@ text-transform: uppercase;
 <!-- Versão mobile (discreta, só o botão do Whats) -->
 <a href="https://wa.me/5541996977148?text=Ol%C3%A1%21+Vim+pelo+site+da+T-Power+Motos+e+quero+informa%C3%A7%C3%B5es."
    target="_blank" rel="noopener noreferrer"
-   class="lg:hidden inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#25D366] hover:bg-[#1ebe5d] text-black font-extrabold text-sm border border-white/10 transition">
+   data-track="whatsapp_click" data-moto-id="header_mobile" class="lg:hidden inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#25D366] hover:bg-[#1ebe5d] text-black font-extrabold text-sm border border-white/10 transition">
   <img src="whatsapp1.png" alt="WhatsApp" class="w-5 h-5" /> Whats
 </a>
 
 <div class="flex-1"></div>
 
-<div class="relative w-full max-w-md">
+<div class="relative w-full max-w-md admin-reveal">
 <input id="searchInput"
 class="w-full pl-12 pr-16 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400 text-sm"
 placeholder="Buscar por modelo, marca, ano…"/>
@@ -462,6 +465,51 @@ realizar o sonho de cada cliente com as melhores condições.
 </section>
 
 
+<!-- DEPOIMENTOS / AVALIAÇÕES (Google) -->
+<section id="depoimentos" class="py-16 relative overflow-hidden border-t border-white/10">
+  <div class="absolute inset-0 opacity-60 pointer-events-none"
+    style="background:
+      radial-gradient(900px 420px at 20% 30%, rgba(56,189,248,.18), transparent 60%),
+      radial-gradient(800px 380px at 85% 20%, rgba(99,102,241,.12), transparent 55%);">
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md p-8 sm:p-10">
+      <div class="flex items-start justify-between gap-6 flex-col lg:flex-row">
+        <div class="max-w-2xl">
+          <h3 class="text-3xl sm:text-4xl font-extrabold tracking-wide">
+            AVALIAÇÕES NO <span class="text-sky-400">GOOGLE</span>
+          </h3>
+          <p class="mt-3 text-white/65 text-lg">
+            Quer ver o que os clientes dizem? Abrimos direto as avaliações da loja no Google Maps.
+          </p>
+
+          <ul class="mt-6 space-y-2 text-white/70">
+            <li class="flex items-center gap-3"><span class="text-sky-300">✓</span> Transparência: avaliações públicas e verificáveis</li>
+            <li class="flex items-center gap-3"><span class="text-sky-300">✓</span> Confira comentários, fotos e respostas da loja</li>
+            <li class="flex items-center gap-3"><span class="text-sky-300">✓</span> Abra em 1 clique (sem sair do site à força)</li>
+          </ul>
+        </div>
+
+        <div class="w-full lg:w-auto flex flex-col gap-3">
+          <a href="https://www.google.com/maps/place/T-Power+Motos/@-25.6471509,-49.310465,17z/data=!4m8!3m7!1s0x94dcffc13f144283:0x1798d348f5d8eb2d!8m2!3d-25.6471558!4d-49.3055941!9m1!1b1!16s%2Fg%2F11tt91p5sl!5m1!1e1?entry=ttu&g_ep=EgoyMDI2MDIxMS4wIKXMDSoASAFQAw%3D%3D"
+             target="_blank" rel="noopener noreferrer"
+             data-track="reviews_click"
+             class="w-full lg:w-72 inline-flex items-center justify-center gap-2 px-7 py-4 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-extrabold tracking-wide">
+            Ver avaliações no Google
+            <span aria-hidden="true">↗</span>
+          </a>
+
+          <p class="text-xs text-white/45">
+            Dica: se o Google pedir, permita abrir em nova aba para ver tudo certinho.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <!-- Modal detalhes -->
 <div id="detailModal" class="fixed inset-0 z-50 hidden">
 <div class="absolute inset-0 bg-black/70" id="detailBackdrop"></div>
@@ -531,7 +579,7 @@ Carregado do Supabase: <span id="detailLoadedFrom">—</span>
 <div class="absolute inset-0 bg-black/75" id="adminBackdrop"></div>
 
 <div class="absolute inset-0 flex items-center justify-center p-4">
-<div class="w-full max-w-3xl rounded-3xl border border-white/10 glass overflow-hidden tp-modal-shell">
+<div class="w-full max-w-3xl rounded-3xl border border-white/10 glass overflow-hidden">
 <div class="flex items-center justify-between p-4 border-b border-white/10">
 <div>
 <div class="text-xs text-white/50 mono">Painel administrativo</div>
@@ -540,8 +588,6 @@ Carregado do Supabase: <span id="detailLoadedFrom">—</span>
 <button id="adminClose" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15">✖</button>
 </div>
 
-
-<div class="tp-modal-scroll">
 <!-- Login -->
 <div id="adminLogin" class="p-6 sm:p-10">
 <div class="mx-auto max-w-md text-center">
@@ -842,6 +888,78 @@ window.__toastTimer = setTimeout(()=>box.classList.add("hidden"), 2600);
 function setStatus(t){
 const el = document.getElementById("statusText");
 if(el) el.textContent = t;
+}
+
+/* ====== Tracking (simples / opcional GA4) ======
+   - Se você tiver GA4, cole o script do Google Analytics e use gtag()
+   - Se não tiver, guardamos contadores no localStorage (sem enviar nada).
+*/
+function trackEvent(name, params = {}){
+  try{
+    // contador local (mínimo)
+    const key = "tp_count_" + name;
+    const n = Number(localStorage.getItem(key) || "0") + 1;
+    localStorage.setItem(key, String(n));
+
+    // log leve (remova se quiser)
+    // console.log("[track]", name, params);
+
+    // GA4 (se existir)
+    if(typeof window.gtag === "function"){
+      window.gtag("event", name, params);
+    }
+  }catch(e){}
+}
+
+/* ====== WhatsApp contextual por moto ====== */
+const WHATSAPP_NUMBER = "5541996977148";
+function buildWhatsappLink(motoId, d){
+  const name = (d?.name || motoId || "").toString().trim();
+  const year = (d?.year || "").toString().trim();
+  const price = (d?.price || "").toString().trim();
+  const parts = [];
+  if(name) parts.push(name);
+  if(year) parts.push(year);
+  const title = parts.join(" ");
+  const text = `Olá! Vim pelo site da T-Power Motos e tenho interesse na ${title}${price ? " - " + price : ""}. Pode me passar mais informações?`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+}
+
+/* ====== Hero dinâmico com fotos reais do estoque ====== */
+let __heroTimer = null;
+function startHeroRotation(){
+  const hero = document.getElementById("hero-bg");
+  if(!hero) return;
+
+  const urls = [];
+  try{
+    Object.keys(motoDataStorage || {}).forEach(id=>{
+      const item = motoDataStorage[id] || {};
+      if(item.thumbnail) urls.push(item.thumbnail);
+      (item.photos || []).forEach(u=>u && urls.push(u));
+    });
+  }catch(e){}
+
+  const uniq = Array.from(new Set(urls.filter(Boolean)));
+  if(uniq.length < 2) return;
+
+  let i = 0;
+  const setBg = (url)=>{
+    hero.style.opacity = "0";
+    window.setTimeout(()=>{
+      hero.style.backgroundImage =
+        `linear-gradient(rgba(2,6,23,0.75), rgba(2,6,23,0.85)), url('${url}')`;
+      hero.style.opacity = "1";
+    }, 350);
+  };
+
+  // inicia no segundo para não “piscar” no carregamento
+  i = 1;
+  if(__heroTimer) clearInterval(__heroTimer);
+  __heroTimer = setInterval(()=>{
+    setBg(uniq[i % uniq.length]);
+    i++;
+  }, 5000);
 }
 
 function updateClearSearchBtn(){
@@ -1146,40 +1264,58 @@ const d = motoDataStorage[id]?.moto_data || {};
 const thumb = motoDataStorage[id]?.thumbnail || motoDataStorage[id]?.photos?.[0] || "";
 const badge = (d.year && String(d.year) === "2024") ? "NOVO" : "DESTAQUE";
 
-const el = document.createElement("a");
-el.href = `moto.html?id=${encodeURIComponent(id)}`;
-el.className = "block text-left p-0 rounded-3xl overflow-hidden border border-white/10 card-gradient hover-glow w-full";
-el.innerHTML = `
-     <div class="relative">
-       <div class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-xs font-black tracking-wide
-                   ${badge==="NOVO" ? "bg-sky-500 text-black" : "bg-red-500 text-white"}">
-         ${badge}
-       </div>
-       <div class="h-56 bg-black/30 border-b border-white/10 flex items-center justify-center">
-         <img src="${thumb || "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80"}"
-              class="w-full h-full object-cover" alt="${d.name||id}"/>
-       </div>
-     </div>
+const detailsHref = `moto.html?id=${encodeURIComponent(id)}`;
+const waHref = buildWhatsappLink(id, d);
 
-     <div class="p-6">
-       <div class="flex items-center justify-between text-sm">
-         <div class="text-sky-300 font-semibold">${(d.brand||"—")}</div>
-         <div class="text-white/50 font-semibold">${(d.year||"—")}</div>
-       </div>
+const card = document.createElement("div");
+card.className = "block text-left p-0 rounded-3xl overflow-hidden border border-white/10 card-gradient hover-glow w-full";
 
-       <div class="mt-2 text-2xl font-extrabold tracking-wide">${d.name || id.toUpperCase()}</div>
+// Conteúdo principal (link para detalhes)
+card.innerHTML = `
+  <a href="${detailsHref}" data-track="moto_view" data-moto-id="${id}" class="block">
+    <div class="relative">
+      <div class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-xs font-black tracking-wide
+                  ${badge==="NOVO" ? "bg-sky-500 text-black" : "bg-red-500 text-white"}">
+        ${badge}
+      </div>
+      <div class="h-56 bg-black/30 border-b border-white/10 flex items-center justify-center">
+        <img src="${thumb || "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80"}"
+             class="w-full h-full object-cover" alt="${(d.name||id)}"/>
+      </div>
+    </div>
 
-       <div class="mt-2 text-white/65 text-sm leading-relaxed line-clamp-2">
-         ${d.description || ""}
-       </div>
+    <div class="p-6">
+      <div class="flex items-center justify-between text-sm">
+        <div class="text-sky-300 font-semibold">${(d.brand||"—")}</div>
+        <div class="text-white/50 font-semibold">${(d.year||"—")}</div>
+      </div>
 
-       <div class="mt-5">
-         <div class="text-xs text-white/40 font-semibold">A partir de</div>
-         <div class="mt-1 text-2xl font-extrabold text-sky-300">${d.price || "Consultar"}</div>
-       </div>
-     </div>
-   `;
-grid.appendChild(el);
+      <div class="mt-2 text-2xl font-extrabold tracking-wide">${d.name || id.toUpperCase()}</div>
+
+      <div class="mt-2 text-white/65 text-sm leading-relaxed line-clamp-2">
+        ${d.description || ""}
+      </div>
+
+      <div class="mt-5">
+        <div class="text-xs text-white/40 font-semibold">A partir de</div>
+        <div class="mt-1 text-2xl font-extrabold text-sky-300">${d.price || "Consultar"}</div>
+      </div>
+    </div>
+  </a>
+
+  <!-- CTA WhatsApp contextual -->
+  <div class="px-6 pb-6">
+    <a href="${waHref}"
+       target="_blank" rel="noopener noreferrer"
+       data-track="whatsapp_click" data-moto-id="${id}"
+       class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-[#25D366] hover:bg-[#1ebe5d] text-black font-extrabold text-sm border border-white/10 transition">
+      <img src="whatsapp1.png" alt="WhatsApp" class="w-5 h-5" />
+      Tenho interesse (WhatsApp)
+    </a>
+  </div>
+`;
+
+grid.appendChild(card);
 });
 }
 
@@ -1233,15 +1369,11 @@ function closeDetail(){ document.getElementById("detailModal").classList.add("hi
 
 /* ====== Admin ====== */
 function openAdmin(){
-  document.getElementById("adminModal").classList.remove("hidden");
-  document.body.style.overflow = "hidden";
-  // se já estiver logado, mostra conteúdo
-  syncAdminVisibility();
+document.getElementById("adminModal").classList.remove("hidden");
+// se já estiver logado, mostra conteúdo
+syncAdminVisibility();
 }
-function closeAdmin(){
-  document.getElementById("adminModal").classList.add("hidden");
-  document.body.style.overflow = "";
-}
+function closeAdmin(){ document.getElementById("adminModal").classList.add("hidden"); }
 
 function syncAdminVisibility(){
 document.getElementById("adminLogin").classList.toggle("hidden", isAdmin);
@@ -1541,8 +1673,10 @@ try{
 ensureSupabase();
 setStatus("carregando do Supabase…");
 await loadAllFromSupabase();
+populateFilterOptions();
 renderFeatured();
 renderGrid();
+startHeroRotation();
 // admin select se já estiver logado
 syncAdminVisibility();
 }catch(e){
@@ -1609,6 +1743,16 @@ if(__next) __next.onclick = ()=>{ currentPage = currentPage + 1; renderGrid(); w
 init();
 populateFilterOptions();
 wireFiltersUI();
+
+
+// Tracking delegado (funciona mesmo com re-render do grid)
+document.addEventListener("click", (e)=>{
+  const el = e.target.closest("[data-track]");
+  if(!el) return;
+  const name = el.getAttribute("data-track");
+  const motoId = el.getAttribute("data-moto-id") || "";
+  trackEvent(name, { moto_id: motoId });
+}, true);
 
 // FIX DEFENSIVO: impede que "moto.html" vire clique em página inteira.
 // Só permite navegar para moto.html quando o clique aconteceu dentro do grid (#motosGrid).
@@ -1792,6 +1936,37 @@ ENTRE EM <span class="text-sky-400">CONTATO</span>
 Estamos prontos para te ajudar a encontrar a moto perfeita
 </p>
 </div>
+<button id="clearFiltersBtn"
+              class="inline-flex items-center justify-center px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/15 text-white/80 hover:text-white font-semibold border border-white/10 transition">
+        Limpar
+      </button>
+    </div>
+
+    <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <select id="filterBrand" class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white">
+        <option value="" class="bg-black">Marca (todas)</option>
+      </select>
+
+      <select id="filterYear" class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white">
+        <option value="" class="bg-black">Ano (todos)</option>
+      </select>
+
+      <input id="filterModel" list="modelsDatalist" placeholder="Modelo (ex: CB 500F)"
+             class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/40"/>
+      <datalist id="modelsDatalist"></datalist>
+
+      <input id="filterMinPrice" placeholder="Preço mín (ex: 20000)"
+             class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/40"/>
+
+      <input id="filterMaxPrice" placeholder="Preço máx (ex: 50000)"
+             class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/40"/>
+    </div>
+
+    <p class="mt-3 text-white/40 text-xs">Dica: no preço, digite apenas números.</p>
+  </div>
+</div>
+
+
 <div class="grid lg:grid-cols-2 gap-10">
 <!-- FORM -->
 <div class="p-8 rounded-3xl bg-white/5 border border-white/10">
