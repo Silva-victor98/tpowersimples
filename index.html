@@ -179,6 +179,19 @@ text-transform: uppercase;
 <input id="searchInput"
 class="w-full pl-12 pr-16 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400 text-sm"
 placeholder="Buscar por modelo, marca, ano…"/>
+
+<button type="button" id="openFiltersBtn"
+        class="ml-2 hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 text-white/80 hover:text-white font-semibold transition">
+  <span class="text-base">⚙️</span>
+  Filtros
+</button>
+
+
+<button type="button" id="openFiltersBtnMobile"
+        class="ml-2 md:hidden inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 text-white/80 hover:text-white transition">
+  ⚙️
+</button>
+
 <div class="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">🔎</div>
 
 
@@ -890,13 +903,171 @@ document.getElementById("featuredDesc").textContent = d.description || "—";
 const img = motoDataStorage[first]?.thumbnail || (motoDataStorage[first]?.photos?.[0] || "");
 document.getElementById("featuredImg").src = img || "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80";
 }
+
+/* ====== Filtros (Drawer) ====== */
+const activeFilters = { brand:"", year:"", model:"", minPrice:"", maxPrice:"" };
+
+function parsePriceToNumber(v){
+  if(v==null) return NaN;
+  const s = String(v).replace(/\./g,"").replace(/,/g,".").replace(/[^\d.]/g,"");
+  // If it's like "35990" -> ok; if "35.990" became "35990" after dots removed.
+  const n = Number(s);
+  return Number.isFinite(n) ? n : NaN;
+}
+
+function matchesFilters(id){
+  const d = motoDataStorage[id]?.moto_data || {};
+  const brand = (d.brand || "").toString().trim().toLowerCase();
+  const year  = (d.year  || "").toString().trim().toLowerCase();
+  const name  = (d.name  || "").toString().trim().toLowerCase();
+
+  if(activeFilters.brand && brand !== activeFilters.brand) return false;
+  if(activeFilters.year  && year  !== activeFilters.year)  return false;
+
+  if(activeFilters.model){
+    const q = activeFilters.model.toLowerCase();
+    if(!name.includes(q)) return false;
+  }
+
+  const p = parsePriceToNumber(d.price);
+  const minP = parsePriceToNumber(activeFilters.minPrice);
+  const maxP = parsePriceToNumber(activeFilters.maxPrice);
+
+  // Se preço não existe ("Consultar"), não elimina a moto — só elimina se tiver filtro e preço for numérico
+  if(activeFilters.minPrice && Number.isFinite(minP) && Number.isFinite(p) && p < minP) return false;
+  if(activeFilters.maxPrice && Number.isFinite(maxP) && Number.isFinite(p) && p > maxP) return false;
+
+  return true;
+}
+
+function openFilters(){
+  const overlay = document.getElementById("filtersOverlay");
+  const drawer  = document.getElementById("filtersDrawer");
+  if(!overlay || !drawer) return;
+  overlay.classList.remove("hidden");
+  // force reflow
+  void drawer.offsetWidth;
+  drawer.classList.remove("translate-x-full");
+}
+function closeFilters(){
+  const overlay = document.getElementById("filtersOverlay");
+  const drawer  = document.getElementById("filtersDrawer");
+  if(!overlay || !drawer) return;
+  drawer.classList.add("translate-x-full");
+  setTimeout(()=>overlay.classList.add("hidden"), 250);
+}
+
+function populateFilterOptions(){
+  const brandSel = document.getElementById("filterBrand");
+  const yearSel  = document.getElementById("filterYear");
+  const modelsDL = document.getElementById("modelsDatalist");
+  if(!brandSel || !yearSel || !modelsDL) return;
+
+  const brands = new Set();
+  const years  = new Set();
+  const models = new Set();
+
+  getMotoIds().forEach(id=>{
+    const d = motoDataStorage[id]?.moto_data || {};
+    if(d.brand) brands.add(String(d.brand).trim());
+    if(d.year)  years.add(String(d.year).trim());
+    if(d.name)  models.add(String(d.name).trim());
+  });
+
+  // reset keeping first option
+  brandSel.querySelectorAll("option:not(:first-child)").forEach(o=>o.remove());
+  yearSel.querySelectorAll("option:not(:first-child)").forEach(o=>o.remove());
+  modelsDL.innerHTML = "";
+
+  [...brands].sort((a,b)=>a.localeCompare(b, "pt-BR")).forEach(b=>{
+    const o = document.createElement("option");
+    o.value = b;
+    o.textContent = b;
+    o.className = "bg-[#050B1A]";
+    brandSel.appendChild(o);
+  });
+
+  [...years].sort((a,b)=>Number(b)-Number(a)).forEach(y=>{
+    const o = document.createElement("option");
+    o.value = y;
+    o.textContent = y;
+    o.className = "bg-[#050B1A]";
+    yearSel.appendChild(o);
+  });
+
+  [...models].sort((a,b)=>a.localeCompare(b, "pt-BR")).slice(0, 200).forEach(m=>{
+    const o = document.createElement("option");
+    o.value = m;
+    modelsDL.appendChild(o);
+  });
+}
+
+function wireFiltersUI(){
+  const openBtn = document.getElementById("openFiltersBtn");
+  const openBtnM = document.getElementById("openFiltersBtnMobile");
+  const closeBtn = document.getElementById("closeFiltersBtn");
+  const overlay  = document.getElementById("filtersOverlay");
+
+  const brandSel = document.getElementById("filterBrand");
+  const yearSel  = document.getElementById("filterYear");
+  const modelInp = document.getElementById("filterModel");
+  const minInp   = document.getElementById("filterMinPrice");
+  const maxInp   = document.getElementById("filterMaxPrice");
+
+  const applyBtn = document.getElementById("applyFiltersBtn");
+  const clearBtn = document.getElementById("clearFiltersBtn");
+
+  if(openBtn) openBtn.addEventListener("click", openFilters);
+  if(openBtnM) openBtnM.addEventListener("click", openFilters);
+  if(closeBtn) closeBtn.addEventListener("click", closeFilters);
+  if(overlay) overlay.addEventListener("click", closeFilters);
+
+  const apply = ()=>{
+    activeFilters.brand = (brandSel?.value || "").trim().toLowerCase();
+    activeFilters.year  = (yearSel?.value  || "").trim().toLowerCase();
+    activeFilters.model = (modelInp?.value || "").trim();
+    activeFilters.minPrice = (minInp?.value || "").trim();
+    activeFilters.maxPrice = (maxInp?.value || "").trim();
+    currentPage = 1;
+    renderGrid();
+    closeFilters();
+  };
+
+  const clear = ()=>{
+    if(brandSel) brandSel.value = "";
+    if(yearSel)  yearSel.value  = "";
+    if(modelInp) modelInp.value = "";
+    if(minInp)   minInp.value   = "";
+    if(maxInp)   maxInp.value   = "";
+    activeFilters.brand = "";
+    activeFilters.year  = "";
+    activeFilters.model = "";
+    activeFilters.minPrice = "";
+    activeFilters.maxPrice = "";
+    currentPage = 1;
+    renderGrid();
+    closeFilters();
+  };
+
+  if(applyBtn) applyBtn.addEventListener("click", apply);
+  if(clearBtn) clearBtn.addEventListener("click", clear);
+
+  // Enter aplica
+  [modelInp, minInp, maxInp].forEach(el=>{
+    if(!el) return;
+    el.addEventListener("keydown", (e)=>{
+      if(e.key === "Enter"){ e.preventDefault(); apply(); }
+    });
+  });
+}
+
 function renderGrid(){
 const q = (document.getElementById("searchInput").value || "").trim().toLowerCase();
 const grid = document.getElementById("motosGrid");
 grid.innerHTML = "";
 
 // Lista filtrada
-const allIds = getMotoIds().filter(id=>matchesSearch(id,q));
+const allIds = getMotoIds().filter(id=>matchesSearch(id,q) && matchesFilters(id));
 document.getElementById("countText").textContent = allIds.length;
 
 // Paginação
@@ -1396,6 +1567,8 @@ const __next = document.getElementById("nextPageBtn");
 if(__prev) __prev.onclick = ()=>{ currentPage = Math.max(1, currentPage - 1); renderGrid(); window.scrollTo({top: document.getElementById("gridSection").offsetTop - 80, behavior: "smooth"}); };
 if(__next) __next.onclick = ()=>{ currentPage = currentPage + 1; renderGrid(); window.scrollTo({top: document.getElementById("gridSection").offsetTop - 80, behavior: "smooth"}); };
 init();
+populateFilterOptions();
+wireFiltersUI();
 
 // FIX DEFENSIVO: impede que "moto.html" vire clique em página inteira.
 // Só permite navegar para moto.html quando o clique aconteceu dentro do grid (#motosGrid).
@@ -1785,6 +1958,76 @@ if(subj) subj.value = `Contato pelo site - ${motoFinal}`;
   }, 6000);
 })();
 </script>
+
+
+<!-- Filters Drawer -->
+<div id="filtersOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] hidden"></div>
+
+<aside id="filtersDrawer"
+       class="fixed top-0 right-0 h-full w-full sm:w-[420px] z-[70] translate-x-full transition-transform duration-300">
+  <div class="h-full bg-[#050B1A]/95 border-l border-white/10 backdrop-blur-xl shadow-2xl">
+    <div class="px-6 py-5 border-b border-white/10 flex items-center justify-between">
+      <div>
+        <div class="text-white font-extrabold tracking-wide text-lg">Filtros</div>
+        <div class="text-white/50 text-sm">Refine sua busca sem poluir o layout</div>
+      </div>
+      <button id="closeFiltersBtn"
+              class="w-10 h-10 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 text-white/80 hover:text-white transition">
+        ✕
+      </button>
+    </div>
+
+    <div class="p-6 space-y-6 overflow-auto h-[calc(100%-76px)]">
+      <div class="space-y-2">
+        <label class="text-white/70 text-sm font-semibold">Marca</label>
+        <select id="filterBrand" class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white">
+          <option value="" class="bg-[#050B1A]">Todas</option>
+        </select>
+      </div>
+
+      <div class="space-y-2">
+        <label class="text-white/70 text-sm font-semibold">Ano</label>
+        <select id="filterYear" class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white">
+          <option value="" class="bg-[#050B1A]">Todos</option>
+        </select>
+      </div>
+
+      <div class="space-y-2">
+        <label class="text-white/70 text-sm font-semibold">Modelo</label>
+        <input id="filterModel" list="modelsDatalist" placeholder="Ex: CB 500F"
+               class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/40"/>
+        <datalist id="modelsDatalist"></datalist>
+      </div>
+
+      <div class="space-y-2">
+        <label class="text-white/70 text-sm font-semibold">Faixa de preço</label>
+        <div class="grid grid-cols-2 gap-4">
+          <input id="filterMinPrice" placeholder="Mín (ex: 20000)"
+                 class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/40"/>
+          <input id="filterMaxPrice" placeholder="Máx (ex: 50000)"
+                 class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/40"/>
+        </div>
+        <p class="text-white/40 text-xs">Dica: pode digitar só números (ex: 35000).</p>
+      </div>
+
+      <div class="flex gap-3 pt-2">
+        <button id="applyFiltersBtn"
+                class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-extrabold border border-white/10 transition">
+          Aplicar
+        </button>
+        <button id="clearFiltersBtn"
+                class="px-6 py-4 rounded-2xl bg-white/10 hover:bg-white/15 text-white/80 hover:text-white font-semibold border border-white/10 transition">
+          Limpar
+        </button>
+      </div>
+
+      <div class="glass rounded-3xl p-5 border border-white/10 bg-white/5">
+        <p class="text-white/80 font-semibold">✨ Fica limpo no layout</p>
+        <p class="text-white/55 text-sm mt-1">Os filtros só aparecem quando o cliente clicar no botão.</p>
+      </div>
+    </div>
+  </div>
+</aside>
 
 </body>
 </html>
