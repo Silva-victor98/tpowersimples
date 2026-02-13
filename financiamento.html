@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Financiamento | T-Power Motos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); }
+    .soft-shadow { box-shadow: 0 0 60px rgba(56,189,248,0.10); }
+    .input-glass { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); }
+    .input-glass:focus { outline: none; border-color: rgba(56,189,248,0.55); box-shadow: 0 0 0 4px rgba(56,189,248,0.12); }
+  </style>
+</head>
+<body class="bg-black text-white">
+  <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-black/30 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center gap-6">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="logo.png" alt="T-Power Motos" class="h-8 w-auto" onerror="this.style.display='none'"/>
+        <span class="text-sky-400 font-display text-xl tracking-wide">T-POWER MOTOS</span>
+      </a>
+      <div class="flex-1"></div>
+
+      <a href="index.html#gridSection"
+         class="hidden sm:inline-flex px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 text-white/80 hover:text-white border border-white/10 transition">
+        Estoque
+      </a>
+      <a href="index.html#contato"
+         class="hidden sm:inline-flex px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 text-white/80 hover:text-white border border-white/10 transition">
+        Contato
+      </a>
+
+      <a href="https://wa.me/5541996977148?text=Ol%C3%A1%21+Vim+pelo+site+da+T-Power+Motos+e+quero+informa%C3%A7%C3%B5es."
+         target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#25D366] hover:bg-[#1ebe5d] text-black font-extrabold text-sm border border-white/10 transition">
+        <img src="whatsapp1.png" alt="WhatsApp" class="w-5 h-5" />
+        <span class="hidden sm:inline">(41) 99697-7148</span>
+        <span class="sm:hidden">Whats</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+        <div>
+          <h1 class="font-display text-4xl sm:text-5xl tracking-wide">
+            Simulação de <span class="text-sky-400">Financiamento</span>
+          </h1>
+          <p class="text-white/70 mt-4 text-lg">
+            Preencha os dados abaixo e envie direto para a nossa equipe no WhatsApp.
+          </p>
+
+          <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="glass rounded-3xl p-5 soft-shadow">
+              <p class="text-white/80 font-semibold">✅ Envio imediato</p>
+              <p class="text-white/60 text-sm mt-1">Ao clicar em “Enviar”, abrimos o WhatsApp com a mensagem pronta.</p>
+            </div>
+            <div class="glass rounded-3xl p-5 soft-shadow">
+              <p class="text-white/80 font-semibold">🔒 Sem backend</p>
+              <p class="text-white/60 text-sm mt-1">Perfeito para começar agora. Depois dá pra integrar um sistema.</p>
+            </div>
+          </div>
+
+          <div class="mt-8 glass rounded-3xl p-6">
+            <p class="text-white/80 font-semibold mb-2">Importante</p>
+            <p class="text-white/60 text-sm">
+              Esta página é uma “pré-aprovação” / simulação. Se você quiser análise automática, aí entra integração.
+            </p>
+          </div>
+        </div>
+
+        <div class="glass rounded-3xl p-6 sm:p-8 soft-shadow">
+          <h2 class="font-display text-2xl tracking-wide mb-6">Preencha seus dados</h2>
+
+          <form id="finForm" class="space-y-6">
+            <div>
+              <p class="text-white/80 font-semibold mb-3">Dados do veículo</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <input name="veiculo" placeholder="Moto desejada (ex: CB 500F)"
+                       class="w-full px-4 py-3 rounded-2xl input-glass text-white placeholder:text-white/40" required />
+                <input name="valor" placeholder="Valor aproximado (ex: R$ 35.990)"
+                       class="w-full px-4 py-3 rounded-2xl input-glass text-white placeholder:text-white/40" />
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                <input name="entrada" placeholder="Entrada (se houver)"
+                       class="w-full px-4 py-3 rounded-2xl input-glass text-white placeholder:text-white/40" />
+                <input name="parcelas" placeholder="Parcelas desejadas (ex: 48x)"
+                       class="w-full px-4 py-3 rounded-2xl input-glass text-white placeholder:text-white/40" />
+              </div>
+            </div>
+
+            <div>
+              <p class="text-white/80 font-semibold mb-3">Dados pessoais</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <input name="nome" placeholder="Nome completo"
+                       class="w-full px-4 py-3 rounded-2xl input-glass text-white placeholder:text-white/40" required />
+                <input name="cpf" placeholder="CPF"
+                       class="w-full px-4 py-3 rounded-2xl input-glass text-white placeholder:text-white/40" required />
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                <input name="telefone" placeholder="Telefone / WhatsApp"
+                       class="w-full px-4 py-3 rounded-2xl input-glass text-white placeholder:text-white/40" required />
+                <input name="email" placeholder="E-mail (opcional)"
+                       class="w-full px-4 py-3 rounded-2xl input-glass text-white placeholder:text-white/40" />
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                <input name="cidade" placeholder="Cidade"
+                       class="w-full px-4 py-3 rounded-2xl input-glass text-white placeholder:text-white/40" />
+                <input name="estado" placeholder="UF" maxlength="2"
+                       class="w-full px-4 py-3 rounded-2xl input-glass text-white placeholder:text-white/40" />
+              </div>
+            </div>
+
+            <div>
+              <p class="text-white/80 font-semibold mb-3">Dados profissionais</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <select name="renda_tipo" class="w-full px-4 py-3 rounded-2xl input-glass text-white">
+                  <option value="" class="bg-black">Tipo de renda</option>
+                  <option value="CLT" class="bg-black">CLT</option>
+                  <option value="Autônomo" class="bg-black">Autônomo</option>
+                  <option value="MEI" class="bg-black">MEI</option>
+                  <option value="Empresário" class="bg-black">Empresário</option>
+                  <option value="Aposentado" class="bg-black">Aposentado</option>
+                </select>
+                <input name="renda" placeholder="Renda mensal (ex: R$ 4.500)"
+                       class="w-full px-4 py-3 rounded-2xl input-glass text-white placeholder:text-white/40" />
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                <input name="empresa" placeholder="Empresa (opcional)"
+                       class="w-full px-4 py-3 rounded-2xl input-glass text-white placeholder:text-white/40" />
+                <input name="tempo" placeholder="Tempo de trabalho (ex: 2 anos)"
+                       class="w-full px-4 py-3 rounded-2xl input-glass text-white placeholder:text-white/40" />
+              </div>
+            </div>
+
+            <div>
+              <p class="text-white/80 font-semibold mb-3">Observações</p>
+              <textarea name="obs" rows="4" placeholder="Detalhes importantes (opcional)"
+                        class="w-full px-4 py-3 rounded-2xl input-glass text-white placeholder:text-white/40"></textarea>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+              <button type="submit"
+                      class="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-[#25D366] hover:bg-[#1ebe5d] text-black font-extrabold text-base border border-white/10 transition">
+                <img src="whatsapp1.png" alt="WhatsApp" class="w-6 h-6" />
+                Enviar no WhatsApp
+              </button>
+
+              <a href="index.html#gridSection"
+                 class="inline-flex items-center justify-center px-6 py-4 rounded-2xl bg-white/10 hover:bg-white/15 text-white/80 hover:text-white font-semibold border border-white/10 transition">
+                Ver motos
+              </a>
+            </div>
+
+            <p class="text-white/45 text-xs">
+              Ao enviar, você autoriza o uso dessas informações pela equipe da T-Power Motos para retorno comercial.
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-white/10 py-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <p class="text-white/50 text-sm">© <span id="year"></span> T-Power Motos — Financiamento</p>
+      <a href="index.html" class="text-sky-400 hover:text-sky-300 text-sm font-semibold">Voltar para o site</a>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const WA_NUMBER = "5541996977148";
+    const form = document.getElementById("finForm");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const data = new FormData(form);
+      const get = (k) => (data.get(k) || "").toString().trim();
+
+      const msg =
+`*SIMULAÇÃO DE FINANCIAMENTO — T-POWER MOTOS*\n\n` +
+`*Moto:* ${get("veiculo")}\n` +
+`*Valor:* ${get("valor")}\n` +
+`*Entrada:* ${get("entrada")}\n` +
+`*Parcelas:* ${get("parcelas")}\n\n` +
+`*Nome:* ${get("nome")}\n` +
+`*CPF:* ${get("cpf")}\n` +
+`*Telefone:* ${get("telefone")}\n` +
+`*E-mail:* ${get("email")}\n` +
+`*Cidade/UF:* ${get("cidade")} - ${get("estado")}\n\n` +
+`*Renda (tipo):* ${get("renda_tipo")}\n` +
+`*Renda mensal:* ${get("renda")}\n` +
+`*Empresa:* ${get("empresa")}\n` +
+`*Tempo de trabalho:* ${get("tempo")}\n\n` +
+`*Obs:* ${get("obs")}`;
+
+      const url = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(msg);
+      window.open(url, "_blank", "noopener,noreferrer");
+    });
+  </script>
+</body>
+</html>
