@@ -17,7 +17,7 @@
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center gap-6">
       
 <a href="index.html" class="flex items-center">
-  <img src="Design sem nome (2).png" alt="T-Power Motos" class="h-8 w-auto" />
+  <img src="Design sem nome (2).png" alt="T-Power Motos" class="h-12 w-auto object-contain" />
 </a>
 
       <div class="flex-1"></div>
@@ -137,11 +137,13 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3">
-              <button type="submit"
-                      class="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-[#25D366] hover:bg-[#1ebe5d] text-black font-extrabold text-base border border-white/10 transition">
+              <a id="sendWhats"
+                 href="https://wa.me/5541996977148?text=Ol%C3%A1%21+Vim+pelo+site+da+T-Power+Motos+e+quero+informa%C3%A7%C3%B5es."
+                 target="_blank" rel="noopener noreferrer"
+                 class="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-[#25D366] hover:bg-[#1ebe5d] text-black font-extrabold text-base border border-white/10 transition">
                 <img src="whatsapp1.png" alt="WhatsApp" class="w-6 h-6" />
                 Enviar no WhatsApp
-              </button>
+              </a>
 
               <a href="index.html#gridSection"
                  class="inline-flex items-center justify-center px-6 py-4 rounded-2xl bg-white/10 hover:bg-white/15 text-white/80 hover:text-white font-semibold border border-white/10 transition">
@@ -165,37 +167,76 @@
     </div>
   </footer>
 
+  
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    const WA_NUMBER = "5541996977148";
+    const WA_NUMBER = "5541996977148"; // número da loja
+    const DEFAULT_WA_LINK = "https://wa.me/5541996977148?text=Ol%C3%A1%21+Vim+pelo+site+da+T-Power+Motos+e+quero+informa%C3%A7%C3%B5es.";
     const form = document.getElementById("finForm");
+    const sendBtn = document.getElementById("sendWhats");
+
+    function buildMessage() {
+      const data = new FormData(form);
+      const getVal = (k) => (data.get(k) || "").toString().trim();
+
+      return (
+        "*SIMULAÇÃO DE FINANCIAMENTO — T-POWER MOTOS*
+
+" +
+        "*Moto:* " + getVal("veiculo") + "
+" +
+        "*Valor:* " + getVal("valor") + "
+" +
+        "*Entrada:* " + getVal("entrada") + "
+" +
+        "*Parcelas:* " + getVal("parcelas") + "
+
+" +
+        "*Nome:* " + getVal("nome") + "
+" +
+        "*CPF:* " + getVal("cpf") + "
+" +
+        "*Telefone:* " + getVal("telefone") + "
+" +
+        "*E-mail:* " + getVal("email") + "
+" +
+        "*Cidade/UF:* " + getVal("cidade") + " - " + getVal("estado") + "
+
+" +
+        "*Renda (tipo):* " + getVal("renda_tipo") + "
+" +
+        "*Renda mensal:* " + getVal("renda") + "
+" +
+        "*Empresa:* " + getVal("empresa") + "
+" +
+        "*Tempo de trabalho:* " + getVal("tempo") + "
+
+" +
+        "*Obs:* " + getVal("obs")
+      );
+    }
+
+    function openWhatsWithForm() {
+      try {
+        const msg = buildMessage();
+        const url = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(msg);
+        window.open(url, "_blank", "noopener,noreferrer");
+      } catch (e) {
+        window.open(DEFAULT_WA_LINK, "_blank", "noopener,noreferrer");
+      }
+    }
+
+    sendBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      openWhatsWithForm();
+    });
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      const data = new FormData(form);
-      const get = (k) => (data.get(k) || "").toString().trim();
-
-      const msg =
-`*SIMULAÇÃO DE FINANCIAMENTO — T-POWER MOTOS*\n\n` +
-`*Moto:* ${get("veiculo")}\n` +
-`*Valor:* ${get("valor")}\n` +
-`*Entrada:* ${get("entrada")}\n` +
-`*Parcelas:* ${get("parcelas")}\n\n` +
-`*Nome:* ${get("nome")}\n` +
-`*CPF:* ${get("cpf")}\n` +
-`*Telefone:* ${get("telefone")}\n` +
-`*E-mail:* ${get("email")}\n` +
-`*Cidade/UF:* ${get("cidade")} - ${get("estado")}\n\n` +
-`*Renda (tipo):* ${get("renda_tipo")}\n` +
-`*Renda mensal:* ${get("renda")}\n` +
-`*Empresa:* ${get("empresa")}\n` +
-`*Tempo de trabalho:* ${get("tempo")}\n\n` +
-`*Obs:* ${get("obs")}`;
-
-      const url = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(msg);
-      window.open(url, "_blank", "noopener,noreferrer");
+      openWhatsWithForm();
     });
   </script>
+
 </body>
 </html>
