@@ -1419,6 +1419,144 @@ try { toast("Clique fora do card (bloqueado).", "warn"); } catch {}
 
 </script>
 <!-- CONTATO -->
+  <!-- Instagram Preview Section -->
+  <section id="instagram" class="py-20 px-4 sm:px-6 lg:px-8 border-t border-white/10">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-end justify-between gap-6 mb-10">
+        <div>
+          <h2 class="font-display text-3xl sm:text-4xl tracking-wide">
+            Siga-nos no <span class="text-sky-400">Instagram</span>
+          </h2>
+          <p class="text-white/60 mt-2">
+            Veja as últimas novidades da loja e anúncios recentes.
+          </p>
+        </div>
+
+        <!-- Troque o link abaixo pelo @ da sua loja -->
+        <a href="https://www.instagram.com/SEU_USUARIO_AQUI/"
+           target="_blank" rel="noopener noreferrer"
+           class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 text-white/80 hover:text-white border border-white/10 transition">
+          <span class="text-base">📸</span>
+          <span>@SEU_USUARIO_AQUI</span>
+        </a>
+      </div>
+
+      <!-- OPÇÃO 1 (RECOMENDADA): Widget/iframe de feed (auto últimos posts)
+           Cole aqui o iframe do seu widget (ex.: LightWidget / Elfsight / SnapWidget etc.)
+           Assim ele mostra automaticamente os últimos 6 (ou mais) posts.
+      -->
+      <div class="rounded-3xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm shadow-[0_0_60px_rgba(56,189,248,0.10)]">
+        <!--
+        <iframe
+          src="COLE_AQUI_O_LINK_DO_IFRAME_DO_WIDGET"
+          class="w-full"
+          style="height: 620px; border: 0; overflow: hidden;"
+          scrolling="no"
+          allowtransparency="true"
+          title="Instagram da T-Power Motos">
+        </iframe>
+        -->
+
+        <!-- OPÇÃO 2 (SEM WIDGET): grade manual de 6 posts (você só troca links/imagens) -->
+        <div class="p-6">
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            <!-- Post 1 -->
+            <a href="https://www.instagram.com/p/SEU_POST_1/"
+               target="_blank" rel="noopener noreferrer"
+               class="group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition">
+              <div class="aspect-square w-full flex items-center justify-center text-white/40 text-sm">
+                Cole a imagem do Post 1
+              </div>
+              <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-black/40"></div>
+              <div class="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition text-sm text-white font-semibold">
+                Ver no Instagram
+              </div>
+            </a>
+
+            <!-- Post 2 -->
+            <a href="https://www.instagram.com/p/SEU_POST_2/"
+               target="_blank" rel="noopener noreferrer"
+               class="group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition">
+              <div class="aspect-square w-full flex items-center justify-center text-white/40 text-sm">
+                Cole a imagem do Post 2
+              </div>
+              <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-black/40"></div>
+              <div class="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition text-sm text-white font-semibold">
+                Ver no Instagram
+              </div>
+            </a>
+
+            <!-- Post 3 -->
+            <a href="https://www.instagram.com/p/SEU_POST_3/"
+               target="_blank" rel="noopener noreferrer"
+               class="group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition">
+              <div class="aspect-square w-full flex items-center justify-center text-white/40 text-sm">
+                Cole a imagem do Post 3
+              </div>
+              <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-black/40"></div>
+              <div class="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition text-sm text-white font-semibold">
+                Ver no Instagram
+              </div>
+            </a>
+
+            <!-- Post 4 -->
+            <a href="https://www.instagram.com/p/SEU_POST_4/"
+               target="_blank" rel="noopener noreferrer"
+               class="group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition">
+              <div class="aspect-square w-full flex items-center justify-center text-white/40 text-sm">
+                Cole a imagem do Post 4
+              </div>
+              <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-black/40"></div>
+              <div class="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition text-sm text-white font-semibold">
+                Ver no Instagram
+              </div>
+            </a>
+
+            <!-- Post 5 -->
+            <a href="https://www.instagram.com/p/SEU_POST_5/"
+               target="_blank" rel="noopener noreferrer"
+               class="group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition">
+              <div class="aspect-square w-full flex items-center justify-center text-white/40 text-sm">
+                Cole a imagem do Post 5
+              </div>
+              <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-black/40"></div>
+              <div class="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition text-sm text-white font-semibold">
+                Ver no Instagram
+              </div>
+            </a>
+
+            <!-- Post 6 -->
+            <a href="https://www.instagram.com/p/SEU_POST_6/"
+               target="_blank" rel="noopener noreferrer"
+               class="group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition">
+              <div class="aspect-square w-full flex items-center justify-center text-white/40 text-sm">
+                Cole a imagem do Post 6
+              </div>
+              <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-black/40"></div>
+              <div class="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition text-sm text-white font-semibold">
+                Ver no Instagram
+              </div>
+            </a>
+          </div>
+
+          <div class="mt-6 flex items-center justify-between gap-4">
+            <p class="text-white/50 text-sm">
+              Quer que atualize automaticamente? Cole o iframe do widget no bloco acima e apague esta grade manual.
+            </p>
+
+            <a href="https://www.instagram.com/SEU_USUARIO_AQUI/"
+               target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-extrabold text-sm border border-white/10 transition">
+              <span>📸</span>
+              Ver Instagram
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
 <section id="contato" class="py-24 relative overflow-hidden">
 <div class="absolute inset-0 opacity-60 pointer-events-none"
 style="background:
