@@ -179,19 +179,6 @@ text-transform: uppercase;
 <input id="searchInput"
 class="w-full pl-12 pr-16 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400 text-sm"
 placeholder="Buscar por modelo, marca, ano…"/>
-
-<button type="button" id="openFiltersBtn"
-        class="ml-2 hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 text-white/80 hover:text-white font-semibold transition">
-  <span class="text-base">⚙️</span>
-  Filtros
-</button>
-
-
-<button type="button" id="openFiltersBtnMobile"
-        class="ml-2 md:hidden inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 text-white/80 hover:text-white transition">
-  ⚙️
-</button>
-
 <div class="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">🔎</div>
 
 
@@ -287,6 +274,49 @@ style="background: radial-gradient(900px 400px at 20% 20%, rgba(56,189,248,.18),
 
 <!-- Grid -->
 <section id="gridSection" class="py-8">
+
+<!-- Inline Filters (above grid) -->
+<div id="inlineFilters" class="mt-8 mb-10">
+  <div class="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 sm:p-6 shadow-[0_0_60px_rgba(56,189,248,0.10)]">
+    <div class="flex items-center justify-between gap-4 flex-wrap">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center">⚙️</div>
+        <div>
+          <p class="text-white font-extrabold tracking-wide">Filtros</p>
+          <p class="text-white/50 text-sm">Refine sua busca rapidamente</p>
+        </div>
+      </div>
+
+      <button id="clearFiltersBtn"
+              class="inline-flex items-center justify-center px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/15 text-white/80 hover:text-white font-semibold border border-white/10 transition">
+        Limpar
+      </button>
+    </div>
+
+    <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <select id="filterBrand" class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white">
+        <option value="" class="bg-black">Marca (todas)</option>
+      </select>
+
+      <select id="filterYear" class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white">
+        <option value="" class="bg-black">Ano (todos)</option>
+      </select>
+
+      <input id="filterModel" list="modelsDatalist" placeholder="Modelo (ex: CB 500F)"
+             class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/40"/>
+      <datalist id="modelsDatalist"></datalist>
+
+      <input id="filterMinPrice" placeholder="Preço mín (ex: 20000)"
+             class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/40"/>
+
+      <input id="filterMaxPrice" placeholder="Preço máx (ex: 50000)"
+             class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/40"/>
+    </div>
+
+    <p class="mt-3 text-white/40 text-xs">Dica: no preço, digite apenas números.</p>
+  </div>
+</div>
+
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 <div class="text-center mb-10">
 <h2 class="text-4xl sm:text-5xl font-extrabold tracking-wide">
@@ -904,13 +934,12 @@ const img = motoDataStorage[first]?.thumbnail || (motoDataStorage[first]?.photos
 document.getElementById("featuredImg").src = img || "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80";
 }
 
-/* ====== Filtros (Drawer) ====== */
+/* ====== Filtros (Inline acima do grid) ====== */
 const activeFilters = { brand:"", year:"", model:"", minPrice:"", maxPrice:"" };
 
 function parsePriceToNumber(v){
   if(v==null) return NaN;
   const s = String(v).replace(/\./g,"").replace(/,/g,".").replace(/[^\d.]/g,"");
-  // If it's like "35990" -> ok; if "35.990" became "35990" after dots removed.
   const n = Number(s);
   return Number.isFinite(n) ? n : NaN;
 }
@@ -933,28 +962,10 @@ function matchesFilters(id){
   const minP = parsePriceToNumber(activeFilters.minPrice);
   const maxP = parsePriceToNumber(activeFilters.maxPrice);
 
-  // Se preço não existe ("Consultar"), não elimina a moto — só elimina se tiver filtro e preço for numérico
   if(activeFilters.minPrice && Number.isFinite(minP) && Number.isFinite(p) && p < minP) return false;
   if(activeFilters.maxPrice && Number.isFinite(maxP) && Number.isFinite(p) && p > maxP) return false;
 
   return true;
-}
-
-function openFilters(){
-  const overlay = document.getElementById("filtersOverlay");
-  const drawer  = document.getElementById("filtersDrawer");
-  if(!overlay || !drawer) return;
-  overlay.classList.remove("hidden");
-  // force reflow
-  void drawer.offsetWidth;
-  drawer.classList.remove("translate-x-full");
-}
-function closeFilters(){
-  const overlay = document.getElementById("filtersOverlay");
-  const drawer  = document.getElementById("filtersDrawer");
-  if(!overlay || !drawer) return;
-  drawer.classList.add("translate-x-full");
-  setTimeout(()=>overlay.classList.add("hidden"), 250);
 }
 
 function populateFilterOptions(){
@@ -974,7 +985,6 @@ function populateFilterOptions(){
     if(d.name)  models.add(String(d.name).trim());
   });
 
-  // reset keeping first option
   brandSel.querySelectorAll("option:not(:first-child)").forEach(o=>o.remove());
   yearSel.querySelectorAll("option:not(:first-child)").forEach(o=>o.remove());
   modelsDL.innerHTML = "";
@@ -983,7 +993,7 @@ function populateFilterOptions(){
     const o = document.createElement("option");
     o.value = b;
     o.textContent = b;
-    o.className = "bg-[#050B1A]";
+    o.className = "bg-black";
     brandSel.appendChild(o);
   });
 
@@ -991,7 +1001,7 @@ function populateFilterOptions(){
     const o = document.createElement("option");
     o.value = y;
     o.textContent = y;
-    o.className = "bg-[#050B1A]";
+    o.className = "bg-black";
     yearSel.appendChild(o);
   });
 
@@ -1002,61 +1012,70 @@ function populateFilterOptions(){
   });
 }
 
-function wireFiltersUI(){
-  const openBtn = document.getElementById("openFiltersBtn");
-  const openBtnM = document.getElementById("openFiltersBtnMobile");
-  const closeBtn = document.getElementById("closeFiltersBtn");
-  const overlay  = document.getElementById("filtersOverlay");
-
+function applyFiltersFromUI(){
   const brandSel = document.getElementById("filterBrand");
   const yearSel  = document.getElementById("filterYear");
   const modelInp = document.getElementById("filterModel");
   const minInp   = document.getElementById("filterMinPrice");
   const maxInp   = document.getElementById("filterMaxPrice");
 
-  const applyBtn = document.getElementById("applyFiltersBtn");
+  activeFilters.brand = (brandSel?.value || "").trim().toLowerCase();
+  activeFilters.year  = (yearSel?.value  || "").trim().toLowerCase();
+  activeFilters.model = (modelInp?.value || "").trim();
+  activeFilters.minPrice = (minInp?.value || "").trim();
+  activeFilters.maxPrice = (maxInp?.value || "").trim();
+
+  currentPage = 1;
+  renderGrid();
+}
+
+function clearFilters(){
+  const brandSel = document.getElementById("filterBrand");
+  const yearSel  = document.getElementById("filterYear");
+  const modelInp = document.getElementById("filterModel");
+  const minInp   = document.getElementById("filterMinPrice");
+  const maxInp   = document.getElementById("filterMaxPrice");
+
+  if(brandSel) brandSel.value = "";
+  if(yearSel)  yearSel.value  = "";
+  if(modelInp) modelInp.value = "";
+  if(minInp)   minInp.value   = "";
+  if(maxInp)   maxInp.value   = "";
+
+  activeFilters.brand = "";
+  activeFilters.year  = "";
+  activeFilters.model = "";
+  activeFilters.minPrice = "";
+  activeFilters.maxPrice = "";
+
+  currentPage = 1;
+  renderGrid();
+}
+
+function wireFiltersUI(){
+  const brandSel = document.getElementById("filterBrand");
+  const yearSel  = document.getElementById("filterYear");
+  const modelInp = document.getElementById("filterModel");
+  const minInp   = document.getElementById("filterMinPrice");
+  const maxInp   = document.getElementById("filterMaxPrice");
   const clearBtn = document.getElementById("clearFiltersBtn");
 
-  if(openBtn) openBtn.addEventListener("click", openFilters);
-  if(openBtnM) openBtnM.addEventListener("click", openFilters);
-  if(closeBtn) closeBtn.addEventListener("click", closeFilters);
-  if(overlay) overlay.addEventListener("click", closeFilters);
+  [brandSel, yearSel].forEach(el=> el && el.addEventListener("change", applyFiltersFromUI));
 
-  const apply = ()=>{
-    activeFilters.brand = (brandSel?.value || "").trim().toLowerCase();
-    activeFilters.year  = (yearSel?.value  || "").trim().toLowerCase();
-    activeFilters.model = (modelInp?.value || "").trim();
-    activeFilters.minPrice = (minInp?.value || "").trim();
-    activeFilters.maxPrice = (maxInp?.value || "").trim();
-    currentPage = 1;
-    renderGrid();
-    closeFilters();
-  };
-
-  const clear = ()=>{
-    if(brandSel) brandSel.value = "";
-    if(yearSel)  yearSel.value  = "";
-    if(modelInp) modelInp.value = "";
-    if(minInp)   minInp.value   = "";
-    if(maxInp)   maxInp.value   = "";
-    activeFilters.brand = "";
-    activeFilters.year  = "";
-    activeFilters.model = "";
-    activeFilters.minPrice = "";
-    activeFilters.maxPrice = "";
-    currentPage = 1;
-    renderGrid();
-    closeFilters();
-  };
-
-  if(applyBtn) applyBtn.addEventListener("click", apply);
-  if(clearBtn) clearBtn.addEventListener("click", clear);
-
-  // Enter aplica
   [modelInp, minInp, maxInp].forEach(el=>{
     if(!el) return;
+    el.addEventListener("input", ()=>{
+      window.clearTimeout(el._t);
+      el._t = window.setTimeout(applyFiltersFromUI, 250);
+    });
     el.addEventListener("keydown", (e)=>{
-      if(e.key === "Enter"){ e.preventDefault(); apply(); }
+      if(e.key === "Enter"){ e.preventDefault(); applyFiltersFromUI(); }
+    });
+  });
+
+  if(clearBtn) clearBtn.addEventListener("click", clearFilters);
+}
+
     });
   });
 }
@@ -1958,76 +1977,5 @@ if(subj) subj.value = `Contato pelo site - ${motoFinal}`;
   }, 6000);
 })();
 </script>
-
-
-<!-- Filters Drawer -->
-<div id="filtersOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] hidden"></div>
-
-<aside id="filtersDrawer"
-       class="fixed top-0 right-0 h-full w-full sm:w-[420px] z-[70] translate-x-full transition-transform duration-300">
-  <div class="h-full bg-[#050B1A]/95 border-l border-white/10 backdrop-blur-xl shadow-2xl">
-    <div class="px-6 py-5 border-b border-white/10 flex items-center justify-between">
-      <div>
-        <div class="text-white font-extrabold tracking-wide text-lg">Filtros</div>
-        <div class="text-white/50 text-sm">Refine sua busca sem poluir o layout</div>
-      </div>
-      <button id="closeFiltersBtn"
-              class="w-10 h-10 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 text-white/80 hover:text-white transition">
-        ✕
-      </button>
-    </div>
-
-    <div class="p-6 space-y-6 overflow-auto h-[calc(100%-76px)]">
-      <div class="space-y-2">
-        <label class="text-white/70 text-sm font-semibold">Marca</label>
-        <select id="filterBrand" class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white">
-          <option value="" class="bg-[#050B1A]">Todas</option>
-        </select>
-      </div>
-
-      <div class="space-y-2">
-        <label class="text-white/70 text-sm font-semibold">Ano</label>
-        <select id="filterYear" class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white">
-          <option value="" class="bg-[#050B1A]">Todos</option>
-        </select>
-      </div>
-
-      <div class="space-y-2">
-        <label class="text-white/70 text-sm font-semibold">Modelo</label>
-        <input id="filterModel" list="modelsDatalist" placeholder="Ex: CB 500F"
-               class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/40"/>
-        <datalist id="modelsDatalist"></datalist>
-      </div>
-
-      <div class="space-y-2">
-        <label class="text-white/70 text-sm font-semibold">Faixa de preço</label>
-        <div class="grid grid-cols-2 gap-4">
-          <input id="filterMinPrice" placeholder="Mín (ex: 20000)"
-                 class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/40"/>
-          <input id="filterMaxPrice" placeholder="Máx (ex: 50000)"
-                 class="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/40"/>
-        </div>
-        <p class="text-white/40 text-xs">Dica: pode digitar só números (ex: 35000).</p>
-      </div>
-
-      <div class="flex gap-3 pt-2">
-        <button id="applyFiltersBtn"
-                class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-extrabold border border-white/10 transition">
-          Aplicar
-        </button>
-        <button id="clearFiltersBtn"
-                class="px-6 py-4 rounded-2xl bg-white/10 hover:bg-white/15 text-white/80 hover:text-white font-semibold border border-white/10 transition">
-          Limpar
-        </button>
-      </div>
-
-      <div class="glass rounded-3xl p-5 border border-white/10 bg-white/5">
-        <p class="text-white/80 font-semibold">✨ Fica limpo no layout</p>
-        <p class="text-white/55 text-sm mt-1">Os filtros só aparecem quando o cliente clicar no botão.</p>
-      </div>
-    </div>
-  </div>
-</aside>
-
 </body>
 </html>
