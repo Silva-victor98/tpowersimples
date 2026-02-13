@@ -124,6 +124,26 @@ letter-spacing: .10em;
 text-transform: uppercase;
 }
 
+
+/* ===== Modal (Admin) - melhoria de responsividade/scroll ===== */
+.tp-modal-shell{ max-height: 90vh; }
+.tp-modal-scroll{
+  max-height: calc(90vh - 72px); /* desconta header do modal */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 12px;
+}
+/* Em telas baixas, garante mais espaço útil */
+@media (max-height: 700px){
+  .tp-modal-shell{ max-height: 94vh; }
+  .tp-modal-scroll{ max-height: calc(94vh - 64px); }
+}
+/* Evita que inputs “grudem” nas bordas em mobile */
+@media (max-width: 640px){
+  .tp-modal-scroll{ padding-left: 4px; padding-right: 4px; }
+}
+
 </style>
 </head>
 
@@ -511,7 +531,7 @@ Carregado do Supabase: <span id="detailLoadedFrom">—</span>
 <div class="absolute inset-0 bg-black/75" id="adminBackdrop"></div>
 
 <div class="absolute inset-0 flex items-center justify-center p-4">
-<div class="w-full max-w-3xl rounded-3xl border border-white/10 glass overflow-hidden">
+<div class="w-full max-w-3xl rounded-3xl border border-white/10 glass overflow-hidden tp-modal-shell">
 <div class="flex items-center justify-between p-4 border-b border-white/10">
 <div>
 <div class="text-xs text-white/50 mono">Painel administrativo</div>
@@ -520,6 +540,8 @@ Carregado do Supabase: <span id="detailLoadedFrom">—</span>
 <button id="adminClose" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15">✖</button>
 </div>
 
+
+<div class="tp-modal-scroll">
 <!-- Login -->
 <div id="adminLogin" class="p-6 sm:p-10">
 <div class="mx-auto max-w-md text-center">
@@ -1211,11 +1233,15 @@ function closeDetail(){ document.getElementById("detailModal").classList.add("hi
 
 /* ====== Admin ====== */
 function openAdmin(){
-document.getElementById("adminModal").classList.remove("hidden");
-// se já estiver logado, mostra conteúdo
-syncAdminVisibility();
+  document.getElementById("adminModal").classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+  // se já estiver logado, mostra conteúdo
+  syncAdminVisibility();
 }
-function closeAdmin(){ document.getElementById("adminModal").classList.add("hidden"); }
+function closeAdmin(){
+  document.getElementById("adminModal").classList.add("hidden");
+  document.body.style.overflow = "";
+}
 
 function syncAdminVisibility(){
 document.getElementById("adminLogin").classList.toggle("hidden", isAdmin);
