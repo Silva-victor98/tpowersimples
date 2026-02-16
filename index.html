@@ -130,84 +130,100 @@ text-transform: uppercase;
 <body class="min-h-screen text-white tp-bg font-body">
 <!-- Header -->
 <header class="sticky top-0 z-40 border-b border-white/10 glass">
-<div class="w-full max-w-none mx-0 px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-4">
-<div class="flex items-center">
-  <a href="./" aria-label="Voltar para a página inicial" class="block">
-    <img src="https://i.imgur.com/FyCqY2d.png" alt="T-Power Motos" class="h-16 sm:h-20 w-auto object-contain" />
-  </a>
-</div>
+  <div class="w-full max-w-none mx-0 px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4">
 
-<!-- CHAMADAS (lado esquerdo, mantendo o visual) -->
-<nav class="hidden lg:flex items-center gap-2">
-  <a href="#gridSection"
-     class="px-3 py-2 rounded-2xl text-sm text-white/70 hover:text-white hover:bg-white/10 border border-transparent hover:border-white/10 transition">
-    Estoque
-  </a>
+      <!-- Logo + navegação desktop -->
+      <div class="flex items-center gap-3">
+        <a href="./" aria-label="Voltar para a página inicial" class="block">
+          <img src="https://i.imgur.com/FyCqY2d.png" alt="T-Power Motos" class="h-14 sm:h-16 lg:h-20 w-auto object-contain" />
+        </a>
 
-  <a href="#contato"
-     class="px-3 py-2 rounded-2xl text-sm text-white/70 hover:text-white hover:bg-white/10 border border-transparent hover:border-white/10 transition">
-    Contato
-  </a>
+        <nav class="hidden lg:flex items-center gap-2 ml-2">
+          <a href="#gridSection"
+             class="px-3 py-2 rounded-2xl text-sm text-white/70 hover:text-white hover:bg-white/10 border border-transparent hover:border-white/10 transition">
+            Estoque
+          </a>
 
-  <a href="financiamento.html"
-     class="px-3 py-2 rounded-2xl text-sm text-white/70 hover:text-white hover:bg-white/10 border border-transparent hover:border-white/10 transition">
-    Financiamento
-  </a>
+          <a href="#contato"
+             class="px-3 py-2 rounded-2xl text-sm text-white/70 hover:text-white hover:bg-white/10 border border-transparent hover:border-white/10 transition">
+            Contato
+          </a>
 
+          <a href="financiamento.html"
+             class="px-3 py-2 rounded-2xl text-sm text-white/70 hover:text-white hover:bg-white/10 border border-transparent hover:border-white/10 transition">
+            Financiamento
+          </a>
 
-<a href="https://www.google.com/maps/place/T-Power+Motos/@-25.6471509,-49.310465,17z/data=!4m8!3m7!1s0x94dcffc13f144283:0x1798d348f5d8eb2d!8m2!3d-25.6471558!4d-49.3055941!9m1!1b1!16s%2Fg%2F11tt91p5sl!5m1!1e1?entry=ttu&g_ep=EgoyMDI2MDIxMS4wIKXMDSoASAFQAw%3D%3D"
-   target="_blank"
-   rel="noopener"
-   class="px-4 py-2 rounded-full
-          border border-transparent hover:border-white/20
-          bg-transparent hover:bg-white/10
-          text-white/80 hover:text-white
-          text-sm font-semibold
-          transition-all duration-300">
-  Depoimentos
-</a>
-</nav>
+          <a href="https://www.google.com/maps/place/T-Power+Motos/@-25.6471509,-49.310465,17z/data=!4m8!3m7!1s0x94dcffc13f144283:0x1798d348f5d8eb2d!8m2!3d-25.6471558!4d-49.3055941!9m1!1b1!16s%2Fg%2F11tt91p5sl!5m1!1e1?entry=ttu&g_ep=EgoyMDI2MDIxMS4wIKXMDSoASAFQAw%3D%3D"
+             target="_blank"
+             rel="noopener"
+             class="px-4 py-2 rounded-full bg-transparent hover:bg-white/10 border border-transparent hover:border-white/20 text-white/80 hover:text-white text-sm font-semibold transition-all duration-300">
+            Depoimentos
+          </a>
+        </nav>
 
+        <!-- Ações mobile (Whats + Menu) -->
+        <div class="ml-auto flex items-center gap-2 lg:hidden">
+          <a href="https://wa.me/5541996977148?text=Ol%C3%A1%21+Vim+pelo+site+da+T-Power+Motos+e+quero+informa%C3%A7%C3%B5es."
+             target="_blank" rel="noopener noreferrer"
+             class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#25D366] hover:bg-[#1ebe5d] text-black font-extrabold text-sm border border-white/10 transition">
+            <img src="whatsapp1.png" alt="WhatsApp" class="w-5 h-5" /> Whats
+          </a>
 
+          <details class="relative">
+            <summary class="list-none cursor-pointer select-none px-3 py-2 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-white/80 transition">
+              ☰
+            </summary>
+            <div class="absolute right-0 mt-2 w-56 rounded-2xl border border-white/10 bg-slate-950/90 backdrop-blur-xl p-2 shadow-xl">
+              <a href="#gridSection" class="block px-3 py-2 rounded-xl text-sm text-white/80 hover:bg-white/10">Estoque</a>
+              <a href="#contato" class="block px-3 py-2 rounded-xl text-sm text-white/80 hover:bg-white/10">Contato</a>
+              <a href="financiamento.html" class="block px-3 py-2 rounded-xl text-sm text-white/80 hover:bg-white/10">Financiamento</a>
+              <a href="https://www.google.com/maps/place/T-Power+Motos/@-25.6471509,-49.310465,17z/data=!4m8!3m7!1s0x94dcffc13f144283:0x1798d348f5d8eb2d!8m2!3d-25.6471558!4d-49.3055941!9m1!1b1!16s%2Fg%2F11tt91p5sl!5m1!1e1?entry=ttu&g_ep=EgoyMDI2MDIxMS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener" class="block px-3 py-2 rounded-xl text-sm text-white/80 hover:bg-white/10">Depoimentos</a>
+            </div>
+          </details>
+        </div>
+      </div>
 
-<a href="https://wa.me/5541996977148?text=Ol%C3%A1%21+Vim+pelo+site+da+T-Power+Motos+e+quero+informa%C3%A7%C3%B5es."
-   target="_blank" rel="noopener noreferrer"
-   class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#25D366] hover:bg-[#1ebe5d] text-black font-extrabold text-sm border border-white/10 transition">
-  <img src="whatsapp1.png" alt="WhatsApp" class="w-5 h-5" />
-  <span class="hidden xl:inline">(41) 99697-7148</span>
-  <span class="xl:hidden">Whats</span>
-</a>
+      <!-- Busca (full no mobile, alinhada à direita no desktop) -->
+      <div class="w-full lg:w-[420px] lg:ml-auto">
+        <div class="relative w-full group">
+          <input id="searchInput"
+            class="w-full pl-12 pr-16 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400 text-sm"
+            placeholder="Buscar por modelo, marca, ano…" />
 
-<!-- Versão mobile (discreta, só o botão do Whats) -->
-<a href="https://wa.me/5541996977148?text=Ol%C3%A1%21+Vim+pelo+site+da+T-Power+Motos+e+quero+informa%C3%A7%C3%B5es."
-   target="_blank" rel="noopener noreferrer"
-   class="lg:hidden inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#25D366] hover:bg-[#1ebe5d] text-black font-extrabold text-sm border border-white/10 transition">
-  <img src="whatsapp1.png" alt="WhatsApp" class="w-5 h-5" /> Whats
-</a>
+          <div class="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">🔎</div>
 
-<div class="flex-1"></div>
+          <!-- Limpar busca (aparece quando tem texto; e só fica visível no hover do campo) -->
+          <button id="clearSearchBtn"
+            type="button"
+            class="absolute right-12 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/90 transition hidden opacity-0 group-hover:opacity-100"
+            title="Limpar busca"
+            aria-label="Limpar busca">✕</button>
 
-<div class="relative w-full max-w-md group">
-<input id="searchInput"
-class="w-full pl-12 pr-16 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400 text-sm"
-placeholder="Buscar por modelo, marca, ano…"/>
-<div class="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">🔎</div>
+          <!-- Botão admin discreto (desktop apenas) -->
+          <button id="adminBtn"
+            class="hidden lg:inline-flex absolute right-3 top-1/2 -translate-y-1/2
+                   opacity-0 group-hover:opacity-100
+                   text-white/40 hover:text-white/90
+                   transition-all duration-300
+                   pointer-events-none group-hover:pointer-events-auto"
+            title="Painel administrativo"
+            aria-label="Painel administrativo">🔒</button>
+        </div>
+      </div>
 
+      <!-- Whats desktop -->
+      <a href="https://wa.me/5541996977148?text=Ol%C3%A1%21+Vim+pelo+site+da+T-Power+Motos+e+quero+informa%C3%A7%C3%B5es."
+         target="_blank" rel="noopener noreferrer"
+         class="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#25D366] hover:bg-[#1ebe5d] text-black font-extrabold text-sm border border-white/10 transition">
+        <img src="whatsapp1.png" alt="WhatsApp" class="w-5 h-5" />
+        <span class="hidden xl:inline">(41) 99697-7148</span>
+        <span class="xl:hidden">Whats</span>
+      </a>
 
-<!-- Limpar busca -->
-<button id="adminBtn"
-  class="absolute right-3 top-1/2 -translate-y-1/2
-         opacity-0 group-hover:opacity-100
-         text-white/40 hover:text-white/90
-         transition-all duration-300
-         pointer-events-none group-hover:pointer-events-auto"
-  title="Painel administrativo"
-  aria-label="Painel administrativo">
-  🔒
-</button>
-
-</div>
-</div>
+    </div>
+  </div>
 </header>
 
 <!-- HERO (visual novo, backend intacto) -->
@@ -243,11 +259,11 @@ EXPLORAR MOTOS
 <div class="relative border-t border-white/10">
 <div class="w-full max-w-none mx-0 px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
 <div>
-<div class="text-3xl font-extrabold text-sky-400">1000+</div>
+<div class="text-3xl font-extrabold text-sky-400">500+</div>
 <div class="text-sm text-white/60 mt-1">Motos Vendidas</div>
 </div>
 <div>
-<div class="text-3xl font-extrabold text-sky-400">30+</div>
+<div class="text-3xl font-extrabold text-sky-400">40+</div>
 <div class="text-sm text-white/60 mt-1">Modelos</div>
 </div>
 <div>
