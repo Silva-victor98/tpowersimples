@@ -187,7 +187,7 @@ text-transform: uppercase;
 
 <div class="flex-1"></div>
 
-<div class="relative w-full max-w-md">
+<div class="relative w-full max-w-md group">
 <input id="searchInput"
 class="w-full pl-12 pr-16 py-3 rounded-2xl bg-white/5 border border-white/10 focus:outline-none focus:border-sky-400 text-sm"
 placeholder="Buscar por modelo, marca, ano…"/>
@@ -195,18 +195,17 @@ placeholder="Buscar por modelo, marca, ano…"/>
 
 
 <!-- Limpar busca -->
-<button id="clearSearchBtn"
-type="button"
-class="absolute right-12 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/90 transition hidden"
-title="Limpar busca"
-aria-label="Limpar busca">✕</button>
-<!-- Botão admin discreto (como “cadeado quase invisível”) -->
 <button id="adminBtn"
-class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/90 transition"
-title="Painel administrativo"
-aria-label="Painel administrativo">
-🔒
+  class="absolute right-3 top-1/2 -translate-y-1/2
+         opacity-0 group-hover:opacity-100
+         text-white/40 hover:text-white/90
+         transition-all duration-300
+         pointer-events-none group-hover:pointer-events-auto"
+  title="Painel administrativo"
+  aria-label="Painel administrativo">
+  🔒
 </button>
+
 </div>
 </div>
 </header>
