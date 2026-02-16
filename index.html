@@ -536,7 +536,7 @@ Carregado do Supabase: <span id="detailLoadedFrom">—</span>
 <div class="absolute inset-0 bg-black/75" id="adminBackdrop"></div>
 
 <div class="absolute inset-0 flex items-center justify-center p-4">
-<div class="w-full max-w-3xl rounded-3xl border border-white/10 glass overflow-hidden">
+<div class="w-full max-w-3xl rounded-3xl border border-white/10 glass overflow-hidden max-h-[90vh] flex flex-col">
 <div class="flex items-center justify-between p-4 border-b border-white/10">
 <div>
 <div class="text-xs text-white/50 mono">Painel administrativo</div>
@@ -544,6 +544,8 @@ Carregado do Supabase: <span id="detailLoadedFrom">—</span>
 </div>
 <button id="adminClose" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15">✖</button>
 </div>
+
+<div class="flex-1 overflow-y-auto">
 
 <!-- Login -->
 <div id="adminLogin" class="p-6 sm:p-10">
@@ -739,6 +741,8 @@ Salvar fotos
 <div class="mt-3 text-xs text-white/45 mono" id="adminDebug"></div>
 </div>
 </div>
+</div>
+
 </div>
 
 </div>
