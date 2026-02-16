@@ -827,7 +827,7 @@ photos: [
 };
 
 // Armazenamento runtime (sempre alimentado do banco + fallback)
-let motoDataStorage = JSON.parse(JSON.stringify(DEFAULT_DB)); 
+let motoDataStorage = {}; // será preenchido do Supabase (ou DEFAULT_DB se a tabela estiver vazia)
 // Paginação (UI)
 let currentPage = 1;
 const PAGE_SIZE = 9;
@@ -876,6 +876,9 @@ return sb;
 /* ====== Supabase I/O (1 chamada para carregar tudo) ====== */
 async function loadAllFromSupabase(){
 const client = ensureSupabase();
+// sempre recarrega do zero para não “ressuscitar” itens removidos
+motoDataStorage = {};
+
 // 1 request: pega tudo de uma vez (evita rate-limit e loops)
 const { data, error } = await client
 .from("motos_store")
@@ -887,7 +890,14 @@ setStatus("Supabase: falha ao carregar (ver console)");
 return { ok:false, error };
 }
 
-// aplica no storage (sem apagar fallback de motos que não existam ainda)
+// Se a tabela estiver vazia, usa o DEFAULT_DB como base (primeiro uso).
+if(!data || data.length === 0){
+  motoDataStorage = JSON.parse(JSON.stringify(DEFAULT_DB));
+  setStatus("Supabase: vazio (usando catálogo padrão) ⚠️");
+  return { ok:true, data: [] };
+}
+
+// aplica no storage (somente o que veio do Supabase)
 (data || []).forEach(row=>{
 const motoId = row.moto_id;
 const t = row.data_type;
@@ -940,8 +950,11 @@ return data;
 
 /* ====== Render ====== */
 function getMotoIds(){
-// garante ordem estável
-return Object.keys(motoDataStorage);
+  // garante ordem estável e respeita exclusões
+  return Object.keys(motoDataStorage).filter(id=>{
+    const d = motoDataStorage[id]?.moto_data || {};
+    return d._deleted !== true && d.deleted !== true && d.isDeleted !== true;
+  });
 }
 function matchesSearch(m, q){
 if(!q) return true;
@@ -956,6 +969,13 @@ const imgEl = document.getElementById("featuredImg");
 if(!titleEl || !descEl || !imgEl) return;
 const ids = getMotoIds();
 const first = ids[0];
+if(!first){
+  titleEl.textContent = "Sem motos cadastradas";
+  descEl.textContent = "Use o painel administrativo para adicionar.";
+  imgEl.src = "";
+  imgEl.alt = "";
+  return;
+}
 const d = motoDataStorage[first]?.moto_data || {};
 document.getElementById("featuredTitle").textContent = d.name || first.toUpperCase();
 document.getElementById("featuredDesc").textContent = d.description || "—";
@@ -1404,15 +1424,32 @@ if(!ok) return;
 try{
 const client = ensureSupabase();
 
-// Remove TODAS as linhas dessa moto (moto_data, thumbnail, photos)
-const { error } = await client
-.from("motos_store")
-.delete()
-.eq("moto_id", motoId);
+// Tenta remover TODAS as linhas dessa moto (moto_data, thumbnail, photos)
+let hardDeleted = false;
+{
+  const { error } = await client
+    .from("motos_store")
+    .delete()
+    .eq("moto_id", motoId);
 
-if(error) throw error;
+  if(!error){
+    hardDeleted = true;
+  } else {
+    console.warn("Delete bloqueado (provável RLS). Fazendo exclusão lógica.", error);
+  }
+}
 
-// Remove do storage local
+// Se não conseguiu deletar (RLS), faz exclusão lógica no moto_data
+if(!hardDeleted){
+  const current = motoDataStorage[motoId]?.moto_data || {};
+  const soft = { ...current, _deleted: true, deleted_at: new Date().toISOString() };
+  await upsertRow(motoId, "moto_data", soft);
+  // limpa thumb/fotos no banco também (para não aparecer em nenhum lugar)
+  await upsertRow(motoId, "thumbnail", "");
+  await upsertRow(motoId, "photos", []);
+}
+
+// Remove do storage local (independente do modo)
 delete motoDataStorage[motoId];
 
 toast("Moto excluída ✅", "ok");
