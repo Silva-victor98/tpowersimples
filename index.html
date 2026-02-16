@@ -658,6 +658,23 @@ Sair
 <label class="text-white/60">Preço</label>
 <input id="f_price" class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10" />
 </div>
+</div>
+<div>
+<label class="text-white/60">Selo do card (ex: DESTAQUE, NOVO, OFERTA)</label>
+<input id="f_badgeText" class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10" placeholder="DESTAQUE" />
+</div>
+<div>
+<label class="text-white/60">Estilo do selo</label>
+<select id="f_badgeStyle" class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10 text-white">
+  <option value="">Padrão</option>
+  <option value="none">Sem selo</option>
+  <option value="sky">Azul</option>
+  <option value="red">Vermelho</option>
+  <option value="emerald">Verde</option>
+  <option value="amber">Amarelo</option>
+</select>
+</div>
+
 <div class="col-span-2">
 <label class="text-white/60">Descrição</label>
 <textarea id="f_desc" rows="3"
@@ -1171,17 +1188,32 @@ return;
 ids.forEach(id=>{
 const d = motoDataStorage[id]?.moto_data || {};
 const thumb = motoDataStorage[id]?.thumbnail || motoDataStorage[id]?.photos?.[0] || "";
-const badge = (d.year && String(d.year) === "2024") ? "NOVO" : "DESTAQUE";
+const hasCustomBadge = Object.prototype.hasOwnProperty.call(d, "badgeText") || Object.prototype.hasOwnProperty.call(d, "badgeStyle");
+let badgeText = hasCustomBadge ? String(d.badgeText || "").trim() : ((d.year && String(d.year) === "2024") ? "NOVO" : "DESTAQUE");
+let badgeStyle = hasCustomBadge ? String(d.badgeStyle || "").trim().toLowerCase() : (badgeText === "NOVO" ? "sky" : "red");
+
+// Se o admin escolheu "Sem selo" ou deixou o texto vazio, não renderiza selo
+if(badgeStyle === "none") badgeText = "";
+
+// Mapa de estilos
+const badgeClassMap = {
+  sky: "bg-sky-500 text-black",
+  red: "bg-red-500 text-white",
+  emerald: "bg-emerald-500 text-black",
+  amber: "bg-amber-400 text-black"
+};
+const badgeClass = badgeClassMap[badgeStyle] || (badgeText === "NOVO" ? badgeClassMap.sky : badgeClassMap.red);
+const badgeHTML = badgeText ? `
+       <div class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-xs font-black tracking-wide ${badgeClass}">
+         ${badgeText}
+       </div>` : "";
 
 const el = document.createElement("a");
 el.href = `moto.html?id=${encodeURIComponent(id)}`;
 el.className = "block text-left p-0 rounded-3xl overflow-hidden border border-white/10 card-gradient hover-glow w-full";
 el.innerHTML = `
      <div class="relative">
-       <div class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-xs font-black tracking-wide
-                   ${badge==="NOVO" ? "bg-sky-500 text-black" : "bg-red-500 text-white"}">
-         ${badge}
-       </div>
+${badgeHTML}
        <div class="h-56 bg-black/30 border-b border-white/10 flex items-center justify-center">
          <img src="${thumb || "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80"}"
               class="w-full h-full object-cover" alt="${d.name||id}"/>
@@ -1310,6 +1342,8 @@ document.getElementById("f_price").value = d.price || "";
 document.getElementById("f_desc").value = d.description || "";
 document.getElementById("f_specs").value = (d.specs || []).join("\n");
 document.getElementById("f_features").value = (d.features || []).join("\n");
+document.getElementById("f_badgeText").value = (Object.prototype.hasOwnProperty.call(d,"badgeText") ? (d.badgeText || "") : "");
+document.getElementById("f_badgeStyle").value = (Object.prototype.hasOwnProperty.call(d,"badgeStyle") ? (d.badgeStyle || "") : "");
 
 // photos
 document.getElementById("thumbUrlInput").value = motoDataStorage[motoId]?.thumbnail || "";
@@ -1532,6 +1566,8 @@ price: document.getElementById("f_price").value.trim(),
 description: document.getElementById("f_desc").value.trim(),
 specs: (document.getElementById("f_specs").value || "").split("\n").map(s=>s.trim()).filter(Boolean),
 features: (document.getElementById("f_features").value || "").split("\n").map(s=>s.trim()).filter(Boolean),
+badgeText: document.getElementById("f_badgeText").value.trim(),
+badgeStyle: document.getElementById("f_badgeStyle").value.trim(),
 };
 
 try{
