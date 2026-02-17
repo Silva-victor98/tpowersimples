@@ -130,9 +130,6 @@
         <div id="badge" class="inline-flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-black tracking-wide bg-sky-400/90 text-black">
           —
         </div>
-        <div id="motoIdPill" class="hidden sm:inline-flex px-3 py-1.5 rounded-full text-xs mono bg-white/5 border border-white/10 text-white/70">
-          —
-        </div>
       </div>
 
       <div id="brand" class="mt-4 text-sky-300 font-bold text-sm"></div>
@@ -426,14 +423,6 @@ function renderPage(motoId){
     window.location.href = "index.html";
     return;
   }
-
-  // pílula do id
-  const idPill = document.getElementById("motoIdPill");
-  if(idPill){
-    idPill.textContent = `ID: ${motoId}`;
-    idPill.classList.remove("hidden");
-  }
-
   const d = data.moto_data || {};
   const year = String(d.year || "");
   const badge = (year === "2024") ? "NOVO" : "DESTAQUE";
