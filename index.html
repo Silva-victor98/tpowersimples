@@ -800,58 +800,12 @@ const ADMIN_PASSWORD = "tpower2023"; // troque depois se quiser
 let sb = null;
 let isAdmin = false;
 
-// Base “fallback” (se não tiver nada no banco, o site ainda funciona)
-const DEFAULT_DB = {
-cb500f: {
-moto_data: {
-name: "CB 500F",
-brand: "Honda",
-year: "2024",
-price: "R$ 35.990",
-description: "Naked equilibrada, ideal para o dia a dia e estrada.",
-specs: ["Motor: 471cc", "Potência: 47 cv", "Torque: 4,4 kgf.m"],
-features: ["ABS", "Painel LCD", "Econômica"]
-},
-thumbnail: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-photos: [
-"https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1600&q=80",
-"https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-]
-},
-hornet: {
-moto_data: {
-name: "Hornet",
-brand: "Honda",
-year: "2023",
-price: "R$ 49.990",
-description: "Clássica naked com performance e presença.",
-specs: ["Motor: 600cc", "Potência: 102 cv", "Torque: 6,5 kgf.m"],
-features: ["Resposta rápida", "Confiável", "Boa revenda"]
-},
-thumbnail: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80",
-photos: [
-"https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1600&q=80"
-]
-},
-xj6: {
-moto_data: {
-name: "XJ6",
-brand: "Yamaha",
-year: "2019",
-price: "R$ 38.990",
-description: "Confortável, suave e ótima para uso misto.",
-specs: ["Motor: 600cc", "Potência: 78 cv", "Torque: 6,1 kgf.m"],
-features: ["Conforto", "Suavidade", "Boa ciclística"]
-},
-thumbnail: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1200&q=80",
-photos: [
-"https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80"
-]
-}
-};
+// Base “fallback” DESATIVADA (não reintroduz motos automaticamente)
+// Se quiser um catálogo inicial, faça isso manualmente pelo painel.
+const DEFAULT_DB = {};
 
 // Armazenamento runtime (sempre alimentado do banco + fallback)
-let motoDataStorage = {}; // será preenchido do Supabase (ou DEFAULT_DB se a tabela estiver vazia)
+let motoDataStorage = {}; // será preenchido do Supabase
 // Paginação (UI)
 let currentPage = 1;
 const PAGE_SIZE = 9;
@@ -914,12 +868,13 @@ setStatus("Supabase: falha ao carregar (ver console)");
 return { ok:false, error };
 }
 
-// Se a tabela estiver vazia, usa o DEFAULT_DB como base (primeiro uso).
+// Se a tabela estiver vazia: NÃO reintroduz catálogo padrão.
 if(!data || data.length === 0){
-  motoDataStorage = JSON.parse(JSON.stringify(DEFAULT_DB));
-  setStatus("Supabase: vazio (usando catálogo padrão) ⚠️");
+  motoDataStorage = {};
+  setStatus("Supabase: vazio (nenhuma moto cadastrada)");
   return { ok:true, data: [] };
 }
+
 
 // aplica no storage (somente o que veio do Supabase)
 (data || []).forEach(row=>{
