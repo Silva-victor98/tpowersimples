@@ -1199,10 +1199,7 @@ ${badgeHTML}
        <div class="relative h-64 bg-black/30 border-b border-white/10 flex items-center justify-center overflow-hidden">
          <img src="${thumb || "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80"}"
               class="w-full h-full object-cover" alt="${d.name||id}"/>
-<div class="mt-0.5 text-white/75 text-sm font-semibold">
-             ${(d.brand||"—")}
-           </div>
-         </div>
+</div>
        </div>
      </div>
 
@@ -1216,9 +1213,17 @@ ${badgeHTML}
          ${kmChip}
        </div>
 
-       <div class="mt-4">
-         <div class="text-xs text-white/40 font-semibold">A partir de</div>
-         <div class="mt-1 text-2xl font-extrabold text-sky-300">${d.price || "Consultar"}</div>
+       <div class="mt-4 flex items-end justify-between gap-4">
+         <div>
+           <div class="text-xs text-white/40 font-semibold">A partir de</div>
+           <div class="mt-1 text-2xl font-extrabold text-sky-300">${d.price || "Consultar"}</div>
+         </div>
+
+         <button type="button"
+                 class="px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-sky-200 font-extrabold text-xs tracking-widest uppercase hover:bg-white/15 hover:border-white/25 transition"
+                 onclick="event.preventDefault(); window.location.href = this.closest('a').href;">
+           Ver detalhes
+         </button>
        </div>
      </div>
    `;
