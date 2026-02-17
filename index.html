@@ -658,6 +658,13 @@ Sair
 <label class="text-white/60">Preço</label>
 <input id="f_price" class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10" />
 </div>
+<div>
+<label class="text-white/60">Ordem (exibição)</label>
+<input id="f_order" type="number" min="1" step="1"
+class="w-full mt-1 px-3 py-2 rounded-2xl bg-black/30 border border-white/10"
+placeholder="ex: 1" />
+</div>
+
 </div>
 <div>
 <label class="text-white/60">Selo do card (ex: DESTAQUE, NOVO, OFERTA)</label>
@@ -973,6 +980,12 @@ function getMotoIds(){
     return d._deleted !== true && d.deleted !== true && d.isDeleted !== true;
   });
 }
+function getMotoOrder(id){
+  const v = motoDataStorage[id]?.moto_data?.order;
+  const n = (typeof v === "number") ? v : parseInt(String(v ?? ""), 10);
+  return Number.isFinite(n) ? n : Infinity;
+}
+
 function matchesSearch(m, q){
 if(!q) return true;
 const d = motoDataStorage[m]?.moto_data || {};
@@ -984,7 +997,7 @@ const titleEl = document.getElementById("featuredTitle");
 const descEl = document.getElementById("featuredDesc");
 const imgEl = document.getElementById("featuredImg");
 if(!titleEl || !descEl || !imgEl) return;
-const ids = getMotoIds();
+const ids = getMotoIds().slice().sort((a,b)=> (getMotoOrder(a) - getMotoOrder(b)) || a.localeCompare(b));
 const first = ids[0];
 if(!first){
   titleEl.textContent = "Sem motos cadastradas";
@@ -1043,7 +1056,7 @@ function populateFilterOptions(){
   const years  = new Set();
   const models = new Set();
 
-  getMotoIds().forEach(id=>{
+  getMotoIds().slice().sort((a,b)=> (getMotoOrder(a) - getMotoOrder(b)) || a.localeCompare(b)).forEach(id=>{
     const d = motoDataStorage[id]?.moto_data || {};
     if(d.brand) brands.add(String(d.brand).trim());
     if(d.year)  years.add(String(d.year).trim());
@@ -1147,7 +1160,9 @@ const grid = document.getElementById("motosGrid");
 grid.innerHTML = "";
 
 // Lista filtrada
-const allIds = getMotoIds().filter(id=>matchesSearch(id,q) && matchesFilters(id));
+const allIds = getMotoIds()
+  .filter(id=>matchesSearch(id,q) && matchesFilters(id))
+  .sort((a,b)=> (getMotoOrder(a) - getMotoOrder(b)) || a.localeCompare(b));
 document.getElementById("countText").textContent = allIds.length;
 
 // Paginação
@@ -1312,7 +1327,8 @@ opt.value = id;
 opt.textContent = id.toUpperCase();
 sel.appendChild(opt);
 });
-sel.value = getMotoIds()[0] || "";
+const __ids = getMotoIds().slice().sort((a,b)=> (getMotoOrder(a) - getMotoOrder(b)) || a.localeCompare(b));
+sel.value = __ids[0] || "";
 loadAdminForm(sel.value);
 }
 }
@@ -1339,6 +1355,7 @@ document.getElementById("f_name").value = d.name || "";
 document.getElementById("f_brand").value = d.brand || "";
 document.getElementById("f_year").value = d.year || "";
 document.getElementById("f_price").value = d.price || "";
+document.getElementById("f_order").value = (d.order ?? "");
 document.getElementById("f_desc").value = d.description || "";
 document.getElementById("f_specs").value = (d.specs || []).join("\n");
 document.getElementById("f_features").value = (d.features || []).join("\n");
@@ -1563,6 +1580,7 @@ name: document.getElementById("f_name").value.trim(),
 brand: document.getElementById("f_brand").value.trim(),
 year: document.getElementById("f_year").value.trim(),
 price: document.getElementById("f_price").value.trim(),
+order: (()=>{ const v = (document.getElementById("f_order").value || "").trim(); const n = parseInt(v, 10); return Number.isFinite(n) ? n : null; })(),
 description: document.getElementById("f_desc").value.trim(),
 specs: (document.getElementById("f_specs").value || "").split("\n").map(s=>s.trim()).filter(Boolean),
 features: (document.getElementById("f_features").value || "").split("\n").map(s=>s.trim()).filter(Boolean),
