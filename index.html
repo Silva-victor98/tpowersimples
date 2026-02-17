@@ -1178,31 +1178,47 @@ const badgeHTML = badgeText ? `
          ${badgeText}
        </div>` : "";
 
+// Km (opcional): aceita vários nomes de campo para não quebrar seu banco
+const kmRaw = (d.km ?? d.kmRodados ?? d.mileage ?? d.odometer ?? d.odometro ?? "");
+const kmStr = String(kmRaw || "").trim();
+const kmChip = kmStr ? `
+         <div class="px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-white/80">
+           🛣 ${kmStr}${/km/i.test(kmStr) ? "" : " km"}
+         </div>` : "";
+
 const el = document.createElement("a");
 el.href = `moto.html?id=${encodeURIComponent(id)}`;
 el.className = "block text-left p-0 rounded-3xl overflow-hidden border border-white/10 card-gradient hover-glow w-full";
 el.innerHTML = `
      <div class="relative">
 ${badgeHTML}
-       <div class="h-56 bg-black/30 border-b border-white/10 flex items-center justify-center">
+       <div class="relative h-64 bg-black/30 border-b border-white/10 flex items-center justify-center overflow-hidden">
          <img src="${thumb || "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80"}"
               class="w-full h-full object-cover" alt="${d.name||id}"/>
+
+         <!-- Overlay (nome + marca) -->
+         <div class="absolute left-3 right-3 bottom-3 p-3 rounded-2xl
+                     bg-gradient-to-t from-black/70 via-black/35 to-transparent
+                     border border-white/10">
+           <div class="text-xl font-extrabold tracking-wide leading-tight">
+             ${d.name || id.toUpperCase()}
+           </div>
+           <div class="mt-0.5 text-white/75 text-sm font-semibold">
+             ${(d.brand||"—")}
+           </div>
+         </div>
        </div>
      </div>
 
-     <div class="p-6">
-       <div class="flex items-center justify-between text-sm">
-         <div class="text-sky-300 font-semibold">${(d.brand||"—")}</div>
-         <div class="text-white/50 font-semibold">${(d.year||"—")}</div>
+     <div class="p-5">
+       <div class="flex flex-wrap gap-2 text-xs font-semibold">
+         <div class="px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-white/80">
+           📅 ${(d.year||"—")}
+         </div>
+         ${kmChip}
        </div>
 
-       <div class="mt-2 text-2xl font-extrabold tracking-wide">${d.name || id.toUpperCase()}</div>
-
-       <div class="mt-2 text-white/65 text-sm leading-relaxed line-clamp-2">
-         ${d.description || ""}
-       </div>
-
-       <div class="mt-5">
+       <div class="mt-4">
          <div class="text-xs text-white/40 font-semibold">A partir de</div>
          <div class="mt-1 text-2xl font-extrabold text-sky-300">${d.price || "Consultar"}</div>
        </div>
