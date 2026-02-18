@@ -1210,19 +1210,17 @@ function renderGrid(){
         <div class="relative h-64 bg-black/30 border-b border-white/10 flex items-center justify-center overflow-hidden">
           <img src="${thumb || "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80"}"
                class="w-full h-full object-cover" alt="${(d.name||id)}"/>
-
-          <!-- Overlay sutil (nome + marca), no canto (não briga com a foto) -->
-          <div class="absolute left-4 bottom-4">
-            <div class="px-4 py-3 rounded-2xl bg-gradient-to-t from-black/70 via-black/35 to-transparent border border-white/10">
-              <div class="text-xl font-extrabold tracking-wide leading-tight">${d.name || id.toUpperCase()}</div>
-              <div class="mt-0.5 text-white/75 text-sm font-semibold">${(d.brand||"—")}</div>
-            </div>
-          </div>
-        </div>
+</div>
       </div>
 
       <div class="p-5">
-        <div class="flex flex-wrap items-center gap-2">
+      <div class="min-w-0">
+        <div class="text-sky-300 text-xs font-extrabold uppercase tracking-wide">${(d.brand||"—")}</div>
+        <div class="mt-1 text-xl font-extrabold tracking-wide leading-tight">${d.name || id.toUpperCase()}</div>
+      </div>
+
+      
+        <div class="mt-3 flex flex-wrap items-center gap-2">
           ${yearChip}
           ${kmChip}
         </div>
