@@ -1114,49 +1114,135 @@ function wireFiltersUI(){
 }
 
 function renderGrid(){
-const q = (document.getElementById("searchInput").value || "").trim().toLowerCase();
-const grid = document.getElementById("motosGrid");
-grid.innerHTML = "";
+  const q = (document.getElementById("searchInput")?.value || "").trim().toLowerCase();
+  const grid = document.getElementById("motosGrid");
+  if(!grid) return;
+  grid.innerHTML = "";
 
-// Lista filtrada
-const allIds = getMotoIds()
-  .filter(id=>matchesSearch(id,q) && matchesFilters(id))
-  .sort((a,b)=> (getMotoOrder(a) - getMotoOrder(b)) || a.localeCompare(b));
-document.getElementById("countText").textContent = allIds.length;
+  // Lista filtrada
+  const allIds = getMotoIds()
+    .filter(id=>matchesSearch(id,q) && matchesFilters(id))
+    .sort((a,b)=> (getMotoOrder(a) - getMotoOrder(b)) || a.localeCompare(b));
 
-// Paginação
-const totalPages = Math.max(1, Math.ceil(allIds.length / PAGE_SIZE));
-if(currentPage > totalPages) currentPage = totalPages;
-if(currentPage < 1) currentPage = 1;
+  const countEl = document.getElementById("countText");
+  if(countEl) countEl.textContent = allIds.length;
 
-const start = (currentPage - 1) * PAGE_SIZE;
-const ids = allIds.slice(start, start + PAGE_SIZE);
+  // Paginação
+  const totalPages = Math.max(1, Math.ceil(allIds.length / PAGE_SIZE));
+  if(currentPage > totalPages) currentPage = totalPages;
+  if(currentPage < 1) currentPage = 1;
 
-// Atualiza controles
-const prevBtn = document.getElementById("prevPageBtn");
-const nextBtn = document.getElementById("nextPageBtn");
-const indicator = document.getElementById("pageIndicator");
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const ids = allIds.slice(start, start + PAGE_SIZE);
 
-if (prevBtn && nextBtn && indicator){
-  prevBtn.disabled = (currentPage <= 1);
-  nextBtn.disabled = (currentPage >= totalPages);
-  indicator.textContent = ""; // remove o texto feio
-}
-// Estado vazio (quando a busca filtra tudo)
-if(!allIds.length){
-grid.innerHTML = `
-   <div class="col-span-full p-10 rounded-3xl bg-white/5 border border-white/10 text-center">
-     <div class="text-2xl font-extrabold tracking-wide">Nenhuma moto encontrada</div>
-     <div class="mt-2 text-white/60">Tente limpar a busca ou pesquisar por marca/modelo.</div>
-     <a href="moto.html?id=${encodeURIComponent(id)}"
-                 class="px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-sky-200 font-extrabold text-xs tracking-wide uppercase hover:bg-white/15 hover:border-white/25 transition inline-flex items-center justify-center">
-           Ver detalhes
-         </a>
-       </div>
-     </div>
-   `;
-grid.appendChild(el);
-});
+  // Atualiza controles
+  const prevBtn = document.getElementById("prevPageBtn");
+  const nextBtn = document.getElementById("nextPageBtn");
+  const indicator = document.getElementById("pageIndicator");
+  if (prevBtn && nextBtn && indicator){
+    prevBtn.disabled = (currentPage <= 1);
+    nextBtn.disabled = (currentPage >= totalPages);
+    indicator.textContent = "";
+  }
+
+  // Estado vazio
+  if(!allIds.length){
+    grid.innerHTML = `
+      <div class="col-span-full p-10 rounded-3xl bg-white/5 border border-white/10 text-center">
+        <div class="text-2xl font-extrabold tracking-wide">Nenhuma moto encontrada</div>
+        <div class="mt-2 text-white/60">Tente limpar a busca ou pesquisar por marca/modelo.</div>
+        <button type="button"
+                onclick="clearSearch()"
+                class="mt-6 px-6 py-3 rounded-full bg-sky-500 hover:bg-sky-400 text-black font-extrabold">
+          Limpar busca
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  // Renderiza cards (somente o botão é clicável)
+  ids.forEach(id=>{
+    const d = motoDataStorage[id]?.moto_data || {};
+    const thumb = motoDataStorage[id]?.thumbnail || motoDataStorage[id]?.photos?.[0] || "";
+
+    // Badge (personalizável)
+    const hasCustomBadge = Object.prototype.hasOwnProperty.call(d, "badgeText") || Object.prototype.hasOwnProperty.call(d, "badgeStyle");
+    let badgeText = hasCustomBadge ? String(d.badgeText || "").trim() : ((d.year && String(d.year) === "2024") ? "NOVO" : "DESTAQUE");
+    let badgeStyle = hasCustomBadge ? String(d.badgeStyle || "").trim().toLowerCase() : (badgeText === "NOVO" ? "sky" : "red");
+    if(badgeStyle === "none") badgeText = "";
+
+    const badgeClassMap = {
+      sky: "bg-sky-500 text-black",
+      red: "bg-red-500 text-white",
+      emerald: "bg-emerald-500 text-black",
+      amber: "bg-amber-400 text-black"
+    };
+    const badgeClass = badgeClassMap[badgeStyle] || (badgeText === "NOVO" ? badgeClassMap.sky : badgeClassMap.red);
+    const badgeHTML = badgeText ? `
+      <div class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-xs font-black tracking-wide ${badgeClass}">
+        ${badgeText}
+      </div>` : "";
+
+    // Km (do painel: f_km salva em d.km) — aceita variações pra não quebrar
+    const kmRaw = (d.km ?? d.quilometragem ?? d.kmRodados ?? d.mileage ?? d.odometer ?? d.odometro ?? "");
+    const kmStr = String(kmRaw || "").trim();
+    const kmChip = kmStr ? `
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-white/80 text-xs font-semibold">
+        <span class="opacity-90">🛣</span>
+        <span>${kmStr}${/km/i.test(kmStr) ? "" : " km"}</span>
+      </div>` : "";
+
+    const yearStr = String(d.year || "").trim();
+    const yearChip = yearStr ? `
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-white/80 text-xs font-semibold">
+        <span class="opacity-90">🗓</span>
+        <span>${yearStr}</span>
+      </div>` : "";
+
+    const el = document.createElement("div");
+    el.className = "block text-left p-0 rounded-3xl overflow-hidden border border-white/10 card-gradient hover-glow w-full";
+
+    el.innerHTML = `
+      <div class="relative">
+        ${badgeHTML}
+
+        <div class="relative h-64 bg-black/30 border-b border-white/10 flex items-center justify-center overflow-hidden">
+          <img src="${thumb || "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80"}"
+               class="w-full h-full object-cover" alt="${(d.name||id)}"/>
+
+          <!-- Overlay sutil (nome + marca), no canto (não briga com a foto) -->
+          <div class="absolute left-4 bottom-4">
+            <div class="px-4 py-3 rounded-2xl bg-gradient-to-t from-black/70 via-black/35 to-transparent border border-white/10">
+              <div class="text-xl font-extrabold tracking-wide leading-tight">${d.name || id.toUpperCase()}</div>
+              <div class="mt-0.5 text-white/75 text-sm font-semibold">${(d.brand||"—")}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-5">
+        <div class="flex flex-wrap items-center gap-2">
+          ${yearChip}
+          ${kmChip}
+        </div>
+
+        <div class="mt-4 flex items-end justify-between gap-4">
+          <div class="min-w-0">
+            <div class="text-xs text-white/40 font-semibold">A partir de</div>
+            <div class="mt-1 text-2xl font-extrabold text-sky-300">${d.price || "Consultar"}</div>
+          </div>
+
+          <a href="moto.html?id=${encodeURIComponent(id)}"
+             class="shrink-0 px-5 py-3 rounded-2xl bg-sky-500 hover:bg-sky-400 text-black font-extrabold text-xs tracking-wide uppercase border border-white/10 transition">
+            Ver detalhes
+          </a>
+        </div>
+      </div>
+    `;
+
+    grid.appendChild(el);
+  });
 }
 
 /* ====== Detalhe ====== */
