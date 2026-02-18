@@ -1167,7 +1167,7 @@ function renderGrid(){
     const thumb = motoDataStorage[id]?.thumbnail || motoDataStorage[id]?.photos?.[0] || "";
 
     // Badge (personalizável)
-    const hasCustomBadge = Object.prototype.hasOwnProperty.call(d, "badgeText") || Object.prototype.hasOwnProperty.call(d, "badgeStyle");
+    const hasCustomBadge = String(d.badgeText || "").trim() !== "";
     let badgeText = hasCustomBadge ? String(d.badgeText || "").trim() : ((d.year && String(d.year) === "2024") ? "NOVO" : "DESTAQUE");
     let badgeStyle = hasCustomBadge ? String(d.badgeStyle || "").trim().toLowerCase() : (badgeText === "NOVO" ? "sky" : "red");
     if(badgeStyle === "none") badgeText = "";
