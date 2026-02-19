@@ -1208,7 +1208,7 @@ function renderGrid(){
         <div class="relative h-64 bg-black/30 border-b border-white/10 flex items-center justify-center overflow-hidden">
           ${badgeHTML}
           <img src="${thumb || "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80"}"
-              class="w-full h-full object-cover object-[center_70%]" alt="${(d.name||id)}"/>
+              class="w-full h-full object-contain" alt="${(d.name||id)}"/>
         </div>
 
         <div class="p-5">
